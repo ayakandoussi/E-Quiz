@@ -3,8 +3,8 @@ package com.projetjava.domain;
 public class Resultat {
 
     private int idResultatQuiz = 0;
-    private int idEtudiant;
-    private int idQuiz;
+    private int idEtudiant;  //a modifier
+    private int idQuiz;      //a modifier
     private double score;
     private String nomEtudiant, prenomEtudiant, titreQuiz;
 
