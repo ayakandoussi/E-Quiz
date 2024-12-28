@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.QuestionController" stylesheets="@styles.css">
+    <TextField fx:id="questionField" text="Question 1: Quel est le type de retour de la méthode main en Java ?" layoutX="62" layoutY="42"/>
+    <CheckBox fx:id="choix1" text="void" layoutX="49" layoutY="156"/>
+    <CheckBox fx:id="choix2" text="int" layoutX="49" layoutY="215"/>
+    <CheckBox  fx:id="choix3" text="String[]" layoutX="368" layoutY="156"/>
+    <CheckBox  fx:id="choix4" text="boolean" layoutX="368" layoutY="215"/>
+    <Button fx:id="validerButton" text="valider" layoutX="95" layoutY="299" onAction="#validerReponse"/>
+    <Button fx:id="suivantButton" text="suivant" layoutX="316" layoutY="299" onAction="#questionSuivante"/>
+</AnchorPane>
