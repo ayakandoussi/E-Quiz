@@ -33,9 +33,22 @@ public class Resultat {
         return score;
     }
 
+    public static void setIdResultatQuiz(int idResultatQuiz) {
+        Resultat.idResultatQuiz = idResultatQuiz;
+    }
+
     public void setScore(double score) {
         this.score = score;
     }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public void setEtudiant(Etudiant etudiant) {
+        this.etudiant = etudiant;
+    }
+    
 
     public void afficheResume() {
         if (this.score >= 0 && this.score <= 5) {
