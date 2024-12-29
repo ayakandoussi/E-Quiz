@@ -6,6 +6,11 @@ public class Professeur extends Utilisateur {
 
     private ArrayList<Quiz> quizCrees;
 
+    public Professeur() {
+        super();
+        this.quizCrees = new ArrayList<>();
+    }
+
     public Professeur(String nom, String prenom, String email, String motDePasse, String role, ArrayList<Quiz> quizCrees) {
         super(nom, prenom, email, motDePasse, role);
         this.quizCrees = quizCrees;

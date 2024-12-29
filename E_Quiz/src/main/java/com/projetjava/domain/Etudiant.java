@@ -11,6 +11,11 @@ public class Etudiant extends Utilisateur {
         this.quizDisponibles = quizDisponibles;
     }
 
+    public Etudiant() {
+        super();
+        this.quizDisponibles = new ArrayList<>();
+    }
+
     @Override
     public void afficher() {
         System.out.println("Etudiant: " + getNom() + " " + getPrenom() + ".");

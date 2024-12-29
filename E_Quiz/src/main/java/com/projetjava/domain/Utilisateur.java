@@ -9,6 +9,9 @@ public abstract class Utilisateur {
     private String motDePasse;
     private String role;
 
+    public Utilisateur() {
+    }
+
     public Utilisateur(String nom, String prenom, String email, String motDePasse, String role) {
         this.id++;
         this.nom = nom;
