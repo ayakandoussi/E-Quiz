@@ -1,0 +1,45 @@
+
+/* Couleur d'arrière-plan pour toute la page */
+AnchorPane {
+    -fx-background-color: linear-gradient(to bottom, #e0f7fa, #b3e5fc); /* Dégradé bleu clair */
+}
+
+/* Style pour les TextField */
+TextField {
+    -fx-background-color: #ffffff; /* Blanc pour le fond */
+    -fx-border-color: #64b5f6;    /* Bleu clair pour les bordures */
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: #1e88e5;       /* Bleu foncé pour le texte */
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+}
+
+/* Style pour les CheckBox */
+CheckBox {
+    -fx-text-fill: #0d47a1;       /* Bleu très foncé pour le texte */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Style pour les boutons */
+Button {
+    -fx-background-color: linear-gradient(to bottom, #42a5f5, #1e88e5); /* Dégradé bleu */
+    -fx-text-fill: #ffffff;        /* Texte blanc */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-radius: 10px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+/* Style pour les boutons lorsqu'on passe la souris dessus */
+Button:hover {
+    -fx-background-color: linear-gradient(to bottom, #64b5f6, #2196f3); /* Bleu plus clair au survol */
+}
+
+/* Style pour les boutons lorsqu'ils sont cliqués */
+Button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #1e88e5, #1565c0); /* Bleu foncé */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 0);
+}
