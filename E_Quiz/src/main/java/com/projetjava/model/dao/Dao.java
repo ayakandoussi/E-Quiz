@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.projetjava.model.dao;
 
-/**
- *
- * @author HP_Maroua
- */
-public interface Dao {
-    
+import java.util.List;
+
+public interface Dao<T> {
+
+    void add(T objet);
+
+    T getById(int id);
+
+    List<T> getAll();
+
+    void update(T objet);
+
+    void delete(int id);
 }
