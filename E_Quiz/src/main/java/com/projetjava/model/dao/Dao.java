@@ -1,6 +1,6 @@
 package com.projetjava.model.dao;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface Dao<T> {
 
@@ -8,7 +8,7 @@ public interface Dao<T> {
 
     T getById(int id);
 
-    List<T> getAll();
+    ArrayList<T> getAll();
 
     void update(T objet);
 
