@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.projetjava.domain;
 
-/**
- *
- * @author User
- */
 public abstract class Utilisateur {
-    private static int id=0;
+
+    private static int id = 0;
     private String nom;
     private String prenom;
     private String email;
@@ -68,8 +61,7 @@ public abstract class Utilisateur {
     public void setRole(String role) {
         this.role = role;
     }
-    
 
     public abstract void afficher();
-    
+
 }
