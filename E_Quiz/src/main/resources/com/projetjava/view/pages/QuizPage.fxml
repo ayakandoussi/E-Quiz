@@ -8,10 +8,10 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Button?>
 
-<AnchorPane prefHeight="335.0" prefWidth="511.0" stylesheets="@styles/questionpage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.QuestionController">
+<AnchorPane prefHeight="335.0" prefWidth="511.0" stylesheets="@../../../../../../../../../../Users/Bouchama/styles/questionpage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.QuestionController">
     <children>
         <!-- Champ de texte pour afficher la question -->
-        <TextField fx:id="questionField" layoutX="25.0" layoutY="42.0" prefHeight="61.0" prefWidth="474.0" editable="false" />
+        <TextField fx:id="questionField" editable="false" layoutX="25.0" layoutY="42.0" prefHeight="61.0" prefWidth="474.0" />
         
         <!-- Cases à cocher pour les choix de réponses -->
         <CheckBox fx:id="choix1" layoutX="49" layoutY="156" />
@@ -20,7 +20,7 @@
         <CheckBox fx:id="choix4" layoutX="368" layoutY="215" />
         
         <!-- Boutons pour valider la réponse et passer à la suivante -->
-        <Button fx:id="validerButton" layoutX="88.0" layoutY="260.0" onAction="#validerReponse" text="Valider" />
-        <Button fx:id="suivantButton" layoutX="320.0" layoutY="260.0" onAction="#questionSuivante" text="Suivant" />
+        <Button fx:id="validerButton" layoutX="88.0" layoutY="260.0" onAction="#validerReponse" style="-fx-background-color: blue; -fx-text-fill: white;" stylesheets="@../../../../../../../../../../Users/Bouchama/styles/questionpage.css" text="Valider" />
+        <Button fx:id="suivantButton" layoutX="320.0" layoutY="260.0" onAction="#questionSuivante" style="-fx-background-color: blue; -fx-text-fill: white;" text="Suivant" />
     </children>
 </AnchorPane>
