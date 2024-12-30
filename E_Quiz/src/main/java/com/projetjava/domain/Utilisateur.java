@@ -1,4 +1,5 @@
 package com.projetjava.domain;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 public abstract class Utilisateur {
@@ -12,14 +13,16 @@ public abstract class Utilisateur {
 
     public Utilisateur() {
     }
-public Utilisateur(Utilisateur U) {
-    this.id++;
-    this.nom=U.nom;
-    this.prenom=U.prenom;
-    this.email=U.email;
-    this.motDePasse=U.motDePasse;
-    this.role=U.role;
+
+    public Utilisateur(Utilisateur U) {
+        this.id++;
+        this.nom = U.nom;
+        this.prenom = U.prenom;
+        this.email = U.email;
+        this.motDePasse = U.motDePasse;
+        this.role = U.role;
     }
+
     public Utilisateur(String nom, String prenom, String email, String motDePasse, String role) {
         this.id++;
         this.nom = nom;
@@ -53,9 +56,13 @@ public Utilisateur(Utilisateur U) {
         return motDePasse;
     }
 
-     public void setMotDePasse(String motDePasse) {
+    public void setMotDePasse(String motDePasse) {
         String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
         this.motDePasse = motDePasseHache;
+    }
+
+    public void setId(int id) {
+        Utilisateur.id = id;
     }
 
     public void setNom(String nom) {
@@ -69,8 +76,6 @@ public Utilisateur(Utilisateur U) {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    
 
     public void setRole(String role) {
         this.role = role;

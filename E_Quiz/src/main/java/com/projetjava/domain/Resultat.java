@@ -33,7 +33,7 @@ public class Resultat {
         return score;
     }
 
-    public static void setIdResultatQuiz(int idResultatQuiz) {
+    public void setIdResultatQuiz(int idResultatQuiz) {
         Resultat.idResultatQuiz = idResultatQuiz;
     }
 
@@ -48,7 +48,6 @@ public class Resultat {
     public void setEtudiant(Etudiant etudiant) {
         this.etudiant = etudiant;
     }
-    
 
     public void afficheResume() {
         if (this.score >= 0 && this.score <= 5) {

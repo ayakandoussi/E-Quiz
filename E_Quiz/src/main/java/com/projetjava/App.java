@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
 public class App extends Application {
 
     private static Scene scene;
@@ -27,11 +26,9 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-<<<<<<< HEAD
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/" +fxml + ".fxml"));
-=======
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/projetjava/view/pages/LoginPage.fxml"));
->>>>>>> origin/feature/GestionDesQuiz
+
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/" + fxml + ".fxml"));
+
         return fxmlLoader.load();
     }
 

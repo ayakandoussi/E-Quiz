@@ -1,5 +1,7 @@
 package com.projetjava.model.dao.impl;
 
+import com.projetjava.domain.Etudiant;
+import com.projetjava.domain.Quiz;
 import com.projetjava.domain.Resultat;
 import com.projetjava.model.dao.Dao;
 import java.sql.PreparedStatement;
@@ -17,7 +19,7 @@ public class ResultatDao implements Dao<Resultat> {
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
             preparedStatement.setInt(1, resultat.getIdResultatQuiz());
-            preparedStatement.setInt(2, resultat.getEtudiant().getIdEtudiant());
+            preparedStatement.setInt(2, resultat.getEtudiant().getId());
             preparedStatement.setInt(3, resultat.getQuiz().getIdQuiz());
             preparedStatement.setDouble(4, resultat.getScore());
 
@@ -35,7 +37,7 @@ public class ResultatDao implements Dao<Resultat> {
             String query = "UPDATE `resultat` SET `etudiantId`=?, `quizId`=?, `score`=? WHERE `idResultatQuiz`=?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
-            preparedStatement.setInt(1, resultat.getEtudiant().getIdEtudiant());
+            preparedStatement.setInt(1, resultat.getEtudiant().getId());
             preparedStatement.setInt(2, resultat.getQuiz().getIdQuiz());
             preparedStatement.setDouble(3, resultat.getScore());
             preparedStatement.setInt(4, resultat.getIdResultatQuiz());
@@ -63,7 +65,7 @@ public class ResultatDao implements Dao<Resultat> {
                 resultat.setScore(resultSet.getDouble("score"));
 
                 Etudiant etudiant = new Etudiant();
-                etudiant.setIdEtudiant(resultSet.getInt("etudiantId"));
+                etudiant.setId(resultSet.getInt("etudiantId"));
                 resultat.setEtudiant(etudiant);
 
                 Quiz quiz = new Quiz();
@@ -98,7 +100,7 @@ public class ResultatDao implements Dao<Resultat> {
                 resultat.setScore(resultSet.getDouble("score"));
 
                 Etudiant etudiant = new Etudiant();
-                etudiant.setIdEtudiant(resultSet.getInt("etudiantId"));
+                etudiant.setId(resultSet.getInt("etudiantId"));
                 resultat.setEtudiant(etudiant);
 
                 Quiz quiz = new Quiz();
