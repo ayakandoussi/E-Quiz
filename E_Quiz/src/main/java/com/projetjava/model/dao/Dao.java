@@ -14,3 +14,4 @@ public interface Dao<T> {
 
     void delete(int id);
 }
+
