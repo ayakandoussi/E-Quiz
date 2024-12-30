@@ -40,7 +40,7 @@
         <CheckBox fx:id="choix2" layoutX="56.0" layoutY="261.0" />
         <CheckBox fx:id="choix3" layoutX="340.0" layoutY="177.0" />
         <CheckBox fx:id="choix4" layoutX="340.0" layoutY="261.0" />
-        <Button fx:id="suivantButton" layoutX="252.0" layoutY="335.0" onAction="#questionSuivante" style="-fx-background-color: green; -fx-text-fill: white;" text="Suivant" />
+        <Button fx:id="suivantButton" layoutX="252.0" layoutY="335.0" onAction="#questionSuivante" style="-fx-background-color: blue; -fx-text-fill: white;" text="Suivant" />
       <Label fx:id="labelChoix1" layoutX="84.0" layoutY="173.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label1" />
         <Label fx:id="labelChoix2" layoutX="84.0" layoutY="257.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label2" />
         <Label fx:id="labelChoix3" layoutX="368.0" layoutY="173.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label3" />
