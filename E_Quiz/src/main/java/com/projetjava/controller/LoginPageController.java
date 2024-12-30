@@ -163,15 +163,15 @@ public class LoginPageController implements Initializable {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    // Si un utilisateur correspond
+                    /* Si un utilisateur correspond
                     alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("Connexion réussie");
                     alert.setHeaderText(null);
                     alert.setContentText("Bienvenue, " + rs.getString("nom") + " " + rs.getString("prenom") + " !");
-                    alert.showAndWait();
+                    alert.showAndWait();*/
 
                     // Charger et afficher la nouvelle page
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/pages/PagePrincipal.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
                     Parent root = loader.load();
 
                     // Obtenez la scène actuelle
