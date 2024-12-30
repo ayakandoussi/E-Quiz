@@ -1,0 +1,31 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.gradient {
+    -fx-background-color:blue;
+        
+
+
+}
+.white-form{
+    -fx-background-color:#fff;
+}
+.login-btn {
+    -fx-background-color:blue ;
+    -fx-background-radius:5px;
+    -fx-cursor:hand;
+    -fx-text-fill:#fff;
+    -fx-font-size:14px;
+}
+.create-btn{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+    -fx-text-fill:#fff;
+    -fx-border-color:#fff;
+     -fx-border-width:1px;
+}
+.create-btn:hover{
+     -fx-background-color:white;
+     -fx-text-fill:blue;
+}
