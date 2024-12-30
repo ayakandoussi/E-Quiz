@@ -8,6 +8,6 @@ module com.projetjava {
 
     opens com.projetjava to javafx.fxml;
     exports com.projetjava;
-    requires jbcrypt;
-    requires com.projetjava;
+ 
+   
 }

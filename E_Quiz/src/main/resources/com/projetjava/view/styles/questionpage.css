@@ -1,0 +1,44 @@
+
+/* Style global pour l'arrière-plan */
+.root {
+    -fx-background-color: #ffffff; /* Blanc */
+}
+
+/* Style pour le champ de texte (questionField) */
+.text-field {
+    -fx-background-color: white; /* Bleu clair */
+    -fx-text-fill: blue;       /* Bleu foncé */
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+    -fx-border-color: blue;   /* Bleu foncé */
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+/* Style pour les CheckBox (choix) */
+.check-box {
+    -fx-text-fill: blue;      /* Bleu foncé */
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-background-color: white; /* Bleu clair */
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: blue; /* Bleu foncé */
+    -fx-text-fill: #ffffff;        /* Blanc */
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #003366;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: white; /* Bleu plus clair */
+}
+
+.button:pressed {
+    -fx-background-color: blue; /* Bleu très foncé */
+}
