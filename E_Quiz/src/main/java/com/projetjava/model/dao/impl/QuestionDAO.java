@@ -1,124 +1,123 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.projetjava.model.dao.impl;
 
-/**
- *
- * @author Bouchama
- */
-import java.sql.ResultSet;
-
 import com.projetjava.domain.Question;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import com.projetjava.model.dao.Dao;
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
-public class QuestionDAO {
-    private Connection connection;
+public class QuestionDAO implements Dao<Question> {
 
-    // Constructeur pour établir la connexion à la base de données
-    public QuestionDAO(Connection connection) {
+    @Override
+    public void add(Question question) {
         try {
-            this.connection = BDConnexion.getConnection();
-        } catch (SQLException e) {
-            // Gérer l'exception ici, par exemple en la loguant ou en la relançant
-            e.printStackTrace();
+            BDConnexion bd = new BDConnexion();
+            String query = "INSERT INTO question (enonce, choix1, choix2, choix3, choix4, bonneReponse, idQuiz) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            preparedStatement.setString(1, question.getEnonce());
+            preparedStatement.setString(2, question.getChoix1());
+            preparedStatement.setString(3, question.getChoix2());
+            preparedStatement.setString(4, question.getChoix3());
+            preparedStatement.setString(5, question.getChoix4());
+            preparedStatement.setString(6, question.getBonneReponse());
+            preparedStatement.setInt(7, question.getIdQuiz());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            bd.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
-    // Ajouter une nouvelle question
-    public void ajouterQuestion(Question question) throws SQLException {
-        String sql = "INSERT INTO Question (enonce, choix1, choix2, choix3, choix4, bonneReponse, idQuiz) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, question.getEnonce());
-            stmt.setString(2, question.getChoix1());
-            stmt.setString(3, question.getChoix2());
-            stmt.setString(4, question.getChoix3());
-            stmt.setString(5, question.getChoix4());
-            stmt.setString(6, question.getBonneReponse());
-            stmt.setInt(7, question.getIdQuiz());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            // Gérer l'exception
-            e.printStackTrace();
-        }
-    }
-
-    // Récupérer toutes les questions d'un quiz
-    public List<Question> getQuestionsByQuizId(int idQuiz) throws SQLException {
-        List<Question> questions = new ArrayList<>();
-        String sql = "SELECT * FROM Question WHERE idQuiz = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idQuiz);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Question question = new Question(
-                        rs.getInt("idQuestion"),
-                        rs.getString("enonce"),
-                        rs.getString("choix1"),
-                        rs.getString("choix2"),
-                        rs.getString("choix3"),
-                        rs.getString("choix4"),
-                        rs.getString("bonneReponse"),
-                        rs.getInt("idQuiz")
-                );
-                questions.add(question);
-            }
-        }
-        return questions;
-    }
-
-    // Récupérer une question par son ID
-    public Question getQuestionById(int idQuestion) throws SQLException {
+    @Override
+    public Question getById(int id) {
         Question question = null;
-        String sql = "SELECT * FROM Question WHERE idQuestion = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idQuestion);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                question = new Question(
-                        rs.getInt("idQuestion"),
-                        rs.getString("enonce"),
-                        rs.getString("choix1"),
-                        rs.getString("choix2"),
-                        rs.getString("choix3"),
-                        rs.getString("choix4"),
-                        rs.getString("bonneReponse"),
-                        rs.getInt("idQuiz")
-                );
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "SELECT * FROM question WHERE idQuestion = ?";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                question = new Question();
+                question.setIdQuestion(resultSet.getInt("idQuestion"));
+                question.setEnonce(resultSet.getString("enonce"));
+                question.setChoix1(resultSet.getString("choix1"));
+                question.setChoix2(resultSet.getString("choix2"));
+                question.setChoix3(resultSet.getString("choix3"));
+                question.setChoix4(resultSet.getString("choix4"));
+                question.setBonneReponse(resultSet.getString("bonneReponse"));
+                question.setIdQuiz(resultSet.getInt("idQuiz"));
             }
+            preparedStatement.close();
+            bd.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return question;
     }
 
-    // Supprimer une question
-    public void supprimerQuestion(int idQuestion) throws SQLException {
-        String sql = "DELETE FROM Question WHERE idQuestion = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idQuestion);
-            stmt.executeUpdate();
+    @Override
+    public ArrayList<Question> getAll() {
+        ArrayList<Question> questions = new ArrayList<>();
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "SELECT * FROM question";
+            Statement statement = bd.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                Question question = new Question();
+                question.setIdQuestion(resultSet.getInt("idQuestion"));
+                question.setEnonce(resultSet.getString("enonce"));
+                question.setChoix1(resultSet.getString("choix1"));
+                question.setChoix2(resultSet.getString("choix2"));
+                question.setChoix3(resultSet.getString("choix3"));
+                question.setChoix4(resultSet.getString("choix4"));
+                question.setBonneReponse(resultSet.getString("bonneReponse"));
+                question.setIdQuiz(resultSet.getInt("idQuiz"));
+                questions.add(question);
+            }
+            statement.close();
+            bd.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return questions;
+    }
+
+    @Override
+    public void update(Question question) {
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "UPDATE question SET enonce = ?, choix1 = ?, choix2 = ?, choix3 = ?, choix4 = ?, bonneReponse = ?, idQuiz = ? WHERE idQuestion = ?";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            preparedStatement.setString(1, question.getEnonce());
+            preparedStatement.setString(2, question.getChoix1());
+            preparedStatement.setString(3, question.getChoix2());
+            preparedStatement.setString(4, question.getChoix3());
+            preparedStatement.setString(5, question.getChoix4());
+            preparedStatement.setString(6, question.getBonneReponse());
+            preparedStatement.setInt(7, question.getIdQuiz());
+            preparedStatement.setInt(8, question.getIdQuestion());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            bd.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
-    // Mettre à jour une question
-    public void mettreAJourQuestion(Question question) throws SQLException {
-        String sql = "UPDATE Question SET enonce = ?, choix1 = ?, choix2 = ?, choix3 = ?, choix4 = ?, bonneReponse = ? WHERE idQuestion = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, question.getEnonce());
-            stmt.setString(2, question.getChoix1());
-            stmt.setString(3, question.getChoix2());
-            stmt.setString(4, question.getChoix3());
-            stmt.setString(5, question.getChoix4());
-            stmt.setString(6, question.getBonneReponse());
-            stmt.setInt(7, question.getIdQuestion());
-            stmt.executeUpdate();
+    @Override
+    public void delete(int id) {
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "DELETE FROM question WHERE idQuestion = ?";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            bd.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }
-

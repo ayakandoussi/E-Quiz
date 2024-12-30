@@ -1,13 +1,7 @@
 package com.projetjava.controller;
 
 import com.projetjava.model.dao.impl.BDConnexion;
-import com.projetjava.domain.Question; // Assurez-vous que cette classe existe et contient les informations des questions
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import com.projetjava.domain.Question;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -15,11 +9,15 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionController {
-    
+
     private List<Question> questions; // Liste pour stocker les questions du quiz
     private int indexQuestionActuelle = 0; // Index de la question actuelle
     private int quizId; // ID du quiz actuel
@@ -32,47 +30,51 @@ public class QuestionController {
 
     @FXML
     private Button validerButton, suivantButton;
-    
+
     // Constructeur avec quizId
     public QuestionController(int quizId) {
         this.quizId = quizId;
         this.questions = new ArrayList<>();
+    }
+
+    @FXML
+    public void initialize() throws SQLException {
         chargerQuestions(); // Charger les questions à partir de la base de données
+        questionSuivante(); // Charger la première question immédiatement
     }
-    
+
     // Méthode pour charger les questions depuis la base de données
-    private void chargerQuestions() {
-    String sql = "SELECT * FROM Question WHERE quiz_id = ?";
+    private void chargerQuestions() throws SQLException {
+        String sql = "SELECT * FROM Question WHERE quiz_id = ?";
+        BDConnexion bdConnexion = new BDConnexion();
+        try (Connection connection = bdConnexion.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, quizId); // Assigner le quiz_id à la requête
+            ResultSet resultSet = statement.executeQuery();
 
-    try (Connection connection = BDConnexion.getConnection();
-         PreparedStatement statement = connection.prepareStatement(sql)) {
-        statement.setInt(1, quizId); // Assigner le quiz_id à la requête
-        ResultSet resultSet = statement.executeQuery();
+            // Parcourir les résultats et ajouter les questions à la liste
+            while (resultSet.next()) {
+                int idQuestion = resultSet.getInt("idQuestion"); // ID de la question
+                String enonce = resultSet.getString("enonce"); // Texte de la question
+                String choix1 = resultSet.getString("choix1");
+                String choix2 = resultSet.getString("choix2");
+                String choix3 = resultSet.getString("choix3");
+                String choix4 = resultSet.getString("choix4");
+                String bonneReponse = resultSet.getString("bonne_reponse");
+                int idQuiz = resultSet.getInt("quiz_id"); // ID du quiz auquel cette question appartient
 
-        // Parcourir les résultats et ajouter les questions à la liste
-        while (resultSet.next()) {
-            int idQuestion = resultSet.getInt("idQuestion"); // ID de la question
-            String enonce = resultSet.getString("enonce"); // Texte de la question
-            String choix1 = resultSet.getString("choix1");
-            String choix2 = resultSet.getString("choix2");
-            String choix3 = resultSet.getString("choix3");
-            String choix4 = resultSet.getString("choix4");
-            String bonneReponse = resultSet.getString("bonne_reponse");
-            int idQuiz = resultSet.getInt("quiz_id"); // ID du quiz auquel cette question appartient
-
-            // Ajouter la question à la liste
-            questions.add(new Question(idQuestion, enonce, choix1, choix2, choix3, choix4, bonneReponse, idQuiz));
+                // Ajouter la question à la liste
+                questions.add(new Question(idQuestion, enonce, choix1, choix2, choix3, choix4, bonneReponse, idQuiz));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showMessage("Erreur", "Erreur lors du chargement des questions.");
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        showMessage("Erreur", "Erreur lors du chargement des questions.");
     }
-}
-
 
     // Méthode pour valider la réponse
     @FXML
-    private void validerReponse() {
+    private void validerReponse()throws SQLException {
         String reponseSelectionnee = null;
         boolean estCorrect = false;
 
@@ -107,32 +109,23 @@ public class QuestionController {
         }
     }
 
-    /**
-     * Enregistre la réponse de l'étudiant dans la base de données.
-     * 
-     * @param reponseChoisie La réponse sélectionnée par l'étudiant.
-     * @param estCorrect Indique si la réponse est correcte ou non.
-     */
-    private void enregistrerReponseDansBaseDeDonnees(String reponseChoisie, boolean estCorrect) {
-        // Récupérer l'ID de l'étudiant (supposons que vous ayez un objet 'Utilisateur' ou un ID stocké dans la session)
-        int etudiantId = getEtudiantId(); // Cette méthode doit renvoyer l'ID de l'étudiant connecté
+    // Méthode pour enregistrer la réponse dans la base de données
+    private void enregistrerReponseDansBaseDeDonnees(String reponseChoisie, boolean estCorrect) throws SQLException{
+        // Récupérer l'ID de l'étudiant (à adapter selon votre application)
+        int etudiantId = getEtudiantId(); 
 
-        // Récupérer l'ID de la question (si vous avez un objet 'Question' ou un ID passé à la méthode)
-        int questionId = getQuestionId(); // Cette méthode doit renvoyer l'ID de la question actuelle
-
-        // Utiliser la classe BDConnexion pour obtenir la connexion
-        try (Connection connection = BDConnexion.getConnection()) {  
-            // Créer une requête SQL pour insérer la réponse dans la table ResultatEtudiant
+        // Récupérer l'ID de la question
+        int questionId = getQuestionId(); 
+        BDConnexion bdConnexion = new BDConnexion();
+        try (Connection connection = bdConnexion.getConnection()) {
             String sql = "INSERT INTO ResultatEtudiant (question_id, etudiant_id, reponse_choisie, est_correct) VALUES (?, ?, ?, ?)";
 
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                // Remplacer les paramètres de la requête
-                statement.setInt(1, questionId);  // ID de la question
-                statement.setInt(2, etudiantId);  // ID de l'étudiant
-                statement.setString(3, reponseChoisie);  // La réponse choisie
-                statement.setBoolean(4, estCorrect);  // Vérifier si la réponse est correcte
+                statement.setInt(1, questionId);
+                statement.setInt(2, etudiantId);
+                statement.setString(3, reponseChoisie);
+                statement.setBoolean(4, estCorrect);
 
-                // Exécuter la requête
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -141,11 +134,7 @@ public class QuestionController {
         }
     }
 
-    /**
-     * Désélectionne tous les autres choix sauf celui qui est actuellement sélectionné.
-     * 
-     * @param choixSelectionne Le choix actuellement sélectionné.
-     */
+    // Méthode pour désélectionner les autres choix
     private void deselectionnerAutresChoix(CheckBox choixSelectionne) {
         if (choixSelectionne != choix1) choix1.setSelected(false);
         if (choixSelectionne != choix2) choix2.setSelected(false);
@@ -165,15 +154,11 @@ public class QuestionController {
     // Méthode pour passer à la question suivante
     @FXML
     private void questionSuivante() {
-        // Vérifier si l'index est valide
         if (indexQuestionActuelle < questions.size()) {
-            // Récupérer la question actuelle
             Question questionActuelle = questions.get(indexQuestionActuelle);
 
-            // Mettre à jour le texte de la question
+            // Mettre à jour l'interface utilisateur
             questionField.setText(questionActuelle.getEnonce());
-
-            // Mettre à jour les choix
             choix1.setText(questionActuelle.getChoix1());
             choix2.setText(questionActuelle.getChoix2());
             choix3.setText(questionActuelle.getChoix3());
@@ -188,22 +173,20 @@ public class QuestionController {
             // Incrémenter l'index pour la prochaine question
             indexQuestionActuelle++;
         } else {
-            // Si nous avons atteint la fin des questions, afficher un message ou un score
+            // Si toutes les questions ont été traitées
             showMessage("Fin du quiz", "Vous avez terminé le quiz !");
-            // Vous pouvez également désactiver le bouton suivant
-            suivantButton.setDisable(true);
+            suivantButton.setDisable(true); // Désactiver le bouton suivant
         }
     }
 
     // Méthodes fictives pour récupérer l'ID de l'étudiant et de la question
     private int getEtudiantId() {
-        // Récupérer l'ID de l'étudiant à partir de la session ou de l'utilisateur connecté
-        return 1; // Par exemple
+        // À implémenter selon votre logique d'application (par exemple, session ou connexion utilisateur)
+        return 1; // Valeur fictive
     }
 
     private int getQuestionId() {
-        // Retourner l'ID de la question actuelle
-        return questions.get(indexQuestionActuelle).getIdQuestion(); // Exemple basé sur l'objet Question
+        return questions.get(indexQuestionActuelle).getIdQuestion(); // Récupérer l'ID de la question actuelle
     }
 
     // Méthode pour récupérer la question actuelle
