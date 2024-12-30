@@ -26,7 +26,7 @@ public class Professeur extends Utilisateur {
 
     @Override
     public void afficher() {
-        System.out.println("Professeur: " + getNom() + " " + getPrenom() + ".");
+        System.out.println("Professeur: " + getNom() + " " + getPrenom() );
     }
 
 }
