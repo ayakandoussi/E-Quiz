@@ -1,8 +1,7 @@
 
-.mainFxmlClass {
-
-}
-
-.textArea{
-    background-color: #111178;
+.prof-label {
+    -fx-background-color: blue;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
 }
