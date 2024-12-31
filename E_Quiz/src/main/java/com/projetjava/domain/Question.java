@@ -31,6 +31,9 @@ public class Question {
         this.bonneReponse = bonneReponse;
         this.idQuiz = idQuiz;
     }
+    
+    
+    
 
     // Getters and Setters
     public int getIdQuestion() {

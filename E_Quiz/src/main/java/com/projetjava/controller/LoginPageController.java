@@ -1,5 +1,7 @@
 package com.projetjava.controller;
 
+import com.projetjava.domain.Session;
+import com.projetjava.domain.Utilisateur;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -135,7 +137,7 @@ public class LoginPageController implements Initializable {
                         LabelAleady.setVisible(false);
 
                     });
-                     slider.play();
+                    slider.play();
 
                 }
             } catch (SQLException e) {
@@ -147,7 +149,7 @@ public class LoginPageController implements Initializable {
             }
         }
     }
-   
+
     public void regBtn(ActionEvent event) throws IOException {
         if (EmailIn.getText().isEmpty() || PasswordIn.getText().isEmpty()) {
             alert = new Alert(AlertType.ERROR);
@@ -158,10 +160,10 @@ public class LoginPageController implements Initializable {
         } else {
 
             // Connexion à la base de données
-            String url = "jdbc:mysql://localhost:3306/e-quiz"; // Remplacez par le nom de votre base
-            String user = "root"; // Votre utilisateur MySQL
-            String password = ""; // Votre mot de passe MySQL
-            String query = "SELECT * FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
+            String url = "jdbc:mysql://localhost:3306/e-quiz";
+            String user = "root";
+            String password = "";
+            String query = "SELECT id, email, nom FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
 
             try (Connection conn = DriverManager.getConnection(url, user, password); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -177,8 +179,26 @@ public class LoginPageController implements Initializable {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    
+                    // Récupérer les données utilisateur
+                    int userId = rs.getInt("id");
+                    String userEmail = rs.getString("email");
+                    String userNom = rs.getString("nom");
 
+                    // Créer une instance vide de l'utilisateur
+                    Utilisateur utilisateur = new Utilisateur() {
+                        @Override
+                        public void afficher() {
+                        }
+                    };
+
+                    // Définir les champs individuellement
+                    utilisateur.setId(userId);
+                    utilisateur.setEmail(userEmail);
+                    utilisateur.setNom(userNom);
+
+                    // Initialiser la session
+                    Session session = Session.getInstance();
+                    session.setUtilisateurConnecte(utilisateur);
                     // Charger et afficher la nouvelle page
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
                     Parent root = loader.load();
@@ -188,6 +208,30 @@ public class LoginPageController implements Initializable {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
+
+                    /*String role = session.getUtilisateurConnecte().getRole();
+                    FXMLLoader loader;
+
+                    if ("Professeur".equals(role)) {
+                        loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/QuizPage.fxml"));
+                        Parent root = loader.load();
+
+                        // Obtenez la scène actuelle
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    } else if ("Etudiant".equals(role)) {
+                        loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                        Parent root = loader.load();
+
+                        // Obtenez la scène actuelle
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    }*/
+
                 } else {
                     // Si aucun utilisateur ne correspond
                     alert = new Alert(AlertType.ERROR);
@@ -205,7 +249,6 @@ public class LoginPageController implements Initializable {
                 alert.showAndWait();
             }
         }
-
     }
 
     @FXML

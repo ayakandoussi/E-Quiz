@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1">
+    <Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+            <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+                <font>
+                    <Font size="17.0" />
+                </font>
+            </Label>
+            <ImageView fitHeight="88.0" fitWidth="92.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../images/logo.png" />
+                </image>
+            </ImageView>
+            <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Accueil" />
+                    <MenuItem mnemonicParsing="false" text="Profil" />
+                    <MenuItem mnemonicParsing="false" text="Se deconnecter" />
+                </items>
+            </MenuButton>
+        </children>
+    </Pane>
+</AnchorPane>
