@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -202,18 +201,7 @@ public class LoginPageController implements Initializable {
                     // Initialiser la session
                     Session session = Session.getInstance();
                     session.setUtilisateurConnecte(utilisateur);
-                    // Charger et afficher la nouvelle page
-                    /*
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/QuizPage.fxml"));
-                    Parent root = loader.load();
-
-                    // Obtenez la scène actuelle
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
-
-                    */
+                     
                     String role = session.getUtilisateurConnecte().getRole();
                     FXMLLoader loader;
 
