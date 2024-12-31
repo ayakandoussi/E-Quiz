@@ -18,8 +18,8 @@ public class Etudiant extends Utilisateur {
     
 
     @Override
-    public void afficher() {
-        System.out.println("Etudiant: " + getNom() + " " + getPrenom() );
+    public String afficher() {
+        return("Etudiant: " + getNom() + " " + getPrenom() );
     }
 
 }

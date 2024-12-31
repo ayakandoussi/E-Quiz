@@ -1,234 +1,112 @@
 package com.projetjava.controller;
 
+import com.projetjava.domain.Quiz;
+import com.projetjava.domain.Utilisateur;
+import com.projetjava.model.dao.impl.QuizDao;
+import com.projetjava.model.dao.impl.UtilisateurDao;
+import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.scene.control.Button;
 
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
-public class AccueilController implements Initializable {
+public class AccueilController {
 
     @FXML
-    private Label roleLabel;
+    private Pane AccueilPane;
+
+    @FXML
+    private ImageView img_Bienvenue;
+
+    @FXML
+    private Label label_Bienvenue;
 
     @FXML
     private VBox profList;
 
     @FXML
-    private GridPane quizGrid;
-
-    @FXML
     private ScrollPane profScrollPane;
 
     @FXML
-    private ScrollPane quizScrollPane; 
+    private GridPane quizGrid;
 
-
-    private List<Professor> professors;
-    private List<Quiz> quizzes;
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Exemple d'initialisation : définir le label du rôle et le nom/prénom de l'utilisateur
-        User currentUser = getCurrentUser(); // Récupérer l'utilisateur actuel
-        roleLabel.setText(currentUser.getRole() + " : " + currentUser.getFirstName() + " " + currentUser.getLastName());
-
-        // Charger les professeurs
-        loadProfessors();
-
-        // Charger les quiz pour le premier professeur (exemple)
-        if (!professors.isEmpty()) {
-            loadQuizzesForProfessor(professors.get(0).getId());
-        }
-    }
-
-    /**
-     * Charge la liste des professeurs dans le VBox.
-     */
-    private void loadProfessors() {
-        // Exemple dynamique : récupérer tous les professeurs
-        professors = getProfessorsFromDatabase(); // Simuler la récupération depuis une base de données
-
-        for (Professor professor : professors) {
-            // Créer un bouton pour chaque professeur avec son nom et prénom
-            Button profButton = new Button(professor.getFirstName() + " " + professor.getLastName());
-            profButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-            int profId = professor.getId(); // Pour utiliser dans le lambda
-            profButton.setOnAction(event -> loadQuizzesForProfessor(profId));
-            profList.getChildren().add(profButton);
-        }
-
-        // Si vous souhaitez que le VBox soit scrollable, vous pouvez ajouter le ScrollPane
-        profScrollPane.setContent(profList);
-    }
-
-    /**
-     * Charge les quiz associés à un professeur dans la grille.
-     *
-     * @param professorId L'identifiant du professeur.
-     */
-    private void loadQuizzesForProfessor(int professorId) {
-        // Nettoyer la grille avant d'ajouter les quiz
-        quizGrid.getChildren().clear();
-
-        // Exemple dynamique : récupérer les quiz pour un professeur spécifique
-        quizzes = getQuizzesForProfessor(professorId); // Simuler la récupération depuis une base de données
-
-        for (int i = 0; i < quizzes.size(); i++) {
-            Quiz quiz = quizzes.get(i);
-            Label quizTitle = new Label(quiz.getTitle());
-            quizTitle.setStyle("-fx-border-color: blue; -fx-alignment: center;");
-
-            Label quizDescription = new Label(quiz.getDescription());
-            quizDescription.setStyle("-fx-alignment: center;");
-
-            Button quizButton = new Button("Passer");
-            quizButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-            int quizId = quiz.getId(); // Pour utilisation dans le lambda
-            quizButton.setOnAction(event -> passQuiz(quizId));
-
-            // Ajouter à la grille (3 colonnes)
-            quizGrid.add(quizTitle, (i) % 3, (i) / 3);
-            quizGrid.add(quizDescription, (i) % 3, (i) / 3 + 1);
-            quizGrid.add(quizButton, (i) % 3, (i) / 3 + 2);
-        }
-
-        // Si vous souhaitez que la grille soit scrollable, vous pouvez ajouter le ScrollPane
-        quizScrollPane.setContent(quizGrid);
-    }
-
-    /**
-     * Action pour passer un quiz.
-     *
-     * @param quizId L'identifiant du quiz.
-     */
-    private void passQuiz(int quizId) {
-        System.out.println("Passer le quiz : " + quizId);
-        // Implémenter la logique pour passer le quiz (changer de page, afficher un formulaire, etc.)
-    }
-
-    /**
-     * Méthodes pour le menu (Accueil, Profil, Déconnexion).
-     */
     @FXML
-    private void goToHome() {
-        System.out.println("Naviguer vers l'accueil.");
-        // Implémenter la navigation vers l'accueil
+    private ScrollPane quizScrollPane;
+
+    private UtilisateurDao utilisateurDao;
+    private QuizDao quizDao;
+
+    private ExecutorService executorService;
+
+    public AccueilController() {
+        this.utilisateurDao = new UtilisateurDao();
+        this.quizDao = new QuizDao();
+        this.executorService = Executors.newFixedThreadPool(2); // Création d'un pool de 2 threads
     }
 
     @FXML
-    private void goToProfile() {
-        System.out.println("Naviguer vers le profil.");
-        // Implémenter la navigation vers le profil
+    public void initialize() {
+        loadProfesseurs();
     }
 
-    @FXML
-    private void logout() {
-        System.out.println("Déconnexion.");
-        // Implémenter la logique de déconnexion
+    private void loadProfesseurs() {
+        executorService.submit(() -> {
+            try {
+                ArrayList<Utilisateur> professeurs = utilisateurDao.getAll();
+                Platform.runLater(() -> {
+                    for (Utilisateur professeur : professeurs) {
+                        addProfesseur(professeur);
+                    }
+                });
+            } catch (Exception e) {
+            }
+        });
     }
 
-    // Méthodes simulant la récupération des données depuis une base de données
-
-    private User getCurrentUser() {
-        // Exemple d'utilisateur, il faut remplacer cela par une récupération réelle
-        return new User("Etudiant", "John", "Doe");
+    private void addProfesseur(Utilisateur professeur) {
+        Label label = new Label(professeur.getNom() + " " + professeur.getPrenom());
+        label.setOnMouseClicked(event -> loadQuizByProfesseur(professeur));
+        profList.getChildren().add(label);
     }
 
-    private List<Professor> getProfessorsFromDatabase() {
-        // Simuler des données pour les professeurs
-        return List.of(
-            new Professor(1, "Alice", "Martin"),
-            new Professor(2, "Bob", "Dupont")
-        );
+    private void loadQuizByProfesseur(Utilisateur professeur) {
+        executorService.submit(() -> {
+            try {
+                ArrayList<Quiz> quizzes = quizDao.getQuizzesByProfesseur(professeur.getId());
+                Platform.runLater(() -> {
+                    quizGrid.getChildren().clear();
+                    for (Quiz quiz : quizzes) {
+                        addQuiz(quiz);
+                    }
+                });
+            } catch (Exception e) {
+            }
+        });
     }
 
-    private List<Quiz> getQuizzesForProfessor(int professorId) {
-        // Simuler des quiz pour un professeur
-        return List.of(
-            new Quiz(1, "Quiz 1", "Description du quiz 1"),
-            new Quiz(2, "Quiz 2", "Description du quiz 2")
-        );
-    }
-}
+    private void addQuiz(Quiz quiz) {
+        int row = quizGrid.getChildren().size() / 3;
+        int column = quizGrid.getChildren().size() % 2;
 
-// Classes simulées pour l'utilisateur, le professeur et le quiz
-
-class User {
-    private String role;
-    private String firstName;
-    private String lastName;
-
-    public User(String role, String firstName, String lastName) {
-        this.role = role;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        Label label = new Label(quiz.getTitre() + "\n" + quiz.getDescription());
+        quizGrid.add(label, column, row);
+        Button button = new Button("Passer");
+        button.setOnAction(event -> startQuiz(quiz));
+        quizGrid.add(button, column, row + 1);
     }
 
-    public String getRole() {
-        return role;
+    private void startQuiz(Quiz quiz) {
+
+        System.out.println("Démarrer le quiz: " + quiz.getTitre());
+        //rediriger vers  page quiz
+        
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-}
-
-class Professor {
-    private int id;
-    private String firstName;
-    private String lastName;
-
-    public Professor(int id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-}
-
-class Quiz {
-    private int id;
-    private String title;
-    private String description;
-
-    public Quiz(int id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }
