@@ -1,6 +1,7 @@
 package com.projetjava.controller;
 
-
+import com.projetjava.domain.Etudiant;
+import com.projetjava.domain.Professeur;
 import com.projetjava.domain.Session;
 import com.projetjava.domain.Utilisateur;
 import javafx.fxml.FXML;
@@ -23,11 +24,10 @@ public class NavbarController {
     @FXML
     private MenuItem SeDeconnecter;
 
-    
     @FXML
     private Label rolelabel;
-    
-     @FXML
+
+    @FXML
     public void initialize() {
         // Récupérer l'utilisateur connecté depuis la session
         Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
@@ -40,11 +40,17 @@ public class NavbarController {
     }
 
     private void afficherRole(Utilisateur utilisateur) {
-        // Utilise la méthode afficher() pour obtenir les informations de l'utilisateur (qui inclut déjà le rôle)
-        String contenuAffichage;
-        contenuAffichage = utilisateur.afficher();
+        String contenu;
+        if (utilisateur.getRole().equalsIgnoreCase("professeur")) {
+            Professeur professeur = new Professeur(utilisateur);
 
-        // Affiche le contenu dans le rolelabel
-        rolelabel.setText(contenuAffichage);
+            contenu = professeur.afficher();
+        } else {
+            Etudiant etudiant = new Etudiant(utilisateur);
+
+            contenu = etudiant.afficher();
+        }
+
+        rolelabel.setText(contenu);
     }
 }
