@@ -162,7 +162,7 @@ public class LoginPageController implements Initializable {
             String url = "jdbc:mysql://localhost:3306/e-quiz";
             String user = "root";
             String password = "";
-            String query = "SELECT id, email, nom ,role  FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
+            String query = "SELECT id, email, nom ,prenom,role  FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
 
             try (Connection conn = DriverManager.getConnection(url, user, password); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -182,6 +182,7 @@ public class LoginPageController implements Initializable {
                     int userId = rs.getInt("id");
                     String userEmail = rs.getString("email");
                     String userNom = rs.getString("nom");
+                    String userPren = rs.getString("prenom");
                     String userRole = rs.getString("role");
 
                     // Créer une instance vide de l'utilisateur
@@ -195,6 +196,7 @@ public class LoginPageController implements Initializable {
                     // Définir les champs individuellement
                     utilisateur.setId(userId);
                     utilisateur.setEmail(userEmail);
+                    utilisateur.setPrenom(userPren);
                     utilisateur.setNom(userNom);
                     utilisateur.setRole(userRole);
                     
@@ -210,7 +212,7 @@ public class LoginPageController implements Initializable {
                         if ("professeur".equals(role)) {
                             loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
                         } else if ("etudiant".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/navbar.fxml"));
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
                         } else {
                             throw new IllegalStateException("Rôle non valide.");
                         }

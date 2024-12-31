@@ -23,7 +23,7 @@ public class Etudiant extends Utilisateur {
 
     @Override
     public String afficher() {
-        return("Etudiant: " + getNom() + " " + getPrenom() );
+        return("Etudiant: "   + getPrenom()+ " " + getNom());
     }
 
 }

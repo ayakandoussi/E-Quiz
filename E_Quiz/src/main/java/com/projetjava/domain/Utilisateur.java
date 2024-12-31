@@ -45,7 +45,7 @@ public abstract class Utilisateur {
     }
 
     public String getPrenom() {
-        return prenom;
+        return this.prenom;
     }
 
     public String getEmail() {
