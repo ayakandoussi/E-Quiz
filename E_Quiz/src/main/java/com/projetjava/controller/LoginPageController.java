@@ -187,7 +187,8 @@ public class LoginPageController implements Initializable {
                     // Créer une instance vide de l'utilisateur
                     Utilisateur utilisateur = new Utilisateur() {
                         @Override
-                        public void afficher() {
+                        public String afficher() {
+                            return null;
                         }
                     };
 
@@ -207,9 +208,9 @@ public class LoginPageController implements Initializable {
 
                     try {
                         if ("professeur".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Resultat.fxml"));
-                        } else if ("etudiant".equals(role)) {
                             loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                        } else if ("etudiant".equals(role)) {
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/navbar.fxml"));
                         } else {
                             throw new IllegalStateException("Rôle non valide.");
                         }
