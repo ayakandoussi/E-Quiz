@@ -124,16 +124,16 @@ public class QuizDao implements Dao<Quiz> {
 
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "SELECT * FROM quiz WHERE professeur.id=?";
+            String query = "SELECT * FROM quiz WHERE idEnseignant=?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, professeurId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("id"));
+                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
                 quiz.setTitre(resultSet.getString("titre"));
-                quiz.setTheme(resultSet.getString("theme"));
+                quiz.setDescription(resultSet.getString("theme"));
 
                 quizzes.add(quiz);
             }
