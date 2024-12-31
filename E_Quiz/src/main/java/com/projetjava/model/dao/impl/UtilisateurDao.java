@@ -1,4 +1,5 @@
 package com.projetjava.model.dao.impl;
+import org.mindrot.jbcrypt.BCrypt;
 
 import com.projetjava.domain.Etudiant;
 import com.projetjava.domain.Professeur;
@@ -9,27 +10,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UtilisateurDao implements Dao<Utilisateur> {
 
-    @Override
-    public void add(Utilisateur utilisateur) {
-        try {
-            BDConnexion bd = new BDConnexion();
-            String query = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
-            preparedStatement.setString(1, utilisateur.getNom());
-            preparedStatement.setString(2, utilisateur.getPrenom());
-            preparedStatement.setString(3, utilisateur.getEmail());
-            preparedStatement.setString(4, utilisateur.getMotDePasse());
-            preparedStatement.setString(5, utilisateur.getRole());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            bd.close();
-        } catch (SQLException ex) {
-
-        }
+@Override
+public void add(Utilisateur utilisateur) {
+    try {
+        BDConnexion bd = new BDConnexion();
+        String query = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+        String hashedPassword = BCrypt.hashpw(utilisateur.getMotDePasse(), BCrypt.gensalt());
+        preparedStatement.setString(1, utilisateur.getNom());
+        preparedStatement.setString(2, utilisateur.getPrenom());
+        preparedStatement.setString(3, utilisateur.getEmail());
+        preparedStatement.setString(4, hashedPassword);
+        preparedStatement.setString(5, utilisateur.getRole());
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+        bd.close();
+    } catch (SQLException ex) {
+        
     }
+}
 
     @Override
     public Utilisateur getById(int id) {
@@ -127,4 +130,3 @@ public class UtilisateurDao implements Dao<Utilisateur> {
         }
     }
 }
-

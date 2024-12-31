@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="335.0" prefWidth="511.0" stylesheets="@../../../../../../../../../../Users/Bouchama/styles/questionpage.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.QuestionController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.QuestionController">
     <children>
-        <!-- Champ de texte pour afficher la question -->
-        <TextField fx:id="questionField" editable="false" layoutX="25.0" layoutY="42.0" prefHeight="61.0" prefWidth="474.0" />
+        <!-- Navbar -->
+        <Pane layoutY="0" prefHeight="53.0" prefWidth="600.0" style="-fx-background-color: blue;">
+            <children>
+                <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+                    <font>
+                        <Font size="17.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="88.0" fitWidth="92.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.png" />
+                    </image>
+                </ImageView>
+                <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Accueil" />
+                        <MenuItem mnemonicParsing="false" text="Profil" />
+                        <MenuItem mnemonicParsing="false" text="Se deconnecter" />
+                    </items>
+                </MenuButton>
+            </children>
+        </Pane>
+
+        <!-- Contenu principal de la page Quiz -->
+        <Label fx:id="questionLabel" layoutX="63.0" layoutY="80.0" prefHeight="61.0" prefWidth="474.0" style="-fx-background-color: beige;" text="Question ici" />
+        <CheckBox fx:id="choix1" layoutX="56.0" layoutY="177.0" />
+        <CheckBox fx:id="choix2" layoutX="56.0" layoutY="261.0" />
+        <CheckBox fx:id="choix3" layoutX="340.0" layoutY="177.0" />
+        <CheckBox fx:id="choix4" layoutX="340.0" layoutY="261.0" />
+        <Button fx:id="suivantButton" layoutX="252.0" layoutY="335.0" onAction="#questionSuivante" style="-fx-background-color: blue; -fx-text-fill: white;" text="Suivant" />
+      <Label fx:id="labelChoix1" layoutX="84.0" layoutY="173.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label1" />
+        <Label fx:id="labelChoix2" layoutX="84.0" layoutY="257.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label2" />
+        <Label fx:id="labelChoix3" layoutX="368.0" layoutY="173.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label3" />
+        <Label fx:id="labelChoix4" layoutX="368.0" layoutY="257.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label4" />
         
-        <!-- Cases à cocher pour les choix de réponses -->
-        <CheckBox fx:id="choix1" layoutX="49" layoutY="156" />
-        <CheckBox fx:id="choix2" layoutX="49" layoutY="215" />
-        <CheckBox fx:id="choix3" layoutX="368" layoutY="156" />
-        <CheckBox fx:id="choix4" layoutX="368" layoutY="215" />
-        
-        <!-- Boutons pour valider la réponse et passer à la suivante -->
-        <Button fx:id="validerButton" layoutX="88.0" layoutY="260.0" onAction="#validerReponse" style="-fx-background-color: blue; -fx-text-fill: white;" stylesheets="@../../../../../../../../../../Users/Bouchama/styles/questionpage.css" text="Valider" />
-        <Button fx:id="suivantButton" layoutX="320.0" layoutY="260.0" onAction="#questionSuivante" style="-fx-background-color: blue; -fx-text-fill: white;" text="Suivant" />
     </children>
 </AnchorPane>

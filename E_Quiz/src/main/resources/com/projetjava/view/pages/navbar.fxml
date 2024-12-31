@@ -8,24 +8,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.view.pages.NavbarController">
+<Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.NavbarController">
     <children>
-        <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+        <Label fx:id="rolelabel" alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
             <font>
                 <Font size="17.0" />
             </font>
         </Label>
-      <ImageView fitHeight="88.0" fitWidth="92.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/logo.png" />
-         </image>
-      </ImageView>
-      <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Accueil" />
-          <MenuItem mnemonicParsing="false" text="Profil" />
-            <MenuItem mnemonicParsing="false" text="Se deconnecter" />
-        </items>
-      </MenuButton>
+        <ImageView fitHeight="88.0" fitWidth="92.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../images/logo.png" />
+            </image>
+        </ImageView>
+        <MenuButton fx:id="menu" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
+            <items>
+                <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
+                <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
+                <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" text="Se deconnecter" />
+            </items>
+        </MenuButton>
     </children>
 </Pane>
