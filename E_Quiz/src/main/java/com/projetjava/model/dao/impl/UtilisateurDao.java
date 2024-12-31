@@ -129,4 +129,34 @@ public void add(Utilisateur utilisateur) {
 
         }
     }
+    public Utilisateur getByEmail(String email) {
+    Utilisateur utilisateur = null;
+    try {
+        BDConnexion bd = new BDConnexion();
+        String query = "SELECT * FROM utilisateur WHERE email = ? ";
+        PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+        preparedStatement.setString(1, email);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            String role = resultSet.getString("role");
+            if (role.equals("professeur")) {
+                utilisateur = new Professeur(); // Type spécifique
+            } else if (role.equals("etudiant")) {
+                utilisateur = new Etudiant(); // Type spécifique
+            }
+            utilisateur.setId(resultSet.getInt("id"));
+            utilisateur.setNom(resultSet.getString("nom"));
+            utilisateur.setPrenom(resultSet.getString("prenom"));
+            utilisateur.setEmail(resultSet.getString("email"));
+            utilisateur.setMotDePasseS(resultSet.getString("mot_de_passe"));
+            utilisateur.setRole(role);
+        }
+        preparedStatement.close();
+        bd.close();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    return utilisateur;
+}
+
 }

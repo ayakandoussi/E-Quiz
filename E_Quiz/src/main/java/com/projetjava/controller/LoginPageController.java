@@ -2,13 +2,9 @@ package com.projetjava.controller;
 
 import com.projetjava.domain.Session;
 import com.projetjava.domain.Utilisateur;
+import com.projetjava.model.dao.impl.UtilisateurDao;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -30,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginPageController implements Initializable {
 
@@ -90,63 +87,52 @@ public class LoginPageController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Remplissez tous les champs !!");
             alert.showAndWait();
-        } else {
-            // Connexion à la base de données
-            String url = "jdbc:mysql://localhost:3306/e-quiz";
-            String user = "root";
-            String password = "";
-            String query = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe,role) VALUES (?, ?, ?, ?,?)";
-
-            try (Connection conn = DriverManager.getConnection(url, user, password); PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-                // Récupérer les valeurs des champs
-                String nom = Nom.getText();
-                String prenom = Prenom.getText();
-                String email = EmailSignUp.getText();
-                String mot_de_passe = PaswordSignUp.getText();
-                String role = (String) Role.getSelectionModel().getSelectedItem();
-
-                // Ajouter les valeurs au PreparedStatement
-                pstmt.setString(1, nom);
-                pstmt.setString(2, prenom);
-                pstmt.setString(3, email);
-                pstmt.setString(4, mot_de_passe);
-                pstmt.setString(5, role);
-
-                // Exécuter la requête
-                int rowsInserted = pstmt.executeUpdate();
-                if (rowsInserted > 0) {
-                    alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Succès");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Utilisateur enregistré avec succès !");
-                    alert.showAndWait();
-                    TranslateTransition slider = new TranslateTransition();
-                    slider.setNode(SignUp);
-
-                    slider.setToX(0);
-                    slider.setDuration(Duration.seconds(0.5));
-
-                    // Action après la transition
-                    slider.setOnFinished(e -> {
-                        HaveAccountBtn1.setVisible(false);
-                        CreateAccountBtn.setVisible(true);
-                        SignIn.setVisible(true);
-                        LabelDont.setVisible(true);
-                        LabelAleady.setVisible(false);
-
-                    });
-                    slider.play();
-
-                }
-            } catch (SQLException e) {
-                alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Erreur lors de l'enregistrement : " + e.getMessage());
-                alert.showAndWait();
-            }
         }
+        else {
+            // Créer l'utilisateur avec les données du formulaire
+            Utilisateur utilisateur = new Utilisateur() {
+                @Override
+                public String afficher() {
+                    return null;
+                }
+            };
+            utilisateur.setNom(Nom.getText());
+            utilisateur.setPrenom(Prenom.getText());
+            utilisateur.setEmail(EmailSignUp.getText());
+            utilisateur.setMotDePasseS(PaswordSignUp.getText());
+            utilisateur.setRole((String) Role.getSelectionModel().getSelectedItem());
+
+            // Utilisation de UtilisateurDao pour ajouter l'utilisateur à la base de données
+            UtilisateurDao utilisateurDao = new UtilisateurDao();
+            utilisateurDao.add(utilisateur);
+
+            alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText(null);
+            alert.setContentText("Utilisateur enregistré avec succès !");
+            alert.showAndWait();
+
+            // Transition vers l'écran suivant
+            TranslateTransition slider = new TranslateTransition();
+            slider.setNode(SignUp);
+            slider.setToX(0);
+            slider.setDuration(Duration.seconds(0.5));
+
+            slider.setOnFinished(e -> {
+                HaveAccountBtn1.setVisible(false);
+                CreateAccountBtn.setVisible(true);
+                SignIn.setVisible(true);
+                LabelDont.setVisible(true);
+                LabelAleady.setVisible(false);
+            });
+
+            slider.play();
+        }
+    }
+
+    public boolean verifierMotDePasse(String motDePasseSaisi, String motDePasseHache) {
+        // Vérifie si le mot de passe saisi correspond au mot de passe haché
+        return BCrypt.checkpw(motDePasseSaisi, motDePasseHache);
     }
 
     public void regBtn(ActionEvent event) throws IOException {
@@ -157,60 +143,26 @@ public class LoginPageController implements Initializable {
             alert.setContentText("Remplissez tous les champs !!!");
             alert.showAndWait();
         } else {
+            // Utilisation de UtilisateurDao pour récupérer l'utilisateur par email et mot de passe
+            UtilisateurDao utilisateurDao = new UtilisateurDao();
+            Utilisateur utilisateur = utilisateurDao.getByEmail(EmailIn.getText());
 
-            // Connexion à la base de données
-            String url = "jdbc:mysql://localhost:3306/e-quiz";
-            String user = "root";
-            String password = "";
-            String query = "SELECT id, email, nom ,prenom,role  FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
+            if (utilisateur != null) {
 
-            try (Connection conn = DriverManager.getConnection(url, user, password); PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-                // Récupérer les valeurs des champs
-                String email = EmailIn.getText();
-                String motDePasse = PasswordIn.getText();
-
-                // Ajouter les valeurs au PreparedStatement
-                pstmt.setString(1, email);
-                pstmt.setString(2, motDePasse);
-
-                // Exécuter la requête
-                ResultSet rs = pstmt.executeQuery();
-
-                if (rs.next()) {
-                    // Récupérer les données utilisateur
-                    int userId = rs.getInt("id");
-                    String userEmail = rs.getString("email");
-                    String userNom = rs.getString("nom");
-                    String userPren = rs.getString("prenom");
-                    String userRole = rs.getString("role");
-
-                    // Créer une instance vide de l'utilisateur
-                    Utilisateur utilisateur = new Utilisateur() {
-                        @Override
-                        public String afficher() {
-                            return null;
-                        }
-                    };
-
-                    // Définir les champs individuellement
-                    utilisateur.setId(userId);
-                    utilisateur.setEmail(userEmail);
-                    utilisateur.setPrenom(userPren);
-                    utilisateur.setNom(userNom);
-                    utilisateur.setRole(userRole);
-                    
-
+                boolean motDePasseValide = BCrypt.checkpw(PasswordIn.getText(), utilisateur.getMotDePasse());
+                if (motDePasseValide) {
                     // Initialiser la session
+
                     Session session = Session.getInstance();
                     session.setUtilisateurConnecte(utilisateur);
-                     
-                    String role = session.getUtilisateurConnecte().getRole();
+
+                    // Charger et afficher la nouvelle page selon le rôle
+                    String role = utilisateur.getRole();
                     FXMLLoader loader;
 
                     try {
                         if ("professeur".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/navbar.fxml"));
                         } else if ("etudiant".equals(role)) {
                             loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
                         } else {
@@ -227,7 +179,6 @@ public class LoginPageController implements Initializable {
                         stage.show();
 
                     } catch (IOException e) {
-                        // Gestion des erreurs si le fichier FXML n'a pas pu être chargé
                         alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Erreur");
                         alert.setHeaderText(null);
@@ -243,13 +194,6 @@ public class LoginPageController implements Initializable {
                     alert.setContentText("Email ou mot de passe incorrect !");
                     alert.showAndWait();
                 }
-            } catch (SQLException e) {
-                // Gérer les exceptions SQL
-                alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Erreur lors de la connexion : " + e.getMessage());
-                alert.showAndWait();
             }
         }
     }

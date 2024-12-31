@@ -60,7 +60,10 @@ public abstract class Utilisateur {
         String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
         this.motDePasse = motDePasseHache;
     }
-
+    public void setMotDePasseS(String motDePasse) {
+        //String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
+        this.motDePasse = motDePasse;
+    }
     public void setId(int id) {
         Utilisateur.id = id;
     }
