@@ -81,6 +81,6 @@ public abstract class Utilisateur {
         this.role = role;
     }
 
-    public abstract void afficher();
+    public abstract String afficher();
 
 }
