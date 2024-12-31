@@ -15,6 +15,10 @@ public class Etudiant extends Utilisateur {
         super();
         this.quizDisponibles = new ArrayList<>();
     }
+
+    public Etudiant(Utilisateur utilisateur) {
+        super(utilisateur);
+    }
     
 
     @Override

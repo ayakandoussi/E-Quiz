@@ -16,6 +16,10 @@ public class Professeur extends Utilisateur {
         this.quizCrees = quizCrees;
     }
 
+    public Professeur(Utilisateur utilisateur) {
+        super(utilisateur);
+    }
+
     public ArrayList<Quiz> getQuizCrees() {
         return quizCrees;
     }
