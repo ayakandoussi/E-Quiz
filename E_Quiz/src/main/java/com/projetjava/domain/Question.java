@@ -1,11 +1,7 @@
-
-
-
-
-
 package com.projetjava.domain;
 
 public class Question {
+
     private int idQuestion;
     private String enonce;
     private String choix1;
@@ -18,8 +14,6 @@ public class Question {
     public Question() {
     }
 
-    
-    
     // Constructeur avec tous les paramètres nécessaires
     public Question(int idQuestion, String enonce, String choix1, String choix2, String choix3, String choix4, String bonneReponse, int idQuiz) {
         this.idQuestion = idQuestion;
@@ -31,9 +25,6 @@ public class Question {
         this.bonneReponse = bonneReponse;
         this.idQuiz = idQuiz;
     }
-    
-    
-    
 
     // Getters and Setters
     public int getIdQuestion() {

@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.AccueilController">
    
-    <Pane layoutY="-1.0" prefHeight="53.0" prefWidth="602.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <Pane prefHeight="53.0" prefWidth="602.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <children>
             <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
                 <font>

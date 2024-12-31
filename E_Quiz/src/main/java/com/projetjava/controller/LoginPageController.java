@@ -187,7 +187,8 @@ public class LoginPageController implements Initializable {
                     // Créer une instance vide de l'utilisateur
                     Utilisateur utilisateur = new Utilisateur() {
                         @Override
-                        public void afficher() {
+                        public String afficher() {
+                            return null;
                         }
                     };
 
@@ -231,7 +232,6 @@ public class LoginPageController implements Initializable {
                         stage.setScene(scene);
                         stage.show();
                     }*/
-
                 } else {
                     // Si aucun utilisateur ne correspond
                     alert = new Alert(AlertType.ERROR);
