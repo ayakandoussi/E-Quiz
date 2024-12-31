@@ -1,4 +1,5 @@
 package com.projetjava.model.dao.impl;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.projetjava.domain.Etudiant;
@@ -14,25 +15,25 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class UtilisateurDao implements Dao<Utilisateur> {
 
-@Override
-public void add(Utilisateur utilisateur) {
-    try {
-        BDConnexion bd = new BDConnexion();
-        String query = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
-        String hashedPassword = BCrypt.hashpw(utilisateur.getMotDePasse(), BCrypt.gensalt());
-        preparedStatement.setString(1, utilisateur.getNom());
-        preparedStatement.setString(2, utilisateur.getPrenom());
-        preparedStatement.setString(3, utilisateur.getEmail());
-        preparedStatement.setString(4, hashedPassword);
-        preparedStatement.setString(5, utilisateur.getRole());
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-        bd.close();
-    } catch (SQLException ex) {
-        
+    @Override
+    public void add(Utilisateur utilisateur) {
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            String hashedPassword = BCrypt.hashpw(utilisateur.getMotDePasse(), BCrypt.gensalt());
+            preparedStatement.setString(1, utilisateur.getNom());
+            preparedStatement.setString(2, utilisateur.getPrenom());
+            preparedStatement.setString(3, utilisateur.getEmail());
+            preparedStatement.setString(4, hashedPassword);
+            preparedStatement.setString(5, utilisateur.getRole());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            bd.close();
+        } catch (SQLException ex) {
+
+        }
     }
-}
 
     @Override
     public Utilisateur getById(int id) {
@@ -75,7 +76,7 @@ public void add(Utilisateur utilisateur) {
             while (resultSet.next()) {
                 String role = resultSet.getString("role");
                 Utilisateur utilisateur;
-                if (role.equals("professeur")) {
+                if (role.equals("enseignant")) {
                     utilisateur = new Professeur();
                 } else {
                     utilisateur = new Etudiant();
@@ -93,6 +94,32 @@ public void add(Utilisateur utilisateur) {
 
         }
         return utilisateurs;
+    }
+
+    public ArrayList<Professeur> getAllProfesseurs() {
+        ArrayList<Professeur> professeurs = new ArrayList<>();
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "SELECT * FROM utilisateur WHERE role= ? ";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            preparedStatement.setString(1, "enseignant");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Professeur professeur = new Professeur();
+                professeur.setNom(resultSet.getString("nom"));
+                professeur.setPrenom(resultSet.getString("prenom"));
+                professeur.setEmail(resultSet.getString("email"));
+                professeur.setMotDePasse(resultSet.getString("mot_de_passe"));
+                professeur.setRole(resultSet.getString("role"));
+                professeurs.add(professeur);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            bd.close();
+        } catch (SQLException ex) {
+
+        }
+        return professeurs;
     }
 
     @Override
