@@ -163,7 +163,7 @@ public class LoginPageController implements Initializable {
             String url = "jdbc:mysql://localhost:3306/e-quiz";
             String user = "root";
             String password = "";
-            String query = "SELECT id, email, nom FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
+            String query = "SELECT id, email, nom ,role  FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
 
             try (Connection conn = DriverManager.getConnection(url, user, password); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -183,6 +183,7 @@ public class LoginPageController implements Initializable {
                     int userId = rs.getInt("id");
                     String userEmail = rs.getString("email");
                     String userNom = rs.getString("nom");
+                    String userRole = rs.getString("role");
 
                     // Créer une instance vide de l'utilisateur
                     Utilisateur utilisateur = new Utilisateur() {
@@ -195,12 +196,15 @@ public class LoginPageController implements Initializable {
                     utilisateur.setId(userId);
                     utilisateur.setEmail(userEmail);
                     utilisateur.setNom(userNom);
+                    utilisateur.setRole(userRole);
+                    
 
                     // Initialiser la session
                     Session session = Session.getInstance();
                     session.setUtilisateurConnecte(utilisateur);
                     // Charger et afficher la nouvelle page
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                    /*
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/QuizPage.fxml"));
                     Parent root = loader.load();
 
                     // Obtenez la scène actuelle
@@ -209,11 +213,20 @@ public class LoginPageController implements Initializable {
                     stage.setScene(scene);
                     stage.show();
 
-                    /*String role = session.getUtilisateurConnecte().getRole();
+                    */
+                    String role = session.getUtilisateurConnecte().getRole();
                     FXMLLoader loader;
 
-                    if ("Professeur".equals(role)) {
-                        loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/QuizPage.fxml"));
+                    try {
+                        if ("professeur".equals(role)) {
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Resultat.fxml"));
+                        } else if ("etudiant".equals(role)) {
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                        } else {
+                            throw new IllegalStateException("Rôle non valide.");
+                        }
+
+                        // Charger la page associée au rôle
                         Parent root = loader.load();
 
                         // Obtenez la scène actuelle
@@ -221,16 +234,15 @@ public class LoginPageController implements Initializable {
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         stage.show();
-                    } else if ("Etudiant".equals(role)) {
-                        loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
-                        Parent root = loader.load();
 
-                        // Obtenez la scène actuelle
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        Scene scene = new Scene(root);
-                        stage.setScene(scene);
-                        stage.show();
-                    }*/
+                    } catch (IOException e) {
+                        // Gestion des erreurs si le fichier FXML n'a pas pu être chargé
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Erreur lors du chargement de la page : " + e.getMessage());
+                        alert.showAndWait();
+                    }
 
                 } else {
                     // Si aucun utilisateur ne correspond
