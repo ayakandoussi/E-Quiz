@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +26,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -122,6 +120,22 @@ public class LoginPageController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Utilisateur enregistré avec succès !");
                     alert.showAndWait();
+                    TranslateTransition slider = new TranslateTransition();
+                    slider.setNode(SignUp);
+
+                    slider.setToX(0);
+                    slider.setDuration(Duration.seconds(0.5));
+
+                    // Action après la transition
+                    slider.setOnFinished(e -> {
+                        HaveAccountBtn1.setVisible(false);
+                        CreateAccountBtn.setVisible(true);
+                        SignIn.setVisible(true);
+                        LabelDont.setVisible(true);
+                        LabelAleady.setVisible(false);
+
+                    });
+                     slider.play();
 
                 }
             } catch (SQLException e) {
@@ -133,7 +147,7 @@ public class LoginPageController implements Initializable {
             }
         }
     }
-
+   
     public void regBtn(ActionEvent event) throws IOException {
         if (EmailIn.getText().isEmpty() || PasswordIn.getText().isEmpty()) {
             alert = new Alert(AlertType.ERROR);
@@ -163,12 +177,7 @@ public class LoginPageController implements Initializable {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    /* Si un utilisateur correspond
-                    alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Connexion réussie");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Bienvenue, " + rs.getString("nom") + " " + rs.getString("prenom") + " !");
-                    alert.showAndWait();*/
+                    
 
                     // Charger et afficher la nouvelle page
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
