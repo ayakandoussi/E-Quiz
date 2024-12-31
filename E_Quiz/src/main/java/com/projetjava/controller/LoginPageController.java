@@ -1,5 +1,6 @@
 package com.projetjava.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +15,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -24,6 +29,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class LoginPageController implements Initializable {
@@ -116,8 +122,7 @@ public class LoginPageController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Utilisateur enregistré avec succès !");
                     alert.showAndWait();
-                    
-                    
+
                 }
             } catch (SQLException e) {
                 alert = new Alert(AlertType.ERROR);
@@ -129,7 +134,7 @@ public class LoginPageController implements Initializable {
         }
     }
 
-    public void regBtn() {
+    public void regBtn(ActionEvent event) throws IOException {
         if (EmailIn.getText().isEmpty() || PasswordIn.getText().isEmpty()) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur");
@@ -137,55 +142,61 @@ public class LoginPageController implements Initializable {
             alert.setContentText("Remplissez tous les champs !!!");
             alert.showAndWait();
         } else {
-         
-        // Connexion à la base de données
-        String url = "jdbc:mysql://localhost:3306/e-quiz"; // Remplacez par le nom de votre base
-        String user = "root"; // Votre utilisateur MySQL
-        String password = ""; // Votre mot de passe MySQL
-        String query = "SELECT * FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
 
-        try (Connection conn = DriverManager.getConnection(url, user, password); 
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            // Connexion à la base de données
+            String url = "jdbc:mysql://localhost:3306/e-quiz"; // Remplacez par le nom de votre base
+            String user = "root"; // Votre utilisateur MySQL
+            String password = ""; // Votre mot de passe MySQL
+            String query = "SELECT * FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
 
-            // Récupérer les valeurs des champs
-            String email = EmailIn.getText();
-            String motDePasse = PasswordIn.getText();
+            try (Connection conn = DriverManager.getConnection(url, user, password); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            // Ajouter les valeurs au PreparedStatement
-            pstmt.setString(1, email);
-            pstmt.setString(2, motDePasse);
+                // Récupérer les valeurs des champs
+                String email = EmailIn.getText();
+                String motDePasse = PasswordIn.getText();
 
-            // Exécuter la requête
-            ResultSet rs = pstmt.executeQuery();
+                // Ajouter les valeurs au PreparedStatement
+                pstmt.setString(1, email);
+                pstmt.setString(2, motDePasse);
 
-            if (rs.next()) {
-                // Si un utilisateur correspond
-                alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Connexion réussie");
-                alert.setHeaderText(null);
-                alert.setContentText("Bienvenue, " + rs.getString("nom") + " " + rs.getString("prenom") + " !");
-                alert.showAndWait();
-                
-                // Rediriger l'utilisateur vers une autre interface ou tableau de bord
-                // Exemple : openDashboard();
-            } else {
-                // Si aucun utilisateur ne correspond
+                // Exécuter la requête
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    /* Si un utilisateur correspond
+                    alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Connexion réussie");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Bienvenue, " + rs.getString("nom") + " " + rs.getString("prenom") + " !");
+                    alert.showAndWait();*/
+
+                    // Charger et afficher la nouvelle page
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                    Parent root = loader.load();
+
+                    // Obtenez la scène actuelle
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    // Si aucun utilisateur ne correspond
+                    alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Email ou mot de passe incorrect !");
+                    alert.showAndWait();
+                }
+            } catch (SQLException e) {
+                // Gérer les exceptions SQL
                 alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Erreur");
                 alert.setHeaderText(null);
-                alert.setContentText("Email ou mot de passe incorrect !");
+                alert.setContentText("Erreur lors de la connexion : " + e.getMessage());
                 alert.showAndWait();
             }
-        } catch (SQLException e) {
-            // Gérer les exceptions SQL
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Erreur lors de la connexion : " + e.getMessage());
-            alert.showAndWait();
         }
-    }
-        
+
     }
 
     @FXML
@@ -231,9 +242,6 @@ public class LoginPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> list = FXCollections.observableArrayList("Professeur", "Etudiant");
         Role.setItems(list);
-         
-        
-
     }
 
 }
