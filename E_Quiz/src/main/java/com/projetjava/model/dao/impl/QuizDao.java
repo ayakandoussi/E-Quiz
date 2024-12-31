@@ -25,7 +25,7 @@ public class QuizDao implements Dao<Quiz> {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            
+
         }
     }
 
@@ -50,40 +50,39 @@ public class QuizDao implements Dao<Quiz> {
             preparedStatement.close();
             bd.close();
         } catch (SQLException ex) {
-            
+
         }
         return quiz;
     }
 
     @Override
-  
-   public ArrayList<Quiz> getAll() {
-    ArrayList<Quiz> quizzes = new ArrayList<>();
-    String query = "SELECT * FROM quiz";
 
-    try {
-         BDConnexion bd = new BDConnexion();
-         Statement statement = bd.getConnection().createStatement();
-         ResultSet resultSet = statement.executeQuery(query);
+    public ArrayList<Quiz> getAll() {
+        ArrayList<Quiz> quizzes = new ArrayList<>();
+        String query = "SELECT * FROM quiz";
 
-        while (resultSet.next()) {
-            Quiz quiz = new Quiz();
-            quiz.setIdQuiz(resultSet.getInt("id"));
-            quiz.setTitre(resultSet.getString("titre"));
-            quiz.setTheme(resultSet.getString("theme"));
-            quiz.setIdEnseignant(resultSet.getInt("id_enseignant"));
-            
-            // Ajout du quiz à la liste
-            quizzes.add(quiz);
+        try {
+            BDConnexion bd = new BDConnexion();
+            Statement statement = bd.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                Quiz quiz = new Quiz();
+                quiz.setIdQuiz(resultSet.getInt("id"));
+                quiz.setTitre(resultSet.getString("titre"));
+                quiz.setTheme(resultSet.getString("theme"));
+                quiz.setIdEnseignant(resultSet.getInt("id_enseignant"));
+
+                // Ajout du quiz à la liste
+                quizzes.add(quiz);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Utilisez un logger dans un projet réel
         }
 
-    } catch (SQLException ex) {
-        ex.printStackTrace(); // Utilisez un logger dans un projet réel
+        return quizzes;
     }
-
-    return quizzes;
-}
-
 
     @Override
     public void update(Quiz quiz) {
@@ -99,7 +98,7 @@ public class QuizDao implements Dao<Quiz> {
             preparedStatement.close();
             bd.close();
         } catch (SQLException ex) {
-            
+
         }
     }
 
@@ -116,7 +115,34 @@ public class QuizDao implements Dao<Quiz> {
             preparedStatement.close();
             bd.close();
         } catch (SQLException ex) {
-            
+
         }
+    }
+
+    public ArrayList<Quiz> getQuizzesByProfesseur(int professeurId) {
+        ArrayList<Quiz> quizzes = new ArrayList<>();
+
+        try {
+            BDConnexion bdConnexion = new BDConnexion();
+            String query = "SELECT * FROM quiz WHERE professeur.id=?";
+            PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1, professeurId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Quiz quiz = new Quiz();
+                quiz.setIdQuiz(resultSet.getInt("id"));
+                quiz.setTitre(resultSet.getString("titre"));
+                quiz.setTheme(resultSet.getString("theme"));
+
+                quizzes.add(quiz);
+            }
+            preparedStatement.close();
+            bdConnexion.close();
+        } catch (SQLException ex) {
+
+        }
+
+        return quizzes;
     }
 }
