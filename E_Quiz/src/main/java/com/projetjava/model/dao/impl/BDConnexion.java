@@ -6,10 +6,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class BDConnexion {
-    private static final String URL = "jdbc:mysql://localhost:3306/EQuizDB";
-    private static final String USER = "root";
+    private static final String URL = "jdbc:mysql://localhost:3306/e-quiz";
+    private static final String USER = "";
 
-    private static final String PASSWORD = "Bouchamaaya2004.";
+    private static final String PASSWORD = "";
 
     private Connection connection;
 

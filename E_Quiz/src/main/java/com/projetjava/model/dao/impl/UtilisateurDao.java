@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UtilisateurDao implements Dao<Utilisateur> {
 
@@ -18,10 +19,11 @@ public class UtilisateurDao implements Dao<Utilisateur> {
             BDConnexion bd = new BDConnexion();
             String query = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
+            String hashedPassword = BCrypt.hashpw(utilisateur.getMotDePasse(), BCrypt.gensalt());
             preparedStatement.setString(1, utilisateur.getNom());
             preparedStatement.setString(2, utilisateur.getPrenom());
             preparedStatement.setString(3, utilisateur.getEmail());
-            preparedStatement.setString(4, utilisateur.getMotDePasse());
+            preparedStatement.setString(4, hashedPassword);
             preparedStatement.setString(5, utilisateur.getRole());
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -127,4 +129,3 @@ public class UtilisateurDao implements Dao<Utilisateur> {
         }
     }
 }
-
