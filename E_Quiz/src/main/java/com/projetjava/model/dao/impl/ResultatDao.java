@@ -137,17 +137,24 @@ public class ResultatDao implements Dao<Resultat> {
         ArrayList<Resultat> resultats = new ArrayList<>();
 
         try {
+            // Création de la connexion à la base de données
             BDConnexion bdConnexion = new BDConnexion();
+
+            // Requête SQL corrigée
             String query = "SELECT r.idResultatQuiz, r.score, r.idEtudiant, q.idQuiz, e.nom, e.prenom "
                     + "FROM resultatquiz r "
                     + "JOIN utilisateur e ON r.idEtudiant = e.id "
                     + "JOIN quiz q ON r.idQuiz = q.idQuiz "
-                    + "WHERE r.idQuiz = ?";
+                    + "WHERE r.idQuiz = ?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
+
+            // Remplacement du paramètre dans la requête
             preparedStatement.setInt(1, quizId);
 
+            // Exécution de la requête
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            // Traitement des résultats
             while (resultSet.next()) {
                 Resultat resultat = new Resultat();
                 resultat.setIdResultatQuiz(resultSet.getInt("idResultatQuiz"));
@@ -165,16 +172,20 @@ public class ResultatDao implements Dao<Resultat> {
                 quiz.setIdQuiz(resultSet.getInt("idQuiz"));
                 resultat.setQuiz(quiz);
 
-                resultats.add(resultat);  // Ajouter le résultat à la liste
+                // Ajouter le résultat à la liste
+                resultats.add(resultat);
             }
 
+            // Fermeture des ressources
             preparedStatement.close();
             bdConnexion.close();
-
         } catch (SQLException ex) {
-
+            // Gestion et affichage des erreurs
+            System.err.println("Erreur lors de la récupération des résultats : " + ex.getMessage());
+            ex.printStackTrace();
         }
 
         return resultats;
     }
+
 }

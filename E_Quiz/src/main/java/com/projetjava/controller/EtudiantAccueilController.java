@@ -23,7 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 
-public class AccueilController {
+public class EtudiantAccueilController {
 
     @FXML
     private Pane AccueilPane;
@@ -56,10 +56,10 @@ public class AccueilController {
 
     private ExecutorService executorService;
 
-    public AccueilController() {
+    public EtudiantAccueilController() {
         this.utilisateurDao = new UtilisateurDao();
         this.quizDao = new QuizDao();
-        this.executorService = Executors.newFixedThreadPool(2); // Création d'un pool de 2 threads
+        this.executorService = Executors.newFixedThreadPool(2);
     }
 
     @FXML
@@ -110,7 +110,6 @@ public class AccueilController {
         professeurBox.setAlignment(Pos.CENTER);
         professeurBox.setMaxWidth(Double.MAX_VALUE);
 
-        // Label pour afficher le nom du professeur avec un effet de survol
         Label label = new Label(professeur.getNom() + " " + professeur.getPrenom());
         label.getStyleClass().add("clickable-label");
         label.setStyle(
@@ -119,23 +118,19 @@ public class AccueilController {
                 + "-fx-font-weight: bold; "
                 + "-fx-font-family: 'Arial', sans-serif; "
                 + "-fx-opacity: 0.9;"
-                + "-fx-cursor: hand;" // Indique que c'est un élément cliquable
+                + "-fx-cursor: hand;"
         );
 
-        // Changer le style au survol et le réinitialiser quand la souris quitte
         label.setOnMouseEntered(event -> {
-            label.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-opacity: 1;"); // Couleur dorée au survol
-            professeurBox.setStyle("-fx-background-color: #0056b3; -fx-border-color: black;"); // Bleu foncé avec bordure dorée
+            label.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-opacity: 1;");
+            professeurBox.setStyle("-fx-background-color: #45a049; -fx-border-color: black;");
         });
         label.setOnMouseExited(event -> {
             label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-opacity: 0.9;");
-            professeurBox.setStyle("-fx-background-color: #007BFF; -fx-border-color: white;"); // Bleu original avec bordure blanche
+            professeurBox.setStyle("-fx-background-color: blue; -fx-border-color: white;");
         });
 
         label.setOnMouseClicked(event -> {
-            if (previousLabel != null) {
-                previousLabel.setStyle("-fx-text-fill: lightblue;");
-            }
 
             label.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
             loadQuizByProfesseur(professeur);
@@ -158,13 +153,13 @@ public class AccueilController {
 
                     if (quizzes.isEmpty()) {
                         Label emptyLabel = new Label("Aucun quiz disponible.");
-                        emptyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: red; -fx-font-weight: bold;");
+                        emptyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: black; -fx-font-weight: bold;");
                         quizTilePane.getChildren().add(emptyLabel);
                     } else {
                         for (Quiz quiz : quizzes) {
                             VBox quizBox = new VBox(10);
                             quizBox.setPadding(new Insets(10));
-                            quizBox.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #007BFF; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
+                            quizBox.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: blue; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
                             quizBox.setAlignment(Pos.CENTER);
 
                             Label labelTitre = new Label(quiz.getTitre());
@@ -178,9 +173,10 @@ public class AccueilController {
 
                             Button button = new Button("Passer");
                             button.setOnAction(event -> startQuiz(quiz));
-                            button.setStyle("-fx-background-color: #007BFF; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
-                            button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #0056b3; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
-                            button.setOnMouseExited(e -> button.setStyle("-fx-background-radius: 25px;-fx-background-color: #007BFF; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
+                            button.setStyle("-fx-background-color: blue; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
+                            button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #45a049; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
+                            button.setOnMouseExited(e -> button.setStyle("-fx-background-color: blue; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
+
                             button.setCursor(Cursor.HAND);
                             quizBox.getChildren().addAll(labelTitre, labelDescription, button);
 
@@ -189,7 +185,7 @@ public class AccueilController {
                     }
                 });
             } catch (Exception e) {
-                // Gérer les erreurs
+
             }
         });
     }
@@ -197,8 +193,13 @@ public class AccueilController {
     private void startQuiz(Quiz quiz) {
 
         System.out.println("Démarrer le quiz: " + quiz.getTitre());
-        //rediriger vers  page quiz
 
     }
 
+    @FXML
+    public void onClose() {
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown();
+        }
+    }
 }

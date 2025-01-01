@@ -13,6 +13,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.layout.HBox;
 
 public class ProfAccueilController {
 
@@ -22,85 +26,170 @@ public class ProfAccueilController {
     @FXML
     private VBox resultsVBox;
 
-    private QuizDao quizDao;  // DAO pour les quiz
-    private ResultatDao resultatDao;  // DAO pour les résultats
+    private QuizDao quizDao;
+    private ResultatDao resultatDao;
 
     public ProfAccueilController() {
-        quizDao = new QuizDao();  // Initialisation du DAO des quiz
-        resultatDao = new ResultatDao();  // Initialisation du DAO des résultats
+        quizDao = new QuizDao();
+        resultatDao = new ResultatDao();
     }
 
     @FXML
     public void initialize() {
-        // Récupérer l'utilisateur connecté depuis la session
+
         Utilisateur professeurConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (professeurConnecte != null) {
-            // Charger les quiz associés au professeur
             loadQuiz(professeurConnecte.getId());
         } else {
             System.out.println("Aucun professeur connecté.");
         }
+
+        styleVBox(quizListVBox);
+        styleVBox(resultsVBox);
     }
 
-    // Charger les quiz du professeur
+    private void styleVBox(VBox vbox) {
+        vbox.setStyle(
+                "-fx-spacing: 10px;"
+                + "-fx-padding: 15px;"
+                + "-fx-background-color: #f5f5f5;"
+                + "-fx-border-radius: 10px;"
+                + "-fx-background-radius: 10px;"
+                + "-fx-border-color: #ddd;"
+        );
+    }
+
     private void loadQuiz(int idProfesseur) {
-        // Récupérer la liste des quiz pour ce professeur
         List<Quiz> quizList = quizDao.getQuizzesByProfesseur(idProfesseur);
 
-        // Ajouter les quiz à la VBox
         Platform.runLater(() -> {
-            quizListVBox.getChildren().clear();  // Réinitialiser la VBox
+            quizListVBox.getChildren().clear();
             for (Quiz quiz : quizList) {
-                addQuizToList(quiz);  // Ajouter chaque quiz à la liste
+                addQuizToList(quiz);
             }
         });
     }
 
-    // Ajouter un quiz à la VBox
     private void addQuizToList(Quiz quiz) {
-        Label quizLabel = new Label(quiz.getTitre() + " - " + quiz.getDescription());
+
+        Label quizLabel = new Label(quiz.getTitre());
+        quizLabel.setStyle(
+                "-fx-font-size: 13px;"
+                + "-fx-font-weight: bold;"
+                + "-fx-text-fill: black;"
+        );
+
+        quizLabel.setAlignment(Pos.CENTER);
+
         Button detailsButton = new Button("Voir les résultats");
+        detailsButton.setStyle(
+                "-fx-background-color: blue;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 5px 10px;"
+                + "-fx-font-size: 12px;"
+                + "-fx-background-radius: 5px;"
+                + "-fx-border-radius: 5px;"
+                + "-fx-font-weight: bold;"
+        );
+        detailsButton.setCursor(Cursor.HAND);
+        detailsButton.setOnMouseEntered(event -> detailsButton.setStyle(
+                "-fx-background-color: #45a049;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 5px 10px;"
+                + "-fx-font-size: 12px;"
+                + "-fx-background-radius: 5px;"
+                + "-fx-border-radius: 5px;"
+                + "-fx-font-weight: bold;"
+        ));
 
-        detailsButton.setOnAction(event -> {
-            showQuizResults(quiz);
-        });
+        detailsButton.setOnMouseExited(event -> detailsButton.setStyle(
+                "-fx-background-color: blue;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 5px 10px;"
+                + "-fx-font-size: 12px;"
+                + "-fx-background-radius: 5px;"
+                + "-fx-border-radius: 5px;"
+                + "-fx-font-weight: bold;"
+        ));
 
-        VBox quizBox = new VBox(quizLabel, detailsButton);
+        detailsButton.setOnAction(event -> showQuizResults(quiz));
+
+       
+        VBox quizBox = new VBox(15, quizLabel, detailsButton); 
+        quizBox.setStyle(
+                "-fx-padding: 10px;"
+                + "-fx-border-radius: 8px;"
+                + "-fx-background-radius: 8px;"
+                + "-fx-background-color: #ffffff;"
+                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);"
+                + "-fx-margin-bottom: 10px;"
+        );
+
+        quizBox.setAlignment(Pos.CENTER);
+
         quizListVBox.getChildren().add(quizBox);
+        quizListVBox.setAlignment(Pos.CENTER);
     }
 
-    // Afficher les résultats pour un quiz
     private void showQuizResults(Quiz quiz) {
-        System.out.println("Afficher les résultats pour le quiz : " + quiz.getTitre());
-
-        // Récupérer les résultats des étudiants pour ce quiz
         List<Resultat> resultats = resultatDao.getResultatsByQuiz(quiz.getIdQuiz());
-        for (Resultat resultat : resultats) {
-            System.out.println(resultat.getEtudiant().afficher());
-            addResultToList(resultat);
-        }
-        // Afficher les résultats dans la VBox
+
         Platform.runLater(() -> {
-            resultsVBox.getChildren().clear();  // Réinitialiser la VBox des résultats
+            resultsVBox.getChildren().clear();
 
             if (resultats.isEmpty()) {
                 Label emptyLabel = new Label("Aucun résultat disponible.");
+                emptyLabel.setStyle(
+                        "-fx-font-size: 16px;"
+                        + "-fx-text-fill: black;"
+                        + "-fx-padding: 10px ;"
+                        + "-fx-text-weight : bold"
+                );
+                emptyLabel.setAlignment(Pos.CENTER);
                 resultsVBox.getChildren().add(emptyLabel);
             } else {
                 for (Resultat resultat : resultats) {
-                    System.out.println(resultat.getEtudiant().afficher());
                     addResultToList(resultat);
                 }
             }
         });
     }
 
-    // Ajouter un résultat à la VBox
     private void addResultToList(Resultat resultat) {
-        System.out.println(resultat.getEtudiant().getNom() + " " + resultat.getEtudiant().getPrenom());
-        Label resultLabel = new Label(resultat.getEtudiant().getNom() + " " + resultat.getEtudiant().getPrenom() + " " + resultat.getScore());
-        resultsVBox.getChildren().add(resultLabel);
 
+        Label nomLabel = new Label(resultat.getEtudiant().getNom());
+        nomLabel.setStyle(
+                "-fx-font-size: 13px;"
+                + "-fx-text-fill: white;"
+                + "-fx-font-weight: bold;"
+        );
+
+        Label prenomLabel = new Label(resultat.getEtudiant().getPrenom());
+        prenomLabel.setStyle(
+                "-fx-font-size: 13px;"
+                + "-fx-text-fill: white;"
+                + "-fx-font-weight: bold;"
+        );
+
+        Label scoreLabel = new Label("\t" + resultat.getScore());
+        scoreLabel.setStyle(
+                "-fx-font-size: 13px;"
+                + "-fx-text-fill: white;"
+                + "-fx-font-weight: bold;"
+        );
+
+        HBox resultBox = new HBox(100);
+        resultBox.setPadding(new Insets(10, 10, 10, 10));
+        resultBox.setStyle(
+                "-fx-background-color: blue;"
+                + "-fx-border-color: #ddd;"
+                + "-fx-border-radius: 10px;"
+                + "-fx-background-radius: 10px;"
+        );
+
+        resultBox.getChildren().addAll(nomLabel, prenomLabel, scoreLabel);
+
+        resultsVBox.getChildren().add(resultBox);
     }
 }
