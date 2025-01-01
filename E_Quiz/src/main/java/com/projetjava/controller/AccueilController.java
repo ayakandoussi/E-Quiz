@@ -85,9 +85,7 @@ public class AccueilController {
         executorService.submit(() -> {
             try {
                 ArrayList<Professeur> professeurs = utilisateurDao.getAllProfesseurs();
-                for (Professeur prof : professeurs) {
-                    System.out.println("Professeur: " + prof.getId() + ", " + prof.getNom() + " " + prof.getPrenom());
-                }
+
                 Platform.runLater(() -> {
                     for (Utilisateur professeur : professeurs) {
                         addProfesseur(professeur);
@@ -98,39 +96,53 @@ public class AccueilController {
         });
     }
 
-    private Label previousLabel = null; // Référence pour le label précédemment sélectionné
+    private Label previousLabel = null;
 
     private void addProfesseur(Utilisateur professeur) {
-        // Crée une nouvelle VBox pour le professeur
-        VBox professeurBox = new VBox(10);
-        professeurBox.setPadding(new Insets(10));
-        professeurBox.setStyle("-fx-background-color: blue; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: white; -fx-border-width: 1px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.5, 0, 5);");
+        VBox professeurBox = new VBox(15);
+        professeurBox.setPadding(new Insets(15));
+        professeurBox.setStyle(
+                "-fx-background-color: blue; "
+                + "-fx-border-color: white; "
+                + "-fx-border-width: 2px; "
+                + "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);"
+        );
         professeurBox.setAlignment(Pos.CENTER);
+        professeurBox.setMaxWidth(Double.MAX_VALUE);
 
-        // Label pour afficher le nom du professeur
+        // Label pour afficher le nom du professeur avec un effet de survol
         Label label = new Label(professeur.getNom() + " " + professeur.getPrenom());
         label.getStyleClass().add("clickable-label");
-        label.setStyle("-fx-text-fill: white;  -fx-font-size: 16px; -fx-font-weight: bold;");
+        label.setStyle(
+                "-fx-text-fill: white; "
+                + "-fx-font-size: 16px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial', sans-serif; "
+                + "-fx-opacity: 0.9;"
+                + "-fx-cursor: hand;" // Indique que c'est un élément cliquable
+        );
+
+        // Changer le style au survol et le réinitialiser quand la souris quitte
+        label.setOnMouseEntered(event -> {
+            label.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-opacity: 1;"); // Couleur dorée au survol
+            professeurBox.setStyle("-fx-background-color: #0056b3; -fx-border-color: black;"); // Bleu foncé avec bordure dorée
+        });
+        label.setOnMouseExited(event -> {
+            label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-opacity: 0.9;");
+            professeurBox.setStyle("-fx-background-color: #007BFF; -fx-border-color: white;"); // Bleu original avec bordure blanche
+        });
+
         label.setOnMouseClicked(event -> {
-            // Réinitialiser le style du précédent label sélectionné
             if (previousLabel != null) {
-                previousLabel.setStyle("-fx-text-fill: lightblue;"); // style de base
+                previousLabel.setStyle("-fx-text-fill: lightblue;");
             }
 
-            // Mettre le style du label cliqué en rouge
             label.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
-
-            // Charger les quiz du professeur sélectionné
             loadQuizByProfesseur(professeur);
-
-            // Mettre à jour le label précédent
             previousLabel = label;
         });
 
-        // Ajouter le label au VBox
         professeurBox.getChildren().add(label);
-
-        // Ajouter le VBox (avec le nom du professeur) à la liste des professeurs
         profList.getChildren().add(professeurBox);
     }
 
@@ -141,8 +153,8 @@ public class AccueilController {
 
                 Platform.runLater(() -> {
                     quizTilePane.getChildren().clear();
-                    quizTilePane.setHgap(15); // Espace horizontal
-                    quizTilePane.setVgap(15); // Espace vertical
+                    quizTilePane.setHgap(15);
+                    quizTilePane.setVgap(15);
 
                     if (quizzes.isEmpty()) {
                         Label emptyLabel = new Label("Aucun quiz disponible.");
@@ -152,38 +164,32 @@ public class AccueilController {
                         for (Quiz quiz : quizzes) {
                             VBox quizBox = new VBox(10);
                             quizBox.setPadding(new Insets(10));
-                            quizBox.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: blue; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
+                            quizBox.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #007BFF; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
                             quizBox.setAlignment(Pos.CENTER);
 
-                            // Titre du quiz
                             Label labelTitre = new Label(quiz.getTitre());
-                            labelTitre.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-                            labelTitre.setAlignment(Pos.CENTER);
+                            labelTitre.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;");
 
-                            // Description du quiz
                             Label labelDescription = new Label(quiz.getDescription());
                             labelDescription.setWrapText(true);
                             labelDescription.setPrefWidth(200);
                             labelDescription.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
                             labelDescription.setAlignment(Pos.CENTER);
 
-                            // Bouton "Passer"
                             Button button = new Button("Passer");
                             button.setOnAction(event -> startQuiz(quiz));
-                            button.setStyle("-fx-background-color: blue;-fx-border-radius: 20; -fx-text-fill: white;-fx-font-weight: bold; -fx-padding: 5 10;");
-                            button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: black; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
-                            button.setOnMouseExited(e -> button.setStyle("-fx-background-color: blue; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
+                            button.setStyle("-fx-background-color: #007BFF; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
+                            button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #0056b3; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
+                            button.setOnMouseExited(e -> button.setStyle("-fx-background-radius: 25px;-fx-background-color: #007BFF; -fx-border-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;"));
                             button.setCursor(Cursor.HAND);
-                            // Ajouter les éléments au VBox
                             quizBox.getChildren().addAll(labelTitre, labelDescription, button);
 
-                            // Ajouter le VBox au TilePane
                             quizTilePane.getChildren().add(quizBox);
                         }
                     }
                 });
             } catch (Exception e) {
-
+                // Gérer les erreurs
             }
         });
     }
