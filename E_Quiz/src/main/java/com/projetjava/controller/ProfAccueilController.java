@@ -1,5 +1,7 @@
 package com.projetjava.controller;
 
+import com.projetjava.domain.Etudiant;
+import com.projetjava.domain.Professeur;
 import com.projetjava.domain.Quiz;
 import com.projetjava.domain.Resultat;
 import com.projetjava.domain.Session;
@@ -16,7 +18,10 @@ import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class ProfAccueilController {
 
@@ -25,6 +30,21 @@ public class ProfAccueilController {
 
     @FXML
     private VBox resultsVBox;
+    @FXML
+    private Pane NavbarController;
+
+    @FXML
+    private MenuButton menu;
+    @FXML
+    private MenuItem Accueil;
+    @FXML
+    private MenuItem Profil;
+    @FXML
+    private MenuItem SeDeconnecter;
+    @FXML
+    private Button addQuizButton;
+    @FXML
+    private Label rolelabel;
 
     private QuizDao quizDao;
     private ResultatDao resultatDao;
@@ -40,6 +60,7 @@ public class ProfAccueilController {
         Utilisateur professeurConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (professeurConnecte != null) {
+            afficherRole(professeurConnecte);
             loadQuiz(professeurConnecte.getId());
         } else {
             System.out.println("Aucun professeur connecté.");
@@ -47,6 +68,26 @@ public class ProfAccueilController {
 
         styleVBox(quizListVBox);
         styleVBox(resultsVBox);
+    }
+
+    @FXML
+    public void handleMouseEntered() {
+        addQuizButton.setStyle("-fx-background-color: #45a049; -fx-text-fill: white;");
+    }
+
+    @FXML
+    public void handleMouseExited() {
+        addQuizButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+    }
+
+    private void afficherRole(Utilisateur utilisateur) {
+        String contenu;
+
+        Professeur professeur = new Professeur(utilisateur);
+
+        contenu = professeur.afficher();
+
+        rolelabel.setText(contenu);
     }
 
     private void styleVBox(VBox vbox) {
@@ -92,6 +133,7 @@ public class ProfAccueilController {
                 + "-fx-border-radius: 5px;"
                 + "-fx-font-weight: bold;"
         );
+
         detailsButton.setCursor(Cursor.HAND);
         detailsButton.setOnMouseEntered(event -> detailsButton.setStyle(
                 "-fx-background-color: #45a049;"
@@ -115,8 +157,7 @@ public class ProfAccueilController {
 
         detailsButton.setOnAction(event -> showQuizResults(quiz));
 
-       
-        VBox quizBox = new VBox(15, quizLabel, detailsButton); 
+        VBox quizBox = new VBox(15, quizLabel, detailsButton);
         quizBox.setStyle(
                 "-fx-padding: 10px;"
                 + "-fx-border-radius: 8px;"
@@ -192,4 +233,5 @@ public class ProfAccueilController {
 
         resultsVBox.getChildren().add(resultBox);
     }
+
 }
