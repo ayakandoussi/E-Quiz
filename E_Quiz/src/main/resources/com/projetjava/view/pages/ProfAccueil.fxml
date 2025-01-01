@@ -44,13 +44,13 @@
             </VBox>
         </content>
     </ScrollPane>
-    <Button fx:id="addQuizButton" layoutX="8.0" layoutY="357.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="175.0" style="-fx-background-color: blue;" text="Ajouter" textFill="#fcf8f8" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+    <Button fx:id="addQuizButton" layoutX="8.0" layoutY="357.0" mnemonicParsing="false" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="29.0" prefWidth="175.0" style="-fx-background-color: blue;" text="Ajouter" textFill="#fcf8f8">
         <font>
             <Font name="System Bold" size="15.0" />
         </font>
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
     </Button>
     <ScrollPane fx:id="resultsPane" layoutX="191.0" layoutY="80.0" prefHeight="320.0" prefWidth="410.0">
         <content>
@@ -81,4 +81,18 @@
             <Insets left="20.0" right="5.0" />
         </padding>
     </HBox>
+    <Pane fx:id="AccueilPane" layoutX="190.0" layoutY="53.0" prefHeight="361.0" prefWidth="410.0" style="-fx-background-color: white;">
+        <children>
+            <ImageView fx:id="img_Bienvenue" fitHeight="199.0" fitWidth="200.0" layoutX="103.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../images/bienvenu.png" />
+                </image>
+            </ImageView>
+            <Label fx:id="label_Bienvenue" alignment="CENTER" layoutX="49.0" layoutY="164.0" prefHeight="81.0" prefWidth="338.0" text="Bienvenue à E-Quiz 😊" textFill="BLUE">
+                <font>
+                    <Font name="Arial Black" size="24.0" />
+                </font>
+            </Label>
+        </children>
+    </Pane>
 </AnchorPane>

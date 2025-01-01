@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.EtudiantAccueilController">
-    <Pane fx:id="AccueilPane" layoutX="173.0" layoutY="53.0" prefHeight="361.0" prefWidth="427.0" style="-fx-background-color: white;" AnchorPane.topAnchor="53.0">
+    <Pane fx:id="AccueilPane" layoutX="173.0" layoutY="53.0" prefHeight="361.0" prefWidth="427.0" style="-fx-background-color: white;">
         <children>
             <ImageView fx:id="img_Bienvenue" fitHeight="199.0" fitWidth="200.0" layoutX="114.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                 <image>
@@ -29,10 +29,9 @@
             </Label>
         </children>
     </Pane>
-   
     <Pane prefHeight="53.0" prefWidth="602.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <children>
-            <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+            <Label fx:id="rolelabel" alignment="CENTER" layoutX="134.0" layoutY="12.0" prefHeight="29.0" prefWidth="360.0" text="Role : Nom Prenom" textFill="WHITE">
                 <font>
                     <Font size="17.0" />
                 </font>
@@ -42,11 +41,11 @@
                     <Image url="@../images/logo.png" />
                 </image>
             </ImageView>
-            <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
+            <MenuButton fx:id="menu" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
                 <items>
-                    <MenuItem mnemonicParsing="false" text="Accueil" />
-                    <MenuItem mnemonicParsing="false" text="Profil" />
-                    <MenuItem mnemonicParsing="false" text="Se deconnecter" />
+                    <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
+                    <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
+                    <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" text="Se deconnecter" />
                 </items>
             </MenuButton>
         </children>
@@ -73,5 +72,19 @@
             </VBox>
         </content>
     </ScrollPane>
+    <Pane fx:id="AccueilPane" layoutX="179.0" layoutY="54.0" prefHeight="361.0" prefWidth="421.0" AnchorPane.topAnchor="54.0">
+        <children>
+            <ImageView fx:id="img_Bienvenue" fitHeight="199.0" fitWidth="200.0" layoutX="114.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../images/bienvenu.png" />
+                </image>
+            </ImageView>
+            <Label fx:id="label_Bienvenue" alignment="CENTER" layoutX="56.0" layoutY="164.0" prefHeight="81.0" prefWidth="338.0" text="Bienvenue à E-Quiz 😊" textFill="BLUE">
+                <font>
+                    <Font name="Arial Black" size="24.0" />
+                </font>
+            </Label>
+        </children>
+    </Pane>
 
 </AnchorPane>

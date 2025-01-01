@@ -1,11 +1,12 @@
 package com.projetjava.controller;
 
+import com.projetjava.domain.Etudiant;
 import com.projetjava.domain.Professeur;
 import com.projetjava.domain.Quiz;
+import com.projetjava.domain.Session;
 import com.projetjava.domain.Utilisateur;
 import com.projetjava.model.dao.impl.QuizDao;
 import com.projetjava.model.dao.impl.UtilisateurDao;
-import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,46 +15,58 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 
 public class EtudiantAccueilController {
 
     @FXML
     private Pane AccueilPane;
-
     @FXML
     private ImageView img_Bienvenue;
-
     @FXML
     private Label label_Bienvenue;
-
     @FXML
     private VBox profList;
-
     @FXML
     private ScrollPane profScrollPane;
-
     @FXML
     private GridPane quizGrid;
-
     @FXML
     private ScrollPane quizScrollPane;
-
     @FXML
     private TilePane quizTilePane;
     @FXML
     private AnchorPane rootPane;
 
+    @FXML
+    private Pane NavbarController;
+
+    @FXML
+    private MenuButton menu;
+    @FXML
+    private MenuItem Accueil;
+    @FXML
+    private MenuItem Profil;
+    @FXML
+    private MenuItem SeDeconnecter;
+
+    @FXML
+    private Label rolelabel;
+
+    private boolean quizVisible = true;
     private UtilisateurDao utilisateurDao;
     private QuizDao quizDao;
-
     private ExecutorService executorService;
 
     public EtudiantAccueilController() {
@@ -64,21 +77,33 @@ public class EtudiantAccueilController {
 
     @FXML
     public void initialize() {
-        /*Liaison dynamique pour ScrollPane
-        quizScrollPane.prefWidthProperty().bind(rootPane.widthProperty().multiply(0.8));
-        quizScrollPane.prefHeightProperty().bind(rootPane.heightProperty().multiply(0.8));
+        Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
 
-        // Configuration du TilePane
-        quizTilePane.prefColumnsProperty().set(3); // Colonnes fixes
-        quizTilePane.setPadding(new Insets(10)); // Marges autour du contenu
-        quizTilePane.setHgap(20); // Espacement horizontal
-        quizTilePane.setVgap(20); // Espacement vertical
+        if (utilisateurConnecte != null) {
+            afficherRole(utilisateurConnecte);
+        } else {
+            System.out.println("Aucun utilisateur connecté.");
+        }
 
-        // Ajustement des éléments dans le TilePane
-        quizTilePane.getChildren().forEach(node -> {
-            node.setStyle("-fx-pref-width: 150; -fx-pref-height: 150;"); // Dimensions uniformes
-        });*/
+        if (AccueilPane != null) {
+            AccueilPane.setVisible(true);
+        }
+        if (quizTilePane != null) {
+            quizTilePane.setVisible(false);
+        }
+
         loadProfesseurs();
+
+    }
+
+    private void afficherRole(Utilisateur utilisateur) {
+        String contenu;
+
+        Etudiant etudiant = new Etudiant(utilisateur);
+
+        contenu = etudiant.afficher();
+
+        rolelabel.setText(contenu);
     }
 
     private void loadProfesseurs() {
@@ -101,40 +126,39 @@ public class EtudiantAccueilController {
     private void addProfesseur(Utilisateur professeur) {
         VBox professeurBox = new VBox(15);
         professeurBox.setPadding(new Insets(15));
-        professeurBox.setStyle(
-                "-fx-background-color: blue; "
-                + "-fx-border-color: white; "
-                + "-fx-border-width: 2px; "
-                + "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);"
-        );
+        professeurBox.setStyle("-fx-background-color: blue; -fx-border-color: white; -fx-border-width: 2px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
         professeurBox.setAlignment(Pos.CENTER);
         professeurBox.setMaxWidth(Double.MAX_VALUE);
 
         Label label = new Label(professeur.getNom() + " " + professeur.getPrenom());
         label.getStyleClass().add("clickable-label");
-        label.setStyle(
-                "-fx-text-fill: white; "
-                + "-fx-font-size: 16px; "
-                + "-fx-font-weight: bold; "
-                + "-fx-font-family: 'Arial', sans-serif; "
-                + "-fx-opacity: 0.9;"
-                + "-fx-cursor: hand;"
-        );
+        label.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-font-family: 'Arial', sans-serif; -fx-opacity: 0.9; -fx-cursor: hand;");
 
         label.setOnMouseEntered(event -> {
             label.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-opacity: 1;");
             professeurBox.setStyle("-fx-background-color: #45a049; -fx-border-color: black;");
         });
+
         label.setOnMouseExited(event -> {
             label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-opacity: 0.9;");
             professeurBox.setStyle("-fx-background-color: blue; -fx-border-color: white;");
         });
 
         label.setOnMouseClicked(event -> {
-
             label.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
             loadQuizByProfesseur(professeur);
             previousLabel = label;
+
+            if (quizVisible) {
+                AccueilPane.setVisible(true);
+                quizTilePane.setVisible(false);
+                quizVisible = false;
+            } else {
+                AccueilPane.setVisible(false);
+                quizTilePane.setVisible(true);
+                quizVisible = true;
+            }
+
         });
 
         professeurBox.getChildren().add(label);
@@ -185,15 +209,12 @@ public class EtudiantAccueilController {
                     }
                 });
             } catch (Exception e) {
-
             }
         });
     }
 
     private void startQuiz(Quiz quiz) {
-
         System.out.println("Démarrer le quiz: " + quiz.getTitre());
-
     }
 
     @FXML

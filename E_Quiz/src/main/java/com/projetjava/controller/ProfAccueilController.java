@@ -20,6 +20,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -32,7 +34,8 @@ public class ProfAccueilController {
     private VBox resultsVBox;
     @FXML
     private Pane NavbarController;
-
+    @FXML
+    private ScrollPane resultsPane;
     @FXML
     private MenuButton menu;
     @FXML
@@ -45,6 +48,12 @@ public class ProfAccueilController {
     private Button addQuizButton;
     @FXML
     private Label rolelabel;
+    @FXML
+    private Pane AccueilPane;
+    @FXML
+    private ImageView img_Bienvenue;
+    @FXML
+    private Label label_Bienvenue;
 
     private QuizDao quizDao;
     private ResultatDao resultatDao;
@@ -64,6 +73,12 @@ public class ProfAccueilController {
             loadQuiz(professeurConnecte.getId());
         } else {
             System.out.println("Aucun professeur connecté.");
+        }
+        if (AccueilPane != null) {
+            AccueilPane.setVisible(true);
+        }
+        if (resultsPane != null) {
+            resultsPane.setVisible(false);
         }
 
         styleVBox(quizListVBox);
@@ -155,7 +170,11 @@ public class ProfAccueilController {
                 + "-fx-font-weight: bold;"
         ));
 
-        detailsButton.setOnAction(event -> showQuizResults(quiz));
+        detailsButton.setOnAction(event -> {
+            showQuizResults(quiz);
+            AccueilPane.setVisible(false);
+            resultsPane.setVisible(true);
+        });
 
         VBox quizBox = new VBox(15, quizLabel, detailsButton);
         quizBox.setStyle(
