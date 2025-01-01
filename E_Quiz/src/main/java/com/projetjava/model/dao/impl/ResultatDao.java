@@ -131,5 +131,50 @@ public class ResultatDao implements Dao<Resultat> {
 
         }
     }
+// Récupérer les résultats d'un quiz donné
 
+    public ArrayList<Resultat> getResultatsByQuiz(int quizId) {
+        ArrayList<Resultat> resultats = new ArrayList<>();
+
+        try {
+            BDConnexion bdConnexion = new BDConnexion();
+            String query = "SELECT r.idResultatQuiz, r.score, r.idEtudiant, q.idQuiz, e.nom, e.prenom "
+                    + "FROM resultatquiz r "
+                    + "JOIN utilisateur e ON r.idEtudiant = e.id "
+                    + "JOIN quiz q ON r.idQuiz = q.idQuiz "
+                    + "WHERE r.idQuiz = ?";
+            PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1, quizId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Resultat resultat = new Resultat();
+                resultat.setIdResultatQuiz(resultSet.getInt("idResultatQuiz"));
+                resultat.setScore(resultSet.getDouble("score"));
+
+                // Récupérer l'étudiant associé
+                Etudiant etudiant = new Etudiant();
+                etudiant.setId(resultSet.getInt("idEtudiant"));
+                etudiant.setNom(resultSet.getString("nom"));
+                etudiant.setPrenom(resultSet.getString("prenom"));
+                resultat.setEtudiant(etudiant);
+
+                // Récupérer le quiz associé
+                Quiz quiz = new Quiz();
+                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
+                resultat.setQuiz(quiz);
+
+                resultats.add(resultat);  // Ajouter le résultat à la liste
+            }
+
+            preparedStatement.close();
+            bdConnexion.close();
+
+        } catch (SQLException ex) {
+
+        }
+
+        return resultats;
+    }
 }

@@ -98,15 +98,40 @@ public class AccueilController {
         });
     }
 
+    private Label previousLabel = null; // Référence pour le label précédemment sélectionné
+
     private void addProfesseur(Utilisateur professeur) {
+        // Crée une nouvelle VBox pour le professeur
+        VBox professeurBox = new VBox(10);
+        professeurBox.setPadding(new Insets(10));
+        professeurBox.setStyle("-fx-background-color: blue; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: white; -fx-border-width: 1px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.5, 0, 5);");
+        professeurBox.setAlignment(Pos.CENTER);
+
+        // Label pour afficher le nom du professeur
         Label label = new Label(professeur.getNom() + " " + professeur.getPrenom());
         label.getStyleClass().add("clickable-label");
-        label.setStyle("-fx-text-fill: blue; -fx-underline: true;");
+        label.setStyle("-fx-text-fill: white;  -fx-font-size: 16px; -fx-font-weight: bold;");
         label.setOnMouseClicked(event -> {
-            label.setStyle(" -fx-text-fill: red;");
+            // Réinitialiser le style du précédent label sélectionné
+            if (previousLabel != null) {
+                previousLabel.setStyle("-fx-text-fill: lightblue;"); // style de base
+            }
+
+            // Mettre le style du label cliqué en rouge
+            label.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+
+            // Charger les quiz du professeur sélectionné
             loadQuizByProfesseur(professeur);
+
+            // Mettre à jour le label précédent
+            previousLabel = label;
         });
-        profList.getChildren().add(label);
+
+        // Ajouter le label au VBox
+        professeurBox.getChildren().add(label);
+
+        // Ajouter le VBox (avec le nom du professeur) à la liste des professeurs
+        profList.getChildren().add(professeurBox);
     }
 
     private void loadQuizByProfesseur(Utilisateur professeur) {

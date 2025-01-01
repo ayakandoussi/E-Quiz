@@ -2,7 +2,7 @@ package com.projetjava.domain;
 
 public class Resultat {
 
-    private static int idResultatQuiz = 0;
+    private  int idResultatQuiz;
     private Quiz quiz;
     private double score;
     private Etudiant etudiant;
@@ -11,9 +11,9 @@ public class Resultat {
     }
 
     public Resultat(Etudiant etudiant, Quiz quiz, double score) {
-        this.idResultatQuiz++;
-        this.quiz = new Quiz();
-        this.etudiant = new Etudiant();
+
+        this.quiz = quiz;
+        this.etudiant = etudiant;
         this.score = score;
     }
 
@@ -34,7 +34,7 @@ public class Resultat {
     }
 
     public void setIdResultatQuiz(int idResultatQuiz) {
-        Resultat.idResultatQuiz = idResultatQuiz;
+        this.idResultatQuiz = idResultatQuiz;
     }
 
     public void setScore(double score) {
