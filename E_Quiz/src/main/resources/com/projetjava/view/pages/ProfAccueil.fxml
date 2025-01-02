@@ -58,6 +58,9 @@
            
             </VBox>
         </content>
+      <padding>
+         <Insets left="15.0" />
+      </padding>
     </ScrollPane>
     <HBox alignment="CENTER" layoutX="191.0" layoutY="52.0" prefHeight="29.0" prefWidth="410.0" spacing="100.0">
         <children>
@@ -71,14 +74,14 @@
                     <Font name="System Bold" size="13.0" />
                 </font>
             </Label>
-            <Label alignment="CENTER" prefHeight="29.0" prefWidth="57.0" text="Score" textFill="BLUE">
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="51.0" text="Score" textFill="BLUE">
                 <font>
                     <Font name="System Bold" size="13.0" />
                 </font>
             </Label>
         </children>
         <padding>
-            <Insets left="20.0" right="5.0" />
+            <Insets left="20.0" right="20.0" />
         </padding>
     </HBox>
     <Pane fx:id="AccueilPane" layoutX="190.0" layoutY="53.0" prefHeight="361.0" prefWidth="410.0" style="-fx-background-color: white;">
