@@ -126,22 +126,22 @@ public class EtudiantAccueilController {
     private void addProfesseur(Utilisateur professeur) {
         VBox professeurBox = new VBox(15);
         professeurBox.setPadding(new Insets(15));
-        professeurBox.setStyle("-fx-background-color: blue; -fx-border-color: white; -fx-border-width: 2px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
+        professeurBox.setStyle("-fx-background-color: blue; -fx-border-width: 2px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
         professeurBox.setAlignment(Pos.CENTER);
         professeurBox.setMaxWidth(Double.MAX_VALUE);
 
         Label label = new Label(professeur.getNom() + " " + professeur.getPrenom());
-        label.getStyleClass().add("clickable-label");
-        label.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-font-family: 'Arial', sans-serif; -fx-opacity: 0.9; -fx-cursor: hand;");
+
+        label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-family: 'Arial', sans-serif; -fx-opacity: 0.9; -fx-cursor: hand;");
 
         label.setOnMouseEntered(event -> {
             label.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-opacity: 1;");
-            professeurBox.setStyle("-fx-background-color: #45a049; -fx-border-color: black;");
+            professeurBox.setStyle("-fx-background-color: #45a049;");
         });
 
         label.setOnMouseExited(event -> {
             label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-opacity: 0.9;");
-            professeurBox.setStyle("-fx-background-color: blue; -fx-border-color: white;");
+            professeurBox.setStyle("-fx-background-color: blue; -fx-border-width: 2px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);");
         });
 
         label.setOnMouseClicked(event -> {
