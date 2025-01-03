@@ -15,6 +15,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
        scene = new Scene(loadFXML("/com/projetjava/view/pages/LoginPage"), 800, 500);
+       //scene = new Scene(loadFXML("/com/projetjava/view/pages/AjoutQuiz"), 600, 400);
         //scene = new Scene(loadFXML("QuizPage"), 640, 480);//
          //scene = new Scene(loadFXML("Accueil"), 640, 480);
         stage.setScene(scene);
@@ -26,8 +27,8 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/projetjava/view/pages/LoginPage.fxml"));
+         // FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/projetjava/view/pages/AjoutQuiz.fxml"));
+       FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/projetjava/view/pages/LoginPage.fxml"));
         //FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/projetjava/view/pages/Accueil.fxml"));
 
         return fxmlLoader.load();

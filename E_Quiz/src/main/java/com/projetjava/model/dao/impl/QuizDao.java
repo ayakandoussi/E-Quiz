@@ -13,21 +13,35 @@ import java.util.List;
 public class QuizDao implements Dao<Quiz> {
 
     @Override
-    public void add(Quiz quiz) {
-        try {
-            BDConnexion bd = new BDConnexion();
-            String query = "INSERT INTO quiz (titre, theme, id_enseignant) VALUES (?, ?, ?)";
-            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, quiz.getTitre());
-            preparedStatement.setString(2, quiz.getTheme());
-            preparedStatement.setInt(3, quiz.getIdEnseignant());
+   public void add(Quiz quiz) {
+    try {
+        BDConnexion bd = new BDConnexion();
+        String query = "INSERT INTO quiz (titre, description, idEnseignant) VALUES (?, ?, ?)";
+        PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, quiz.getTitre());
+        preparedStatement.setString(2, quiz.getDescription());
+        preparedStatement.setInt(3, quiz.getIdEnseignant());
 
-            preparedStatement.executeUpdate();
+        // Exécutez la requête
+        int affectedRows = preparedStatement.executeUpdate();
 
-        } catch (SQLException ex) {
-
+        // Si une ligne est affectée, récupérez l'ID généré
+        if (affectedRows > 0) {
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    quiz.setIdQuiz(generatedKeys.getInt(1)); // Assignez l'ID généré
+                } else {
+                    System.out.println("Aucune clé générée !");
+                }
+            }
+        } else {
+            System.out.println("Aucune ligne affectée !");
         }
+
+    } catch (SQLException ex) {
+        ex.printStackTrace(); // Affichez les erreurs SQL pour déboguer
     }
+}
 
     @Override
     public Quiz getById(int id) {
@@ -43,8 +57,8 @@ public class QuizDao implements Dao<Quiz> {
                 quiz = new Quiz();
                 quiz.setIdQuiz(resultSet.getInt("id"));
                 quiz.setTitre(resultSet.getString("titre"));
-                quiz.setTheme(resultSet.getString("theme"));
-                quiz.setIdEnseignant(resultSet.getInt("id_enseignant"));
+                quiz.setDescription(resultSet.getString("description"));
+                quiz.setIdEnseignant(resultSet.getInt("idEnseignant"));
             }
 
             preparedStatement.close();
@@ -70,8 +84,8 @@ public class QuizDao implements Dao<Quiz> {
                 Quiz quiz = new Quiz();
                 quiz.setIdQuiz(resultSet.getInt("id"));
                 quiz.setTitre(resultSet.getString("titre"));
-                quiz.setTheme(resultSet.getString("theme"));
-                quiz.setIdEnseignant(resultSet.getInt("id_enseignant"));
+                quiz.setDescription(resultSet.getString("description"));
+                quiz.setIdEnseignant(resultSet.getInt("idEnseignant"));
 
                 // Ajout du quiz à la liste
                 quizzes.add(quiz);
@@ -88,10 +102,10 @@ public class QuizDao implements Dao<Quiz> {
     public void update(Quiz quiz) {
         try {
             BDConnexion bd = new BDConnexion();
-            String query = "UPDATE quiz SET titre = ?,theme = ?, id_enseignant = ? WHERE id = ?";
+            String query = "UPDATE quiz SET titre = ?,description = ?, idEnseignant = ? WHERE id = ?";
             PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
             preparedStatement.setString(1, quiz.getTitre());
-            preparedStatement.setString(2, quiz.getTheme());
+            preparedStatement.setString(2, quiz.getDescription());
             preparedStatement.setInt(3, quiz.getIdEnseignant());
             preparedStatement.setInt(4, quiz.getIdQuiz());
             preparedStatement.executeUpdate();
@@ -133,7 +147,7 @@ public class QuizDao implements Dao<Quiz> {
                 Quiz quiz = new Quiz();
                 quiz.setIdQuiz(resultSet.getInt("id"));
                 quiz.setTitre(resultSet.getString("titre"));
-                quiz.setTheme(resultSet.getString("theme"));
+                quiz.setDescription(resultSet.getString("description"));
 
                 quizzes.add(quiz);
             }
