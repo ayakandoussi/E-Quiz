@@ -44,7 +44,7 @@
             </VBox>
         </content>
     </ScrollPane>
-    <Button fx:id="addQuizButton" layoutX="8.0" layoutY="357.0" mnemonicParsing="false" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="29.0" prefWidth="175.0" style="-fx-background-color: blue;" text="Ajouter" textFill="#fcf8f8">
+    <Button fx:id="addQuizButton" layoutX="8.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleAddQuizButtonAction" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="29.0" prefWidth="175.0" style="-fx-background-color: blue;" text="Ajouter" textFill="#fcf8f8">
         <font>
             <Font name="System Bold" size="15.0" />
         </font>

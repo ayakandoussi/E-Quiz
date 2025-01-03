@@ -268,7 +268,7 @@ public class ProfAccueilController {
     private void handleAddQuizButtonAction() {
         try {
             // Charger la page "Ajouter un quiz"
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AjoutQuiz.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/AjoutQuiz.fxml"));
             Parent root = loader.load();
 
             // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre ou la même
