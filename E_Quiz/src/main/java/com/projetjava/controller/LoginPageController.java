@@ -148,8 +148,6 @@ public class LoginPageController implements Initializable {
             Utilisateur utilisateur = utilisateurDao.getByEmail(EmailIn.getText());
 
             if (utilisateur != null) {
-                 System.out.println("Utilisateur connecté ID : " + utilisateur.getId());
-
                 boolean motDePasseValide = BCrypt.checkpw(PasswordIn.getText(), utilisateur.getMotDePasse());
                 if (motDePasseValide) {
                     // Initialiser la session
