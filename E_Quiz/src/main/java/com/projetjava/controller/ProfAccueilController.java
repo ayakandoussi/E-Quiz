@@ -15,15 +15,19 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class ProfAccueilController {
 
@@ -259,6 +263,21 @@ public class ProfAccueilController {
 
        
         resultsVBox.getChildren().add(resultBox);
+    }
+        @FXML
+    private void handleAddQuizButtonAction() {
+        try {
+            // Charger la page "Ajouter un quiz"
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AjoutQuiz.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre ou la même
+            Stage stage = (Stage) addQuizButton.getScene().getWindow(); // Même fenêtre
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+     
+        }
     }
 
 }
