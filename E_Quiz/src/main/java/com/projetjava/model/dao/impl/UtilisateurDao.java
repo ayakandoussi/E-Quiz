@@ -111,6 +111,7 @@ public class UtilisateurDao implements Dao<Utilisateur> {
                 professeur.setEmail(resultSet.getString("email"));
                 professeur.setMotDePasse(resultSet.getString("mot_de_passe"));
                 professeur.setRole(resultSet.getString("role"));
+                professeur.setId(resultSet.getInt("id"));
                 professeurs.add(professeur);
             }
             resultSet.close();
@@ -133,7 +134,7 @@ public class UtilisateurDao implements Dao<Utilisateur> {
             preparedStatement.setString(3, utilisateur.getEmail());
             preparedStatement.setString(4, utilisateur.getMotDePasse());
             preparedStatement.setString(5, utilisateur.getRole());
-            preparedStatement.setInt(6, Utilisateur.getId());
+            preparedStatement.setInt(6, utilisateur.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             bd.close();

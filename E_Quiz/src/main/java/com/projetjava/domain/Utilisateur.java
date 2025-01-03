@@ -4,7 +4,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public abstract class Utilisateur {
 
-    private static int id = 0;
+    private int id;
     private String nom;
     private String prenom;
     private String email;
@@ -15,7 +15,6 @@ public abstract class Utilisateur {
     }
 
     public Utilisateur(Utilisateur U) {
-        this.id++;
         this.nom = U.nom;
         this.prenom = U.prenom;
         this.email = U.email;
@@ -24,7 +23,7 @@ public abstract class Utilisateur {
     }
 
     public Utilisateur(String nom, String prenom, String email, String motDePasse, String role) {
-        this.id++;
+
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -32,7 +31,7 @@ public abstract class Utilisateur {
         this.role = role;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
@@ -65,7 +64,7 @@ public abstract class Utilisateur {
         this.motDePasse = motDePasse;
     }
     public void setId(int id) {
-        Utilisateur.id = id;
+        this.id = id;
     }
 
     public void setNom(String nom) {

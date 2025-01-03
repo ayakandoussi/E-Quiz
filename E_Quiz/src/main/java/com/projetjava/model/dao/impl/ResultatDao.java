@@ -131,5 +131,61 @@ public class ResultatDao implements Dao<Resultat> {
 
         }
     }
+// Récupérer les résultats d'un quiz donné
+
+    public ArrayList<Resultat> getResultatsByQuiz(int quizId) {
+        ArrayList<Resultat> resultats = new ArrayList<>();
+
+        try {
+            // Création de la connexion à la base de données
+            BDConnexion bdConnexion = new BDConnexion();
+
+            // Requête SQL corrigée
+            String query = "SELECT r.idResultatQuiz, r.score, r.idEtudiant, q.idQuiz, e.nom, e.prenom "
+                    + "FROM resultatquiz r "
+                    + "JOIN utilisateur e ON r.idEtudiant = e.id "
+                    + "JOIN quiz q ON r.idQuiz = q.idQuiz "
+                    + "WHERE r.idQuiz = ?";
+            PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
+
+            // Remplacement du paramètre dans la requête
+            preparedStatement.setInt(1, quizId);
+
+            // Exécution de la requête
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Traitement des résultats
+            while (resultSet.next()) {
+                Resultat resultat = new Resultat();
+                resultat.setIdResultatQuiz(resultSet.getInt("idResultatQuiz"));
+                resultat.setScore(resultSet.getDouble("score"));
+
+                // Récupérer l'étudiant associé
+                Etudiant etudiant = new Etudiant();
+                etudiant.setId(resultSet.getInt("idEtudiant"));
+                etudiant.setNom(resultSet.getString("nom"));
+                etudiant.setPrenom(resultSet.getString("prenom"));
+                resultat.setEtudiant(etudiant);
+
+                // Récupérer le quiz associé
+                Quiz quiz = new Quiz();
+                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
+                resultat.setQuiz(quiz);
+
+                // Ajouter le résultat à la liste
+                resultats.add(resultat);
+            }
+
+            // Fermeture des ressources
+            preparedStatement.close();
+            bdConnexion.close();
+        } catch (SQLException ex) {
+            // Gestion et affichage des erreurs
+            System.err.println("Erreur lors de la récupération des résultats : " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return resultats;
+    }
 
 }
