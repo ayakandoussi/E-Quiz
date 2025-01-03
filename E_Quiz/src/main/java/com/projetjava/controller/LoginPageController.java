@@ -163,9 +163,9 @@ public class LoginPageController implements Initializable {
 
                     try {
                         if ("professeur".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/AjoutQuiz.fxml"));
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
                         } else if ("etudiant".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
                         } else {
                             throw new IllegalStateException("Rôle non valide.");
                         }

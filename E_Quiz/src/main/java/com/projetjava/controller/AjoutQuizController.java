@@ -50,7 +50,7 @@ public class AjoutQuizController {
     private QuizDao quizDao;
     private QuestionDAO questionDao;
     private int nombreQuestionsAjoutees = 0; // Compteur pour les questions ajoutées
-    private static final int NOMBRE_MAX_QUESTIONS = 2; // Nombre maximum de questions
+    private static final int NOMBRE_MAX_QUESTIONS = 20; // Nombre maximum de questions
     
     private void afficherRole(Utilisateur utilisateur) {
         String contenu;
@@ -94,10 +94,10 @@ public class AjoutQuizController {
         }
         
         
-        
+        Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
         quizEnCours.setTitre(titreQuiz);
         quizEnCours.setDescription(descriptionQuiz);
-        quizEnCours.setIdEnseignant(Utilisateur.getId());
+        quizEnCours.setIdEnseignant(utilisateurConnecte.getId());
 
         quizDao.add(quizEnCours); // ID automatiquement récupéré ici
 
