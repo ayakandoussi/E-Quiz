@@ -18,7 +18,7 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.ProfAccueilController">
     <Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <children>
-            <Label fx:id="rolelabel" alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+            <Label fx:id="rolelabel" alignment="CENTER" layoutX="137.0" layoutY="12.0" prefHeight="29.0" prefWidth="347.0" text="Role : Nom Prenom" textFill="WHITE">
                 <font>
                     <Font size="17.0" />
                 </font>
@@ -37,14 +37,14 @@
             </MenuButton>
         </children>
     </Pane>
-    <ScrollPane fx:id="quizListPane" layoutY="52.0" prefHeight="302.0" prefWidth="191.0">
+    <ScrollPane fx:id="quizListPane" layoutY="52.0" prefHeight="311.0" prefWidth="191.0">
         <content>
-            <VBox fx:id="quizListVBox" prefHeight="300.0" prefWidth="190.0">
+            <VBox fx:id="quizListVBox" prefHeight="309.0" prefWidth="190.0">
            
             </VBox>
         </content>
     </ScrollPane>
-    <Button fx:id="addQuizButton" layoutX="8.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleAddQuizButtonAction" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="29.0" prefWidth="175.0" style="-fx-background-color: blue;" text="Ajouter" textFill="#fcf8f8">
+    <Button fx:id="addQuizButton" layoutX="6.0" layoutY="372.0" mnemonicParsing="false" onAction="#handleAddQuizButtonAction" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="29.0" prefWidth="175.0" style="-fx-background-color: blue;" text="Ajouter" textFill="#fcf8f8">
         <font>
             <Font name="System Bold" size="15.0" />
         </font>

@@ -76,7 +76,7 @@ public class UtilisateurDao implements Dao<Utilisateur> {
             while (resultSet.next()) {
                 String role = resultSet.getString("role");
                 Utilisateur utilisateur;
-                if (role.equals("enseignant")) {
+                if (role.equals("professeur")) {
                     utilisateur = new Professeur();
                 } else {
                     utilisateur = new Etudiant();
@@ -102,7 +102,7 @@ public class UtilisateurDao implements Dao<Utilisateur> {
             BDConnexion bd = new BDConnexion();
             String query = "SELECT * FROM utilisateur WHERE role= ? ";
             PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
-            preparedStatement.setString(1, "enseignant");
+            preparedStatement.setString(1, "professeur");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Professeur professeur = new Professeur();
