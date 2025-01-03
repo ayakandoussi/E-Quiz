@@ -87,14 +87,14 @@ public class AjoutQuizController {
     private void ajouterQuiz() {
         String titreQuiz = titre.getText().trim();
         String descriptionQuiz = description.getText().trim();
-        Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
+        
         if (titreQuiz.isEmpty() || descriptionQuiz.isEmpty()) {
             afficherAlerte("Erreur", "Tous les champs doivent être remplis", Alert.AlertType.ERROR);
             return;
         }
         
         
-         System.out.println("Utilisateur connecté ID : " + utilisateurConnecte.getId());
+        
         quizEnCours.setTitre(titreQuiz);
         quizEnCours.setDescription(descriptionQuiz);
         quizEnCours.setIdEnseignant(Utilisateur.getId());
