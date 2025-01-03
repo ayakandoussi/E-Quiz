@@ -148,6 +148,7 @@ public class LoginPageController implements Initializable {
             Utilisateur utilisateur = utilisateurDao.getByEmail(EmailIn.getText());
 
             if (utilisateur != null) {
+                 System.out.println("Utilisateur connecté ID : " + utilisateur.getId());
 
                 boolean motDePasseValide = BCrypt.checkpw(PasswordIn.getText(), utilisateur.getMotDePasse());
                 if (motDePasseValide) {
@@ -162,7 +163,7 @@ public class LoginPageController implements Initializable {
 
                     try {
                         if ("professeur".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/navbar.fxml"));
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/AjoutQuiz.fxml"));
                         } else if ("etudiant".equals(role)) {
                             loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Accueil.fxml"));
                         } else {
@@ -195,6 +196,9 @@ public class LoginPageController implements Initializable {
                     alert.showAndWait();
                 }
             }
+            else {
+            System.out.println("Échec de la connexion.");
+}
         }
     }
 
