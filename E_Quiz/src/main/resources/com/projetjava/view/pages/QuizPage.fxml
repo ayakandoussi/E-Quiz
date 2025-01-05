@@ -4,8 +4,6 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
@@ -14,7 +12,7 @@
         <!-- Navbar -->
         <Pane layoutY="0" prefHeight="53.0" prefWidth="600.0" style="-fx-background-color: blue;">
             <children>
-                <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+                <Label fx:id="rolelabel" alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
                     <font>
                         <Font size="17.0" />
                     </font>
@@ -26,25 +24,32 @@
                 </ImageView>
                 <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Accueil" />
-                        <MenuItem mnemonicParsing="false" text="Profil" />
+                        <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
+                        <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
                         <MenuItem mnemonicParsing="false" text="Se deconnecter" />
                     </items>
                 </MenuButton>
             </children>
         </Pane>
 
-        <!-- Contenu principal de la page Quiz -->
+        <!-- Question Label avec retour à la ligne -->
         <Label fx:id="questionLabel" layoutX="63.0" layoutY="80.0" prefHeight="61.0" prefWidth="474.0" style="-fx-background-color: beige;" text="Question ici" />
-        <CheckBox fx:id="choix1" layoutX="56.0" layoutY="177.0" />
-        <CheckBox fx:id="choix2" layoutX="56.0" layoutY="261.0" />
-        <CheckBox fx:id="choix3" layoutX="340.0" layoutY="177.0" />
-        <CheckBox fx:id="choix4" layoutX="340.0" layoutY="261.0" />
-        <Button fx:id="suivantButton" layoutX="252.0" layoutY="335.0" onAction="#questionSuivante" style="-fx-background-color: blue; -fx-text-fill: white;" text="Suivant" />
-      <Label fx:id="labelChoix1" layoutX="84.0" layoutY="173.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label1" />
-        <Label fx:id="labelChoix2" layoutX="84.0" layoutY="257.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label2" />
-        <Label fx:id="labelChoix3" layoutX="368.0" layoutY="173.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label3" />
-        <Label fx:id="labelChoix4" layoutX="368.0" layoutY="257.0" prefHeight="29.0" prefWidth="88.0" style="-fx-background-color: beige;" text="Label4" />
+
+        <!-- Choix de réponses sous forme de RadioButton -->
+        <RadioButton fx:id="choix1" layoutX="33.0" layoutY="167.0" mnemonicParsing="false" text="Choix 1">
+            <toggleGroup>
+                <ToggleGroup fx:id="choix" />
+            </toggleGroup>
+        </RadioButton>
+
+        <RadioButton fx:id="choix2" layoutX="33.0" layoutY="244.0" mnemonicParsing="false" text="Choix 2" toggleGroup="$choix" />
         
+        <RadioButton fx:id="choix3" layoutX="332.0" layoutY="167.0" mnemonicParsing="false" text="Choix 3" toggleGroup="$choix" />
+        
+        <RadioButton fx:id="choix4" layoutX="332.0" layoutY="244.0" mnemonicParsing="false" text="Choix 4" toggleGroup="$choix" />
+        
+        <!-- Bouton pour passer à la question suivante -->
+        <Button fx:id="suivantButton" layoutX="252.0" layoutY="335.0" onAction="#questionSuivante" style="-fx-background-color: blue; -fx-text-fill: white;" text="Suivant" />
+
     </children>
 </AnchorPane>

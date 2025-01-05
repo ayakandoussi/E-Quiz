@@ -1,70 +1,132 @@
 package com.projetjava.controller;
 
-
-import java.util.ArrayList;
-
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+import com.projetjava.domain.Etudiant;
+import com.projetjava.domain.Professeur;
+import com.projetjava.domain.Session;
+import com.projetjava.domain.Utilisateur;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Pane;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import com.projetjava.domain.Question;
-import com.projetjava.model.dao.impl.QuestionDAO;
-import com.projetjava.model.dao.impl.QuizDao;
 import com.projetjava.domain.Quiz;
 import com.projetjava.model.dao.impl.BDConnexion;
-import com.projetjava.domain.Utilisateur;
-import com.projetjava.model.dao.impl.UtilisateurDao;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
+
+
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-
-
-
+import java.util.Collections;
 public class QuestionController {
 
-    // FXML pour les composants de l'interface
-    @FXML private Label questionLabel; // Label pour la question
-    @FXML private Label labelChoix1;   // Label pour le choix 1
-    @FXML private Label labelChoix2;   // Label pour le choix 2
-    @FXML private Label labelChoix3;   // Label pour le choix 3
-    @FXML private Label labelChoix4;   // Label pour le choix 4
-
-    @FXML private CheckBox choix1;     // CheckBox pour le choix 1
-    @FXML private CheckBox choix2;     // CheckBox pour le choix 2
-    @FXML private CheckBox choix3;     // CheckBox pour le choix 3
-    @FXML private CheckBox choix4;     // CheckBox pour le choix 4
-
-    @FXML private Button suivantButton; // Bouton pour passer à la question suivante
-     
+    @FXML private Label questionLabel;
+    @FXML private RadioButton choix1;
+    @FXML private RadioButton choix2;
+    @FXML private RadioButton choix3;
+    @FXML private RadioButton choix4;
+    @FXML private ToggleGroup choix;
+    @FXML private Button suivantButton;
     
     
+    @FXML
+    private Pane NavbarController;
+
+    @FXML
+    private MenuButton menu;
+    @FXML
+    private MenuItem Accueil;
+    @FXML
+    private MenuItem Profil;
+    @FXML
+    private MenuItem SeDeconnecter;
+    @FXML
+    private Button addQuizButton;
+    @FXML
+    private Label rolelabel;
+    
+
+
+
     private BDConnexion bdConnexion;
     private List<Question> questions;
     private int currentQuestionIndex;
-    private int score;
-    private int idEtudiant; // Vous récupérerez l'ID de l'étudiant une fois qu'il est connecté
-    private int idQuiz; // L'ID du quiz sélectionné
-    
-    
+    private double score;
+    private int idQuiz;
+    private int idEtudiant;
+
     @FXML
     private void initialize() throws SQLException {
         this.bdConnexion = new BDConnexion();
         this.questions = new ArrayList<>();
         this.currentQuestionIndex = 0;
         this.score = 0;
+        Profil.setOnAction(event -> afficherProfil());
 
-        // Charger les questions du quiz (idQuiz devrait être récupéré dynamiquement)
+        // Récupérer l'utilisateur connecté via la session
+        Utilisateur etudiantConnecte = Session.getInstance().getUtilisateurConnecte();
+
+        if (etudiantConnecte != null) {
+            afficherRole(etudiantConnecte);
+            
+        } else {
+            System.out.println("Aucun professeur connecté.");
+        }
+
+        
+        
+    }
+    
+    private void afficherRole(Utilisateur utilisateur) {
+        String contenu;
+
+        Etudiant etudiant = new Etudiant(utilisateur);
+
+            contenu = etudiant.afficher();
+
+        rolelabel.setText(contenu);
+    }
+    
+    @FXML
+    public void selectionnerQuiz(Quiz quizSelectionne) throws SQLException {
+        int idQuiz = quizSelectionne.getIdQuiz(); // ID du quiz sélectionné
+        int idEtudiant = Session.getInstance().getUtilisateurConnecte().getId(); // Récupérer l'ID de l'étudiant
+
         chargerQuestions(idQuiz);
+
+        // Afficher la première question
         afficherQuestion();
     }
 
-    // Méthode pour charger les questions du quiz
-    public void chargerQuestions(int idQuiz) throws SQLException {
+    
+
+    // Méthode pour définir l'ID du quiz et de l'étudiant dynamiquement
+    public void setIdQuiz(int idQuiz, int idEtudiant) throws SQLException {
         this.idQuiz = idQuiz;
+        this.idEtudiant = idEtudiant;
+
+        // Charger les questions pour ce quiz
+        chargerQuestions(idQuiz);
+
+        // Afficher la première question
+        afficherQuestion();
+    }
+
+    // Méthode pour charger les questions du quiz à partir de la base de données
+    private void chargerQuestions(int idQuiz) throws SQLException {
         String query = "SELECT idQuestion, enonce, choix1, choix2, choix3, choix4, bonneReponse FROM Question WHERE idQuiz = ? ORDER BY idQuestion";
         PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
-        preparedStatement.setInt(1, idQuiz);  // On passe l'ID du quiz
+        preparedStatement.setInt(1, idQuiz);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
@@ -80,7 +142,7 @@ public class QuestionController {
             questions.add(question);
         }
     }
-    
+
     // Méthode pour afficher la question actuelle
     private void afficherQuestion() {
         if (currentQuestionIndex < questions.size()) {
@@ -91,87 +153,111 @@ public class QuestionController {
             choix3.setText(question.getChoix3());
             choix4.setText(question.getChoix4());
         } else {
-            // Fin du quiz
-            // Afficher le score ou passer à la page suivante
-        }
-    }
-   
-    @FXML
-    private void handleChoice() {
-        // Si une case est cochée, on désélectionne les autres
-        if (choix1.isSelected()) {
-            choix2.setSelected(false);
-            choix3.setSelected(false);
-            choix4.setSelected(false);
-        } else if (choix2.isSelected()) {
-            choix1.setSelected(false);
-            choix3.setSelected(false);
-            choix4.setSelected(false);
-        } else if (choix3.isSelected()) {
-            choix1.setSelected(false);
-            choix2.setSelected(false);
-            choix4.setSelected(false);
-        } else if (choix4.isSelected()) {
-            choix1.setSelected(false);
-            choix2.setSelected(false);
-            choix3.setSelected(false);
-        }
-    }
-    
-    // Méthode pour gérer le clic sur le bouton "Suivant"
-    @FXML
-    private void questionSuivante() throws SQLException {
-        // Enregistrer la réponse de l'étudiant
-        enregistrerReponse();
-
-        // Passer à la question suivante
-        currentQuestionIndex++;
-
-        // Afficher la nouvelle question
-        afficherQuestion();
-    }
-    
-    // Méthode pour enregistrer la réponse de l'étudiant
-    private void enregistrerReponse() throws SQLException {
-        Question question = questions.get(currentQuestionIndex);
-        String reponse = getReponseChoisie();
-
-        // Enregistrer la réponse dans la base de données
-        String query = "INSERT INTO ResultatEtudiantQuestion (idEtudiant, idQuestion, reponse, estCorrect) VALUES (?, ?, ?, ?)";
-        PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
-        preparedStatement.setInt(1, idEtudiant);
-        preparedStatement.setInt(2, question.getIdQuestion());
-        preparedStatement.setString(3, reponse);
-        preparedStatement.setBoolean(4, reponse.equals(question.getBonneReponse()));
-        preparedStatement.executeUpdate();
-
-        // Mettre à jour le score si la réponse est correcte
-        if (reponse.equals(question.getBonneReponse())) {
-            score++;
+            // Lorsque toutes les questions sont répondues, afficher la page des résultats
+            afficherResultats();
         }
     }
 
     // Méthode pour obtenir la réponse choisie par l'utilisateur
     private String getReponseChoisie() {
-        if (choix1.isSelected()) {
-            return choix1.getText();
-        } else if (choix2.isSelected()) {
-            return choix2.getText();
-        } else if (choix3.isSelected()) {
-            return choix3.getText();
-        } else if (choix4.isSelected()) {
-            return choix4.getText();
+        Toggle selectedToggle = choix.getSelectedToggle();
+        if (selectedToggle != null) {
+            RadioButton selectedRadioButton = (RadioButton) selectedToggle;
+            return selectedRadioButton.getText();
         }
-        return ""; // Pas de réponse choisie
+        return "";
+    }
+
+    // Méthode pour vérifier la réponse donnée par l'utilisateur
+    public boolean verifierReponse(String reponse) {
+        Question questionActuelle = questions.get(currentQuestionIndex);
+        return reponse.equals(questionActuelle.getBonneReponse());
+    }
+
+    // Méthode pour générer un certain nombre de questions aléatoires
+    public void genererQuestions(int nombreQuestions) throws SQLException {
+        Collections.shuffle(questions);  // Mélange les questions
+        questions = questions.subList(0, Math.min(nombreQuestions, questions.size()));  // Limite le nombre de questions
+    }
+
+    private void reinitialiserQuiz() throws SQLException {
+        // Réinitialiser le score
+        score = 0;
+        currentQuestionIndex = 0;  // Revenir à la première question
+
+        // Recharger les questions pour le quiz (si elles ont été chargées précédemment)
+        questions.clear();  // Vider la liste actuelle des questions
+        chargerQuestions(idQuiz);  // Recharger les questions pour ce quiz
+
+        // Afficher la première question
+        afficherQuestion();
+    }
+
+    // Méthode pour passer à la question suivante
+    @FXML
+    private void questionSuivante() {
+        // Vérifier si une réponse a été sélectionnée
+        RadioButton selectedRadioButton = (RadioButton) choix.getSelectedToggle();
+        if (selectedRadioButton != null) {
+            String reponseChoisie = selectedRadioButton.getText();
+            // Vérifier si la réponse est correcte
+            if (verifierReponse(reponseChoisie)) {
+                score++; // Incrémenter le score si la réponse est correcte
+            }
+        }
+
+        // Passer à la question suivante
+        currentQuestionIndex++;
+
+        // Vérifier si c'est la dernière question
+        if (currentQuestionIndex < questions.size()) {
+            afficherQuestion();
+        } else {
+            // Lorsque toutes les questions sont répondues, afficher la page des résultats
+            afficherResultats();
+        }
+
+        // Réinitialiser la sélection des réponses
+        choix.selectToggle(null);
+    }
+
+    private void afficherResultats() {
+        try {
+            // Charger la scène des résultats
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Resultat.fxml"));
+            Parent root = loader.load();
+
+            // Passer le score à la scène des résultats
+            ResultatPageController resultatController = loader.getController();
+            resultatController.afficherResultat(score);  // Passer le score à la méthode afficherResultat()
+
+            // Charger la scène dans la fenêtre actuelle
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) questionLabel.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    // Méthode pour afficher la page de profil
+    public void afficherProfil() {
+        try {
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
+            Stage stage = new Stage();
+            stage.setTitle("Page Profil");
+            stage.setScene(new Scene(root));
+
+            // Afficher la nouvelle fenêtre
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

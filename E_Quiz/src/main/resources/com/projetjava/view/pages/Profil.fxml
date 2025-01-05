@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -10,31 +15,37 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: blue;" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1">
-    <Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-        <children>
-            <Label alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
-                <font>
-                    <Font size="17.0" />
-                </font>
-            </Label>
-            <ImageView fitHeight="88.0" fitWidth="92.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/logo.png" />
-                </image>
-            </ImageView>
-            <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
-                <items>
-                    <MenuItem mnemonicParsing="false" text="Accueil" />
-                    <MenuItem mnemonicParsing="false" text="Profil" />
-                    <MenuItem mnemonicParsing="false" text="Se deconnecter" />
-                </items>
-            </MenuButton>
-        </children>
-    </Pane>
-   <Pane layoutX="115.0" layoutY="100.0" prefHeight="249.0" prefWidth="372.0" style="-fx-border-color: white; -fx-background-color: white; -fx-border-width: 10; -fx-border-radius: 30; -fx-background-radius: 30;">
-      <children>
-         <VBox prefHeight="200.0" prefWidth="100.0" />
-      </children>
-   </Pane>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.ProfilController">
+   <children>
+       <Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+           <children>
+               <Label fx:id="roleLabel" alignment="CENTER" layoutX="184.0" layoutY="12.0" prefHeight="29.0" prefWidth="257.0" text="Role : Nom Prenom" textFill="WHITE">
+                   <font>
+                       <Font size="17.0" />
+                   </font>
+               </Label>
+               <ImageView fitHeight="88.0" fitWidth="92.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../images/logo.png" />
+                   </image>
+               </ImageView>
+               <MenuButton fx:id="menu" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
+                   <items>
+                       <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil"  />
+                       <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil"  />
+                       <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" text="Se deconnecter" />
+                   </items>
+               </MenuButton>
+           </children>
+       </Pane>
+      <Label layoutX="42.0" layoutY="86.0" prefHeight="42.0" prefWidth="102.0" style="-fx-background-color: beige;" text="       Nom:" />
+      <Label layoutX="42.0" layoutY="140.0" prefHeight="42.0" prefWidth="102.0" style="-fx-background-color: beige;" text="    Prenom:" />
+      <Label layoutX="42.0" layoutY="200.0" prefHeight="42.0" prefWidth="102.0" style="-fx-background-color: beige;" text="       Email:" />
+      <Button fx:id="bouttonmodifier" layoutX="169.0" layoutY="326.0" mnemonicParsing="false" onAction="#handleModifierMotDePasseAction" prefHeight="42.0" prefWidth="174.0" style="-fx-background-color: pink;" text="modifier mot de passe" />
+      <Label layoutX="42.0" layoutY="254.0" prefHeight="42.0" prefWidth="102.0" style="-fx-background-color: beige;" text="          Role:" />
+      <TextField fx:id="nomfield" layoutX="223.0" layoutY="86.0" prefHeight="42.0" prefWidth="270.0" text="nom" />
+      <TextField fx:id="prenomfiled" layoutX="226.0" layoutY="140.0" prefHeight="42.0" prefWidth="270.0" text="prenom" />
+      <TextField fx:id="emailfield" layoutX="226.0" layoutY="200.0" prefHeight="42.0" prefWidth="270.0" text="email" />
+      <TextField fx:id="rolefield" layoutX="226.0" layoutY="254.0" prefHeight="42.0" prefWidth="270.0" text="role" />
+   </children>
 </AnchorPane>

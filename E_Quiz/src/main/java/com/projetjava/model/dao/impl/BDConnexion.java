@@ -6,10 +6,12 @@ import java.sql.SQLException;
 
 public class BDConnexion {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/e_quiz";
-    private static final String USER = "root";
 
-    private static final String PASSWORD = "ABC@def123";
+    private static final String URL = "jdbc:mysql://localhost:3306/e_quiz"; 
+    private static final String USER = "root"; 
+    private static final String PASSWORD = "ABC@def123"; 
+
+ 
 
     private Connection connection;
 

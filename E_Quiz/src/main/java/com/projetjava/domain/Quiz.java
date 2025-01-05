@@ -4,8 +4,6 @@
  */
 
 package com.projetjava.domain;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Quiz {
  
@@ -14,18 +12,18 @@ public class Quiz {
     private String description;
     private String theme; 
     private int idEnseignant; // Identifiant du professeur qui a créé le quiz
-    private List<Question> questions; // Liste des questions associées au quiz
+    
     public Quiz() {
       
     }
     
-    public Quiz( String titre, String description, String theme, int idEnseignant ,Question questions) {
+    public Quiz( String titre, String description, String theme, int idEnseignant ) {
 
         this.titre = titre;
         this.description = description;
         this.theme = theme;
         this.idEnseignant = idEnseignant;
-        this.questions =  new ArrayList<>();
+        
     }
     
   
@@ -71,13 +69,7 @@ public class Quiz {
         this.idEnseignant = idEnseignant;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
+    
     @Override
     public String toString() {
         return "Quiz{" +
@@ -85,7 +77,7 @@ public class Quiz {
                 ", titre='" + titre + '\'' +
                 ", theme=" + theme +
                 ", idEnseignant=" + idEnseignant +
-                ", questions=" + (questions != null ? questions.size() : 0) +
+                
                 '}';
     }
 

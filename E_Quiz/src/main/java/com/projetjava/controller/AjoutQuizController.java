@@ -8,6 +8,9 @@ import com.projetjava.domain.Utilisateur;
 import com.projetjava.model.dao.impl.QuestionDAO;
 import com.projetjava.model.dao.impl.QuizDao;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 
 public class AjoutQuizController {
@@ -80,6 +84,7 @@ public class AjoutQuizController {
         quizEnCours = new Quiz();
         AjoutQuestion.setOnAction(event -> ajouterQuiz());
         questionsuivante.setOnAction(event -> ajouterQuestion());
+        Profil.setOnAction(event -> afficherProfil());
    
     }
 
@@ -172,5 +177,24 @@ public class AjoutQuizController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    // Méthode pour afficher la page de profil
+    public void afficherProfil() {
+        try {
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
+            Stage stage = new Stage();
+            stage.setTitle("Page Profil");
+            stage.setScene(new Scene(root));
+
+            // Afficher la nouvelle fenêtre
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

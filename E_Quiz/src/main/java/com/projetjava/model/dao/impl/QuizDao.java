@@ -134,30 +134,42 @@ public class QuizDao implements Dao<Quiz> {
     }
 
     public ArrayList<Quiz> getQuizzesByProfesseur(int professeurId) {
-        ArrayList<Quiz> quizzes = new ArrayList<>();
+    ArrayList<Quiz> quizzes = new ArrayList<>();
+    BDConnexion bdConnexion = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
 
-        try {
-            BDConnexion bdConnexion = new BDConnexion();
-            String query = "SELECT * FROM quiz WHERE idEnseignant=?";
-            PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
-            preparedStatement.setInt(1, professeurId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+    try {
+        bdConnexion = new BDConnexion();
+        String query = "SELECT * FROM Quiz WHERE idEnseignant=?";
+        preparedStatement = bdConnexion.getConnection().prepareStatement(query);
+        preparedStatement.setInt(1, professeurId);
+        resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
-                quiz.setTitre(resultSet.getString("titre"));
+        while (resultSet.next()) {
+            Quiz quiz = new Quiz();
+            quiz.setIdQuiz(resultSet.getInt("idQuiz"));
+            quiz.setTitre(resultSet.getString("titre"));
+            quiz.setDescription(resultSet.getString("description"));
 
-                quiz.setDescription(resultSet.getString("description"));
-
-                quizzes.add(quiz);
-            }
-            preparedStatement.close();
-            bdConnexion.close();
-        } catch (SQLException ex) {
-
+            quizzes.add(quiz);
         }
-
-        return quizzes;
+    } catch (SQLException ex) {
+        // Log l'erreur pour faciliter le débogage
+        ex.printStackTrace();
+        // Vous pouvez aussi afficher un message d'erreur à l'utilisateur si nécessaire
+    } finally {
+        // Fermeture des ressources dans le bloc finally pour garantir leur fermeture
+        try {
+            if (resultSet != null) resultSet.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (bdConnexion != null) bdConnexion.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+    return quizzes;
+}
+
 }

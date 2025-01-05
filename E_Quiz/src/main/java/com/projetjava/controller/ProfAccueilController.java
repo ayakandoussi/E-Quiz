@@ -75,6 +75,8 @@ public class ProfAccueilController {
         if (professeurConnecte != null) {
             afficherRole(professeurConnecte);
             loadQuiz(professeurConnecte.getId());
+            Profil.setOnAction(event -> afficherProfil());
+            Accueil.setOnAction(event -> afficherAccueil());
         } else {
             System.out.println("Aucun professeur connecté.");
         }
@@ -87,6 +89,7 @@ public class ProfAccueilController {
 
         styleVBox(quizListVBox);
         styleVBox(resultsVBox);
+        
     }
 
     @FXML
@@ -277,6 +280,40 @@ public class ProfAccueilController {
             stage.show();
         } catch (Exception e) {
      
+        }
+    }
+    
+    public void afficherProfil() {
+        try {
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
+            Stage stage = new Stage();
+            stage.setTitle("Page Profil");
+            stage.setScene(new Scene(root));
+
+            // Afficher la nouvelle fenêtre
+            stage.show();
+        } catch (Exception e) {
+        }
+    }
+        public void afficherAccueil() {
+        try {
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
+            Parent root = loader.load();
+
+            
+            Stage stage = new Stage();
+            stage.setTitle("Page Acceuil");
+            stage.setScene(new Scene(root));
+
+           
+            stage.show();
+        } catch (Exception e) {
+           
         }
     }
 

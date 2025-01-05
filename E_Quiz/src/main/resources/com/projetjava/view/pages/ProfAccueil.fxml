@@ -30,7 +30,7 @@
             </ImageView>
             <MenuButton fx:id="menu" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
                 <items>
-                    <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
+                    <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil"  />
                     <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
                     <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" text="Se deconnecter" />
                 </items>

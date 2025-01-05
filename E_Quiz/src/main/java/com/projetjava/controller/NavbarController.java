@@ -1,19 +1,17 @@
 package com.projetjava.controller;
 
-import com.projetjava.domain.Etudiant;
-import com.projetjava.domain.Professeur;
 import com.projetjava.domain.Session;
 import com.projetjava.domain.Utilisateur;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class NavbarController {
-
-    @FXML
-    private Pane NavbarController;
 
     @FXML
     private MenuButton menu;
@@ -23,7 +21,6 @@ public class NavbarController {
     private MenuItem Profil;
     @FXML
     private MenuItem SeDeconnecter;
-
     @FXML
     private Label rolelabel;
 
@@ -37,20 +34,42 @@ public class NavbarController {
         } else {
             System.out.println("Aucun utilisateur connecté.");
         }
+        Profil.setOnAction(event -> afficherProfil());
+    }
+    
+    // Méthode pour afficher la page Profil
+    public void afficherProfil() {
+        try {
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène et l'afficher dans la même fenêtre
+            Stage stage = (Stage) menu.getScene().getWindow();  // Utiliser le même stage
+            stage.setTitle("Page Profil");
+            stage.setScene(new Scene(root));
+
+            // Afficher la nouvelle fenêtre
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void afficherRole(Utilisateur utilisateur) {
+    
+    
+    public void afficherRole(Utilisateur utilisateur) {
         String contenu;
+
         if (utilisateur.getRole().equalsIgnoreCase("professeur")) {
-            Professeur professeur = new Professeur(utilisateur);
-
-            contenu = professeur.afficher();
+            contenu = "Professeur";
         } else {
-            Etudiant etudiant = new Etudiant(utilisateur);
-
-            contenu = etudiant.afficher();
+            contenu = "Etudiant";
         }
 
         rolelabel.setText(contenu);
     }
+    
+    
+
 }

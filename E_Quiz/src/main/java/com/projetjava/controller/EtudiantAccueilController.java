@@ -28,6 +28,12 @@ import java.util.concurrent.Executors;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 public class EtudiantAccueilController {
 
     @FXML
@@ -93,6 +99,8 @@ public class EtudiantAccueilController {
         }
 
         loadProfesseurs();
+        Profil.setOnAction(event -> afficherProfil());
+        Accueil.setOnAction(event -> afficherAccueil());
 
     }
 
@@ -214,8 +222,72 @@ public class EtudiantAccueilController {
     }
 
     private void startQuiz(Quiz quiz) {
+        
         System.out.println("Démarrer le quiz: " + quiz.getTitre());
+        // Créer une nouvelle scène pour le quiz
+        try {
+            
+            // Charger le FXML de la page QuizPage
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/QuizPage.fxml"));
+            
+           AnchorPane quizPage = loader.load();
+           
+           
+            QuestionController questionController = loader.getController(); // Correctement récupérer le contrôleur
+            questionController.selectionnerQuiz(quiz); // Passer le quiz sélectionné
+            
+            
+            // Créer une nouvelle scène avec le contenu de quizPage.fxml
+            
+            Scene quizScene = new Scene(quizPage);
+
+            // Récupérer le Stage actuel (la fenêtre)
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+
+            // Passer à la scène du quiz
+            stage.setScene(quizScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Gérer l'erreur si le fichier FXML n'a pas pu être chargé
+        }
     }
+    
+    public void afficherProfil() {
+        try {
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
+            Stage stage = new Stage();
+            stage.setTitle("Page Profil");
+            stage.setScene(new Scene(root));
+
+            // Afficher la nouvelle fenêtre
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void afficherAccueil() {
+        try {
+        
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
+            Parent root = loader.load();
+
+            
+            Stage stage = new Stage();
+            stage.setTitle("Page Aceuil");
+            stage.setScene(new Scene(root));
+
+           
+            stage.show();
+        } catch (Exception e) {
+           
+        }
+    }
+
 
     @FXML
     public void onClose() {
