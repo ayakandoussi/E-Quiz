@@ -34,7 +34,7 @@
                 <items>
                     <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
                     <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
-                    <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" text="Se deconnecter" />
+                    <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" onAction="#seDeconnecter" text="Se deconnecter" />
                 </items>
             </MenuButton>
         </children>

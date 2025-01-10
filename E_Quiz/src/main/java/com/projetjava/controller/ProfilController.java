@@ -58,19 +58,19 @@ public class ProfilController {
             afficherRole(utilisateurConnecte);
             Profil.setOnAction(event -> afficherProfil());
             Accueil.setOnAction(event -> afficherAccueil(utilisateurConnecte));
-            
+            SeDeconnecter.setOnAction(event -> seDeconnecter());
+
         } else {
             nomfield.setText("Nom non disponible");
             prenomfiled.setText("Prénom non disponible");
             emailfield.setText("Email non disponible");
             rolefield.setText("Rôle non disponible");
             roleLabel.setText("Rôle : Non disponible");
-           
+
         }
 
     }
 
-   
     private void afficherRole(Utilisateur utilisateur) {
         String contenu = "";
         String role = utilisateur.getRole();
@@ -78,7 +78,7 @@ public class ProfilController {
         if ("professeur".equals(role)) {
             // Créez un objet Professeur et récupérez son affichage
             Professeur professeur = new Professeur(utilisateur);
-            contenu = professeur.afficher();  
+            contenu = professeur.afficher();
         } else if ("etudiant".equals(role)) {
             // Créez un objet Etudiant et récupérez son affichage
             Etudiant etudiant = new Etudiant(utilisateur);
@@ -115,37 +115,59 @@ public class ProfilController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent root = loader.load();
 
-            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
-            Stage stage = new Stage();
-            stage.setTitle("Page Profil");
-            stage.setScene(new Scene(root));
+            // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) menu.getScene().getWindow();
 
-            // Afficher la nouvelle fenêtre
+            // Remplacer la scène existante
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-           
+
         }
     }
 
     public void afficherAccueil(Utilisateur u) {
         String role = u.getRole();
         try {
-            if ("professeur".equals(role)) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
-                Parent root = loader.load();
-                Stage stage = new Stage();
-                stage.setTitle("Page Aceuil");
-                stage.setScene(new Scene(root));
-                stage.show();
+
+            String fxmlPath;
+            if ("professeur".equals(u.getRole())) {
+                fxmlPath = "/com/projetjava/view/pages/ProfAccueil.fxml";
             } else {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
-                Parent root = loader.load();
-                Stage stage = new Stage();
-                stage.setTitle("Page Aceuil");
-                stage.setScene(new Scene(root));
-                stage.show();
+                fxmlPath = "/com/projetjava/view/pages/EtudiantAccueil.fxml";
             }
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
+            // Ici on utilise le MenuButton 'menu'
+            Stage stage = (Stage) menu.getScene().getWindow();
+
+            // Remplacer la scène existante
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void seDeconnecter() {
+        try {
+
+            // Réinitialiser la session avant de rediriger
+            Session.getInstance().setUtilisateurConnecte(null);
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
+            Parent root = loader.load();
+
+            // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) menu.getScene().getWindow();
+
+            // Remplacer la scène existante
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (Exception e) {
 
         }

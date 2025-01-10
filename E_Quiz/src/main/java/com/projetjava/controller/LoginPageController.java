@@ -2,6 +2,8 @@ package com.projetjava.controller;
 
 import com.projetjava.domain.Session;
 import com.projetjava.domain.Utilisateur;
+import com.projetjava.exceptions.EmailException;
+import com.projetjava.exceptions.MotDePasseException;
 import com.projetjava.model.dao.impl.UtilisateurDao;
 import java.io.IOException;
 import java.net.URL;
@@ -72,6 +74,8 @@ public class LoginPageController implements Initializable {
     @FXML
     private TextField Prenom;
     @FXML
+    private TextField Filomod;
+    @FXML
     private AnchorPane SideAlradyHaveAccount;
     @FXML
     private Label LabelAleady;
@@ -80,15 +84,14 @@ public class LoginPageController implements Initializable {
 
     private Alert alert;
 
-    public void regBtn2() {
-        if (EmailSignUp.getText().isEmpty() || PaswordSignUp.getText().isEmpty() || Nom.getText().isEmpty() || Prenom.getText().isEmpty() || Role.getSelectionModel().isEmpty()) {
+    public void regBtn2() throws EmailException, MotDePasseException {
+        if (EmailSignUp.getText().isEmpty() || PaswordSignUp.getText().isEmpty() || Nom.getText().isEmpty() || Prenom.getText().isEmpty() || Role.getSelectionModel().isEmpty() || Filomod.getText().isEmpty()) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur");
             alert.setHeaderText(null);
             alert.setContentText("Remplissez tous les champs !!");
             alert.showAndWait();
-        }
-        else {
+        } else {
             // Créer l'utilisateur avec les données du formulaire
             Utilisateur utilisateur = new Utilisateur() {
                 @Override
@@ -98,9 +101,28 @@ public class LoginPageController implements Initializable {
             };
             utilisateur.setNom(Nom.getText());
             utilisateur.setPrenom(Prenom.getText());
-            utilisateur.setEmail(EmailSignUp.getText());
-            utilisateur.setMotDePasseS(PaswordSignUp.getText());
+
+            try {
+                utilisateur.setEmail(EmailSignUp.getText()); // Cela déclenchera une exception si l'email est invalide
+                utilisateur.setMotDePasseS(PaswordSignUp.getText()); // Cela déclenchera une exception si le mot de passe est invalide
+            } catch (EmailException ex) {
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur Email");
+                alert.setHeaderText(null);
+                alert.setContentText(ex.getMessage());
+                alert.showAndWait();
+                return;
+            } catch (MotDePasseException ex) {
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur Mot de Passe");
+                alert.setHeaderText(null);
+                alert.setContentText(ex.getMessage());
+                alert.showAndWait();
+                return;
+            }
+
             utilisateur.setRole((String) Role.getSelectionModel().getSelectedItem());
+            utilisateur.setFilomod(Filomod.getText());
 
             // Utilisation de UtilisateurDao pour ajouter l'utilisateur à la base de données
             UtilisateurDao utilisateurDao = new UtilisateurDao();
@@ -135,7 +157,7 @@ public class LoginPageController implements Initializable {
         return BCrypt.checkpw(motDePasseSaisi, motDePasseHache);
     }
 
-    public void regBtn(ActionEvent event) throws IOException {
+    public void regBtn(ActionEvent event) throws IOException, EmailException, MotDePasseException {
         if (EmailIn.getText().isEmpty() || PasswordIn.getText().isEmpty()) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur");
@@ -149,44 +171,56 @@ public class LoginPageController implements Initializable {
 
             if (utilisateur != null) {
                 boolean motDePasseValide = BCrypt.checkpw(PasswordIn.getText(), utilisateur.getMotDePasse());
-                if (motDePasseValide) {
-                    // Initialiser la session
+                boolean emailValide = EmailIn.getText().equals(utilisateur.getEmail());
+                if (emailValide) {
 
-                    Session session = Session.getInstance();
-                    session.setUtilisateurConnecte(utilisateur);
+                    if (motDePasseValide) {
+                        // Initialiser la session
 
-                    // Charger et afficher la nouvelle page selon le rôle
-                    String role = utilisateur.getRole();
-                    FXMLLoader loader;
+                        Session session = Session.getInstance();
+                        session.setUtilisateurConnecte(utilisateur);
 
-                    try {
-                        if ("professeur".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
-                        } else if ("etudiant".equals(role)) {
-                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
-                        } else {
-                            throw new IllegalStateException("Rôle non valide.");
+                        // Charger et afficher la nouvelle page selon le rôle
+                        String role = utilisateur.getRole();
+                        FXMLLoader loader;
+
+                        try {
+                            if ("professeur".equals(role)) {
+                                loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
+                            } else if ("etudiant".equals(role)) {
+                                loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
+                            } else {
+                                throw new IllegalStateException("Rôle non valide.");
+                            }
+
+                            // Charger la page associée au rôle
+                            Parent root = loader.load();
+
+                            // Obtenez la scène actuelle
+                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.show();
+
+                        } catch (IOException e) {
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Erreur");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Erreur lors du chargement de la page : " + e.getMessage());
+                            alert.showAndWait();
                         }
 
-                        // Charger la page associée au rôle
-                        Parent root = loader.load();
-
-                        // Obtenez la scène actuelle
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        Scene scene = new Scene(root);
-                        stage.setScene(scene);
-                        stage.show();
-
-                    } catch (IOException e) {
-                        alert = new Alert(Alert.AlertType.ERROR);
+                    } else {
+                        // Si aucun utilisateur ne correspond
+                        alert = new Alert(AlertType.ERROR);
                         alert.setTitle("Erreur");
                         alert.setHeaderText(null);
-                        alert.setContentText("Erreur lors du chargement de la page : " + e.getMessage());
+                        alert.setContentText("Email ou mot de passe incorrect !");
                         alert.showAndWait();
                     }
-
                 } else {
-                    // Si aucun utilisateur ne correspond
+                    System.out.println("Échec de la connexion.");
+
                     alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Erreur");
                     alert.setHeaderText(null);
@@ -194,55 +228,58 @@ public class LoginPageController implements Initializable {
                     alert.showAndWait();
                 }
             }
-            else {
-            System.out.println("Échec de la connexion.");
-}
         }
     }
-
-    @FXML
-    public void Switchform(ActionEvent event) {
+    
+        @FXML
+        public void Switchform
+        (ActionEvent event
+        
+            ) {
         TranslateTransition slider = new TranslateTransition();
-        if (event.getSource() == CreateAccountBtn) {
-            slider.setNode(SignUp);
-            slider.setToX(400);  // Déplace le panneau SignUp
-            slider.setDuration(Duration.seconds(0.5));
+            if (event.getSource() == CreateAccountBtn) {
+                slider.setNode(SignUp);
+                slider.setToX(400);  // Déplace le panneau SignUp
+                slider.setDuration(Duration.seconds(0.5));
 
-            // Action après la transition
-            slider.setOnFinished(e -> {
-                HaveAccountBtn1.setVisible(true);
-                CreateAccountBtn.setVisible(false);
-                SignIn.setVisible(false);
-                LabelDont.setVisible(false);
-                LabelAleady.setVisible(true);
+                // Action après la transition
+                slider.setOnFinished(e -> {
+                    HaveAccountBtn1.setVisible(true);
+                    CreateAccountBtn.setVisible(false);
+                    SignIn.setVisible(false);
+                    LabelDont.setVisible(false);
+                    LabelAleady.setVisible(true);
 
-            });
+                });
 
-            slider.play(); // Démarre l'animation
-        } else if (event.getSource() == HaveAccountBtn1) {
-            slider.setNode(SignUp);
+                slider.play(); // Démarre l'animation
+            } else if (event.getSource() == HaveAccountBtn1) {
+                slider.setNode(SignUp);
 
-            slider.setToX(0);
-            slider.setDuration(Duration.seconds(0.5));
+                slider.setToX(0);
+                slider.setDuration(Duration.seconds(0.5));
 
-            // Action après la transition
-            slider.setOnFinished(e -> {
-                HaveAccountBtn1.setVisible(false);
-                CreateAccountBtn.setVisible(true);
-                SignIn.setVisible(true);
-                LabelDont.setVisible(true);
-                LabelAleady.setVisible(false);
+                // Action après la transition
+                slider.setOnFinished(e -> {
+                    HaveAccountBtn1.setVisible(false);
+                    CreateAccountBtn.setVisible(true);
+                    SignIn.setVisible(true);
+                    LabelDont.setVisible(true);
+                    LabelAleady.setVisible(false);
 
-            });
+                });
 
-            slider.play();
+                slider.play();
+            }
         }
-    }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+        @Override
+        public void initialize
+        (URL url, ResourceBundle rb
+        
+            ) {
         ObservableList<String> list = FXCollections.observableArrayList("Professeur", "Etudiant");
-        Role.setItems(list);
-    }
+            Role.setItems(list);
+        }
 
-}
+    }

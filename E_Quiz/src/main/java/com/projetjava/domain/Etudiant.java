@@ -1,13 +1,15 @@
 package com.projetjava.domain;
 
+import com.projetjava.exceptions.EmailException;
+import com.projetjava.exceptions.MotDePasseException;
 import java.util.ArrayList;
 
 public class Etudiant extends Utilisateur {
 
     private ArrayList<Quiz> quizDisponibles;
 
-    public Etudiant(String nom, String prenom, String email, String motDePasse, String role, ArrayList<Quiz> quizDisponibles) {
-        super(nom, prenom, email, motDePasse, role);
+    public Etudiant(String nom, String prenom, String email, String motDePasse, String role, String filomod, ArrayList<Quiz> quizDisponibles) throws EmailException,MotDePasseException {
+        super(nom, prenom, email, motDePasse, role, filomod);
         this.quizDisponibles = quizDisponibles;
     }
 
@@ -19,11 +21,10 @@ public class Etudiant extends Utilisateur {
     public Etudiant(Utilisateur utilisateur) {
         super(utilisateur);
     }
-    
 
     @Override
     public String afficher() {
-        return("Etudiant: "   + getPrenom()+ " " + getNom());
+        return ("Etudiant: " + getPrenom() + " " + getNom());
     }
 
 }

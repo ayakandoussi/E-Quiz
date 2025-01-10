@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -14,12 +9,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="10" style="-fx-background-color: blue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.ResultatPageController">
+<VBox spacing="10" style="-fx-background-color: blue;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projetjava.controller.ResultatPageController">
     <children>
         <!-- Navbar -->
         <Pane layoutY="0" prefHeight="53.0" prefWidth="600.0" style="-fx-background-color: blue;">
             <children>
-                <Label fx:id="rolelabel" alignment="CENTER" layoutX="208.0" layoutY="12.0" prefHeight="29.0" prefWidth="185.0" text="Role : Nom Prenom" textFill="WHITE">
+                <Label fx:id="rolelabel" alignment="CENTER" layoutX="111.0" layoutY="12.0" prefHeight="29.0" prefWidth="383.0" text="Role : Nom Prenom" textFill="WHITE">
                     <font>
                         <Font size="17.0" />
                     </font>

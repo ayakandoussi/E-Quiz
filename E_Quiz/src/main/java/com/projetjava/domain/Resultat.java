@@ -1,6 +1,6 @@
 package com.projetjava.domain;
 
-public class Resultat {
+public class Resultat implements Interpretation{
 
     private  int idResultatQuiz;
     private Quiz quiz;
@@ -49,17 +49,18 @@ public class Resultat {
         this.etudiant = etudiant;
     }
 
+    @Override
     public void afficheResume() {
         if (this.score >= 0 && this.score <= 5) {
-            System.out.print("Null!");
+            System.out.print(NULL);
         } else if (this.score > 5 && this.score <= 10) {
-            System.out.print("Passable!");
+            System.out.print(PASSABLE);
         } else if (this.score > 10 && this.score <= 15) {
-            System.out.print("Bien!");
+            System.out.print(BIEN);
         } else if (this.score > 15 && this.score <= 19) {
-            System.out.print("Tres Bien!");
+            System.out.print(TRES_BIEN);
         } else {
-            System.out.print("Excellent!");
+            System.out.print(EXCELLENT);
         }
 
     }

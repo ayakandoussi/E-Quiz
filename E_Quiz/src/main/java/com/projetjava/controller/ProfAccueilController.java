@@ -25,6 +25,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -54,6 +55,8 @@ public class ProfAccueilController {
     private Label rolelabel;
     @FXML
     private Pane AccueilPane;
+    @FXML
+    private AnchorPane rootPane;
     @FXML
     private ImageView img_Bienvenue;
     @FXML
@@ -89,7 +92,11 @@ public class ProfAccueilController {
 
         styleVBox(quizListVBox);
         styleVBox(resultsVBox);
-        
+
+        Profil.setOnAction(event -> afficherProfil());
+        Accueil.setOnAction(event -> afficherAccueil());
+        SeDeconnecter.setOnAction(event -> seDeconnecter());
+
     }
 
     @FXML
@@ -140,8 +147,8 @@ public class ProfAccueilController {
                 "-fx-font-size: 10px;"
                 + "-fx-font-weight: bold;"
                 + "-fx-text-fill: black;"
-                + "-fx-wrap-text: true;" 
-                + "-fx-text-alignment: center;" 
+                + "-fx-wrap-text: true;"
+                + "-fx-text-alignment: center;"
         );
         quizLabel.setMaxWidth(200);
         quizLabel.setAlignment(Pos.CENTER);
@@ -225,7 +232,7 @@ public class ProfAccueilController {
     }
 
     private void addResultToList(Resultat resultat) {
-        
+
         Label nomLabel = new Label(resultat.getEtudiant().getNom());
         nomLabel.setStyle(
                 "-fx-font-family: 'monospaced';"
@@ -233,7 +240,7 @@ public class ProfAccueilController {
                 + "-fx-text-fill: black;"
                 + "-fx-font-weight: bold;"
         );
-        nomLabel.setPrefWidth(150); 
+        nomLabel.setPrefWidth(150);
         Label prenomLabel = new Label(resultat.getEtudiant().getPrenom());
         prenomLabel.setStyle(
                 "-fx-font-family: 'monospaced';"
@@ -252,7 +259,6 @@ public class ProfAccueilController {
         );
         scoreLabel.setPrefWidth(100);
 
-      
         HBox resultBox = new HBox(10);
         resultBox.setPadding(new Insets(5, 10, 5, 10));
         resultBox.setStyle(
@@ -264,10 +270,10 @@ public class ProfAccueilController {
 
         resultBox.getChildren().addAll(nomLabel, prenomLabel, scoreLabel);
 
-       
         resultsVBox.getChildren().add(resultBox);
     }
-        @FXML
+
+    @FXML
     private void handleAddQuizButtonAction() {
         try {
             // Charger la page "Ajouter un quiz"
@@ -279,44 +285,60 @@ public class ProfAccueilController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-     
+
         }
     }
-    
+
     public void afficherProfil() {
         try {
             // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
-            Parent root = loader.load();
+            Parent Profil = loader.load();
 
-            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
-            Stage stage = new Stage();
-            stage.setTitle("Page Profil");
-            stage.setScene(new Scene(root));
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.setScene(new Scene(Profil));
+            stage.show();
 
             // Afficher la nouvelle fenêtre
             stage.show();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-        public void afficherAccueil() {
+
+    public void afficherAccueil() {
         try {
-            
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
-            Parent root = loader.load();
 
-            
-            Stage stage = new Stage();
-            stage.setTitle("Page Acceuil");
-            stage.setScene(new Scene(root));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
+            Parent EtudiantAccueil = loader.load();
 
-           
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.setScene(new Scene(EtudiantAccueil));
+
             stage.show();
         } catch (Exception e) {
-           
+
         }
     }
 
+    public void seDeconnecter() {
+        try {
+            // Réinitialiser la session avant de rediriger
+            Session.getInstance().setUtilisateurConnecte(null);
+
+            // Charger la page de connexion
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
+            Parent LoginPage = loader.load();
+
+            // Rediriger vers la page de connexion
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.setScene(new Scene(LoginPage));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();  // Ajout du printStackTrace pour voir les erreurs potentielles
+        }
+
+    }
 }
 /*package com.projetjava.controller;
 

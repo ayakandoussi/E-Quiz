@@ -14,37 +14,46 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 
 public class ResultatPageController {
-     @FXML
+
+    @FXML
     private MenuButton menu;
 
-    @FXML private Label rolelabel;
-    @FXML private Label scoreLabel;
-    @FXML private Label remarqueLabel;
-    @FXML private MenuItem Profil;  // Bouton pour afficher le profil
-
+    @FXML
+    private Label rolelabel;
+    @FXML
+    private Label scoreLabel;
+    @FXML
+    private Label remarqueLabel;
+    @FXML
+    private MenuItem Profil;  // Bouton pour afficher le profil
+    @FXML
+    private MenuItem SeDeconnecter;
+    @FXML
+    private MenuItem Accueil;
     private double score;
 
     // Méthode d'initialisation
     @FXML
     private void initialize() {
-        
+
         // Récupérer l'utilisateur connecté via la session
         Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (utilisateurConnecte != null) {
             afficherRole(utilisateurConnecte);
+            Profil.setOnAction(event -> afficherProfil());
+            Accueil.setOnAction(event -> afficherAccueil(utilisateurConnecte));
+            SeDeconnecter.setOnAction(event -> seDeconnecter());
         } else {
             System.out.println("Aucun utilisateur connecté.");
         }
-        
-        // Associer l'action du bouton pour afficher le profil
-         Profil.setOnAction(event -> afficherProfil());
+
     }
 
     // Méthode pour afficher le rôle de l'utilisateur
     private void afficherRole(Utilisateur utilisateur) {
         String contenu = "";
-        
+
         // Affichage spécifique pour l'étudiant
         if (utilisateur instanceof Etudiant) {
             Etudiant etudiant = (Etudiant) utilisateur;
@@ -57,7 +66,7 @@ public class ResultatPageController {
 
     public void afficherResultat(double score) {
         this.score = score;
-        System.out.println("Score reçu : " + score); 
+        System.out.println("Score reçu : " + score);
         // Mettre à jour le label du score
         scoreLabel.setText(String.format("%.0f", score));  // Afficher le score sans décimale
 
@@ -80,22 +89,68 @@ public class ResultatPageController {
         }
     }
 
-    // Méthode pour afficher le profil de l'utilisateur
     public void afficherProfil() {
         try {
             // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent root = loader.load();
 
-            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
-            Stage stage = new Stage();
-            stage.setTitle("Page Profil");
-            stage.setScene(new Scene(root));
+            // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) menu.getScene().getWindow();
 
-            // Afficher la nouvelle fenêtre
+            // Remplacer la scène existante
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
+
+    public void afficherAccueil(Utilisateur u) {
+        String role = u.getRole();
+        try {
+
+            String fxmlPath;
+            if ("professeur".equals(u.getRole())) {
+                fxmlPath = "/com/projetjava/view/pages/ProfAccueil.fxml";
+            } else {
+                fxmlPath = "/com/projetjava/view/pages/EtudiantAccueil.fxml";
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
+            // Ici on utilise le MenuButton 'menu'
+            Stage stage = (Stage) menu.getScene().getWindow();
+
+            // Remplacer la scène existante
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void seDeconnecter() {
+        try {
+
+            // Réinitialiser la session avant de rediriger
+            Session.getInstance().setUtilisateurConnecte(null);
+            // Charger le fichier FXML de la page de profil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
+            Parent root = loader.load();
+
+            // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) menu.getScene().getWindow();
+
+            // Remplacer la scène existante
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+
+        }
+    }
+
 }

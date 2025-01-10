@@ -17,19 +17,20 @@
          <children>
             <AnchorPane fx:id="SignUpForm" layoutY="3.0" prefHeight="500.0" prefWidth="400.0" styleClass="white-form" stylesheets="@../styles/LoginPage.css">
                <children>
-                  <Label layoutX="150.0" layoutY="83.0" text="Inscription" textFill="BLUE">
+                  <Label layoutX="150.0" layoutY="29.0" text="Inscription" textFill="BLUE">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="EmailSignUp" layoutX="75.0" layoutY="250.0" prefHeight="40.0" prefWidth="250.0" promptText="Email" />
-                  <PasswordField fx:id="PaswordSignUp" layoutX="75.0" layoutY="304.0" prefHeight="40.0" prefWidth="250.0" promptText="Mot de passe" />
+                  <TextField fx:id="EmailSignUp" layoutX="75.0" layoutY="193.0" prefHeight="40.0" prefWidth="250.0" promptText="Email" />
+                  <PasswordField fx:id="PaswordSignUp" layoutX="75.0" layoutY="247.0" prefHeight="40.0" prefWidth="250.0" promptText="Mot de passe" />
                   <Button fx:id="InscrireBtn" layoutX="75.0" layoutY="426.0" mnemonicParsing="false" onAction="#regBtn2" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: blue; -fx-text-fill: white;" styleClass="login-btn" stylesheets="@../styles/LoginPage.css" text="S'inscrire" />
-                  <TextField fx:id="Prenom" layoutX="75.0" layoutY="195.0" prefHeight="40.0" prefWidth="250.0" promptText="Prénom" />
-                  <ComboBox fx:id="Role" layoutX="75.0" layoutY="364.0" prefHeight="40.0" prefWidth="250.0" promptText="Role" styleClass="white-form" stylesheets="@../styles/LoginPage.css" visibleRowCount="2" />
-                  <TextField fx:id="Nom" layoutX="75.0" layoutY="136.0" prefHeight="40.0" prefWidth="250.0" promptText="Nom" />
+                  <TextField fx:id="Prenom" layoutX="75.0" layoutY="138.0" prefHeight="40.0" prefWidth="250.0" promptText="Prénom" />
+                  <ComboBox fx:id="Role" layoutX="75.0" layoutY="307.0" prefHeight="40.0" prefWidth="250.0" promptText="Role" styleClass="white-form" stylesheets="@../styles/LoginPage.css" visibleRowCount="2" />
+                  <TextField fx:id="Nom" layoutX="75.0" layoutY="79.0" prefHeight="40.0" prefWidth="250.0" promptText="Nom" />
+                  <TextField fx:id="Filomod" layoutX="75.0" layoutY="361.0" prefHeight="40.0" prefWidth="250.0" promptText="Filière / Module" />
                
-               </children>
+                     </children>
             </AnchorPane>
             <AnchorPane fx:id="SignIn" layoutX="400.0" layoutY="5.0" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: white;" styleClass="white-form" stylesheets="@../styles/LoginPage.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                <children>

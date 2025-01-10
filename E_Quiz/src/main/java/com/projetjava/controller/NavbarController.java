@@ -34,27 +34,11 @@ public class NavbarController {
         } else {
             System.out.println("Aucun utilisateur connecté.");
         }
-        Profil.setOnAction(event -> afficherProfil());
+        
     }
     
     // Méthode pour afficher la page Profil
-    public void afficherProfil() {
-        try {
-            // Charger le fichier FXML de la page de profil
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
-            Parent root = loader.load();
-
-            // Créer une nouvelle scène et l'afficher dans la même fenêtre
-            Stage stage = (Stage) menu.getScene().getWindow();  // Utiliser le même stage
-            stage.setTitle("Page Profil");
-            stage.setScene(new Scene(root));
-
-            // Afficher la nouvelle fenêtre
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+ 
 
     
     

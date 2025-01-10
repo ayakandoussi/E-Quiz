@@ -1,5 +1,7 @@
 package com.projetjava.domain;
 
+import com.projetjava.exceptions.BonChoixException;
+
 public class Question {
 
     private int idQuestion;
@@ -15,14 +17,14 @@ public class Question {
     }
 
     // Constructeur avec tous les paramètres nécessaires
-    public Question(int idQuestion, String enonce, String choix1, String choix2, String choix3, String choix4, String bonneReponse, int idQuiz) {
+    public Question(int idQuestion, String enonce, String choix1, String choix2, String choix3, String choix4, String bonneReponse, int idQuiz) throws BonChoixException {
         this.idQuestion = idQuestion;
         this.enonce = enonce;
         this.choix1 = choix1;
         this.choix2 = choix2;
         this.choix3 = choix3;
         this.choix4 = choix4;
-        this.bonneReponse = bonneReponse;
+        setBonneReponse(bonneReponse);
         this.idQuiz = idQuiz;
     }
 
@@ -79,7 +81,10 @@ public class Question {
         return bonneReponse;
     }
 
-    public void setBonneReponse(String bonneReponse) {
+    public void setBonneReponse(String bonneReponse)throws BonChoixException{
+        if (!bonneReponse.equals(getChoix1()) && !bonneReponse.equals(getChoix2())&& !bonneReponse.equals(getChoix3()) && !bonneReponse.equals(getChoix4())){
+            throw new BonChoixException("Le bon choix doit être parmi les 4 choix");
+        }
         this.bonneReponse = bonneReponse;
     }
 

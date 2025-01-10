@@ -1,9 +1,12 @@
 package com.projetjava.model.dao.impl;
 
 import com.projetjava.domain.Question;
+import com.projetjava.exceptions.BonChoixException;
 import com.projetjava.model.dao.Dao;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class QuestionDAO implements Dao<Question> {
 
@@ -52,6 +55,8 @@ public class QuestionDAO implements Dao<Question> {
             bd.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } catch (BonChoixException ex) {
+            System.out.println(ex.getMessage());
         }
         return question;
     }
@@ -80,6 +85,8 @@ public class QuestionDAO implements Dao<Question> {
             bd.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } catch (BonChoixException ex) {
+            System.out.println(ex.getMessage());
         }
         return questions;
     }

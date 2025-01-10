@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import com.projetjava.domain.Question;
 import com.projetjava.domain.Quiz;
+import com.projetjava.exceptions.BonChoixException;
 import com.projetjava.model.dao.impl.BDConnexion;
 
 
@@ -98,7 +99,7 @@ public class QuestionController {
     }
     
     @FXML
-    public void selectionnerQuiz(Quiz quizSelectionne) throws SQLException {
+    public void selectionnerQuiz(Quiz quizSelectionne) throws SQLException, BonChoixException {
         int idQuiz = quizSelectionne.getIdQuiz(); // ID du quiz sélectionné
         int idEtudiant = Session.getInstance().getUtilisateurConnecte().getId(); // Récupérer l'ID de l'étudiant
 
@@ -111,7 +112,7 @@ public class QuestionController {
     
 
     // Méthode pour définir l'ID du quiz et de l'étudiant dynamiquement
-    public void setIdQuiz(int idQuiz, int idEtudiant) throws SQLException {
+    public void setIdQuiz(int idQuiz, int idEtudiant) throws SQLException, BonChoixException {
         this.idQuiz = idQuiz;
         this.idEtudiant = idEtudiant;
 
@@ -123,7 +124,7 @@ public class QuestionController {
     }
 
     // Méthode pour charger les questions du quiz à partir de la base de données
-    private void chargerQuestions(int idQuiz) throws SQLException {
+    private void chargerQuestions(int idQuiz) throws SQLException, BonChoixException {
         String query = "SELECT idQuestion, enonce, choix1, choix2, choix3, choix4, bonneReponse FROM Question WHERE idQuiz = ? ORDER BY idQuestion";
         PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
         preparedStatement.setInt(1, idQuiz);
@@ -180,7 +181,7 @@ public class QuestionController {
         questions = questions.subList(0, Math.min(nombreQuestions, questions.size()));  // Limite le nombre de questions
     }
 
-    private void reinitialiserQuiz() throws SQLException {
+    private void reinitialiserQuiz() throws SQLException, BonChoixException {
         // Réinitialiser le score
         score = 0;
         currentQuestionIndex = 0;  // Revenir à la première question

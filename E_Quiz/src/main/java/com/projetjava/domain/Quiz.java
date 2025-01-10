@@ -1,32 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.projetjava.domain;
 
 public class Quiz {
- 
-    private int id; 
-    private String titre; 
+
+    private int id;
+    private String titre;
     private String description;
-    private String theme; 
+
     private int idEnseignant; // Identifiant du professeur qui a créé le quiz
-    
+
     public Quiz() {
-      
+
     }
-    
-    public Quiz( String titre, String description, String theme, int idEnseignant ) {
+
+    public Quiz(String titre, String description, int idEnseignant) {
 
         this.titre = titre;
         this.description = description;
-        this.theme = theme;
         this.idEnseignant = idEnseignant;
-        
+
     }
-    
-  
 
     // Getters et Setters
     public int getIdQuiz() {
@@ -42,7 +34,7 @@ public class Quiz {
     }
 
     public void setTitre(String titre) {
-        this.titre= titre;
+        this.titre = titre;
     }
 
     public String getDescription() {
@@ -53,14 +45,6 @@ public class Quiz {
         this.description = description;
     }
 
-    public String getTheme() {
-        return theme;
-    }
-
-    public void setTheme(String theme) {
-        this.theme= theme;
-    }
-
     public int getIdEnseignant() {
         return idEnseignant;
     }
@@ -69,26 +53,13 @@ public class Quiz {
         this.idEnseignant = idEnseignant;
     }
 
-    
     @Override
     public String toString() {
-        return "Quiz{" +
-                "id=" + id +
-                ", titre='" + titre + '\'' +
-                ", theme=" + theme +
-                ", idEnseignant=" + idEnseignant +
-                
-                '}';
+        return "Quiz{"
+                + "id=" + id
+                + ", titre='" + titre + '\''
+                + ", idEnseignant=" + idEnseignant
+                + '}';
     }
 
-    
-
-   
 }
-
-
-
-
-
-    
-

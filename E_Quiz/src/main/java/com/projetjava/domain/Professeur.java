@@ -1,5 +1,7 @@
 package com.projetjava.domain;
 
+import com.projetjava.exceptions.EmailException;
+import com.projetjava.exceptions.MotDePasseException;
 import java.util.ArrayList;
 
 public class Professeur extends Utilisateur {
@@ -11,8 +13,8 @@ public class Professeur extends Utilisateur {
         this.quizCrees = new ArrayList<>();
     }
 
-    public Professeur(String nom, String prenom, String email, String motDePasse, String role, ArrayList<Quiz> quizCrees) {
-        super(nom, prenom, email, motDePasse, role);
+    public Professeur(String nom, String prenom, String email, String motDePasse, String role, String filomod,ArrayList<Quiz> quizCrees) throws EmailException, MotDePasseException {
+        super(nom, prenom, email, motDePasse, role,filomod);
         this.quizCrees = quizCrees;
     }
 
