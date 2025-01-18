@@ -309,7 +309,7 @@ public class ProfAccueilController {
     public void afficherAccueil() {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
             Parent EtudiantAccueil = loader.load();
 
             Stage stage = (Stage) rootPane.getScene().getWindow();

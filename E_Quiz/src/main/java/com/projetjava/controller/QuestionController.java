@@ -22,24 +22,28 @@ import com.projetjava.domain.Quiz;
 import com.projetjava.exceptions.BonChoixException;
 import com.projetjava.model.dao.impl.BDConnexion;
 
-
-
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+
 public class QuestionController {
 
-    @FXML private Label questionLabel;
-    @FXML private RadioButton choix1;
-    @FXML private RadioButton choix2;
-    @FXML private RadioButton choix3;
-    @FXML private RadioButton choix4;
-    @FXML private ToggleGroup choix;
-    @FXML private Button suivantButton;
-    
-    
+    @FXML
+    private Label questionLabel;
+    @FXML
+    private RadioButton choix1;
+    @FXML
+    private RadioButton choix2;
+    @FXML
+    private RadioButton choix3;
+    @FXML
+    private RadioButton choix4;
+    @FXML
+    private ToggleGroup choix;
+    @FXML
+    private Button suivantButton;
+
     @FXML
     private Pane NavbarController;
 
@@ -55,9 +59,6 @@ public class QuestionController {
     private Button addQuizButton;
     @FXML
     private Label rolelabel;
-    
-
-
 
     private BDConnexion bdConnexion;
     private List<Question> questions;
@@ -72,32 +73,29 @@ public class QuestionController {
         this.questions = new ArrayList<>();
         this.currentQuestionIndex = 0;
         this.score = 0;
-        Profil.setOnAction(event -> afficherProfil());
 
         // Récupérer l'utilisateur connecté via la session
         Utilisateur etudiantConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (etudiantConnecte != null) {
             afficherRole(etudiantConnecte);
-            
+
         } else {
             System.out.println("Aucun professeur connecté.");
         }
 
-        
-        
     }
-    
+
     private void afficherRole(Utilisateur utilisateur) {
         String contenu;
 
         Etudiant etudiant = new Etudiant(utilisateur);
 
-            contenu = etudiant.afficher();
+        contenu = etudiant.afficher();
 
         rolelabel.setText(contenu);
     }
-    
+
     @FXML
     public void selectionnerQuiz(Quiz quizSelectionne) throws SQLException, BonChoixException {
         int idQuiz = quizSelectionne.getIdQuiz(); // ID du quiz sélectionné
@@ -108,8 +106,6 @@ public class QuestionController {
         // Afficher la première question
         afficherQuestion();
     }
-
-    
 
     // Méthode pour définir l'ID du quiz et de l'étudiant dynamiquement
     public void setIdQuiz(int idQuiz, int idEtudiant) throws SQLException, BonChoixException {
@@ -241,24 +237,5 @@ public class QuestionController {
             e.printStackTrace();
         }
     }
-    
-    
-    // Méthode pour afficher la page de profil
-    public void afficherProfil() {
-        try {
-            // Charger le fichier FXML de la page de profil
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
-            Parent root = loader.load();
 
-            // Créer une nouvelle scène et l'afficher dans une nouvelle fenêtre
-            Stage stage = new Stage();
-            stage.setTitle("Page Profil");
-            stage.setScene(new Scene(root));
-
-            // Afficher la nouvelle fenêtre
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

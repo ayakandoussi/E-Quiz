@@ -15,7 +15,7 @@ public class ResultatDao implements Dao<Resultat> {
     public void add(Resultat resultat) {
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "INSERT INTO `resultat` (`idResultatQuiz`, `etudiantId`, `quizId`, `score`) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO `resultatquiz` (`idResultatQuiz`, `idEtudiant`, `idQuiz`, `score`) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
             preparedStatement.setInt(1, resultat.getIdResultatQuiz());
@@ -34,7 +34,7 @@ public class ResultatDao implements Dao<Resultat> {
     public void update(Resultat resultat) {
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "UPDATE `resultat` SET `etudiantId`=?, `quizId`=?, `score`=? WHERE `idResultatQuiz`=?";
+            String query = "UPDATE `resultatquiz` SET `idEtudiant`=?, `idQuiz`=?, `score`=? WHERE `idResultatQuiz`=?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
             preparedStatement.setInt(1, resultat.getEtudiant().getId());
@@ -55,7 +55,7 @@ public class ResultatDao implements Dao<Resultat> {
         ArrayList<Resultat> resultats = new ArrayList<Resultat>();
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "SELECT * FROM `resultat`";
+            String query = "SELECT * FROM `resultatquiz`";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -87,7 +87,7 @@ public class ResultatDao implements Dao<Resultat> {
         Resultat resultat = null;
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "SELECT * FROM `resultat` WHERE `idResultatQuiz`=?";
+            String query = "SELECT * FROM `resultatquiz` WHERE `idResultatQuiz`=?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
             preparedStatement.setInt(1, idResultatQuiz);
@@ -100,11 +100,11 @@ public class ResultatDao implements Dao<Resultat> {
                 resultat.setScore(resultSet.getDouble("score"));
 
                 Etudiant etudiant = new Etudiant();
-                etudiant.setId(resultSet.getInt("etudiantId"));
+                etudiant.setId(resultSet.getInt("idEtudiant"));
                 resultat.setEtudiant(etudiant);
 
                 Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("quizId"));
+                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
                 resultat.setQuiz(quiz);
             }
 
@@ -119,7 +119,7 @@ public class ResultatDao implements Dao<Resultat> {
     public void delete(int idResultatQuiz) {
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "DELETE FROM `resultat` WHERE `idResultatQuiz`=?";
+            String query = "DELETE FROM `resultatquiz` WHERE `idResultatQuiz`=?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
             preparedStatement.setInt(1, idResultatQuiz);

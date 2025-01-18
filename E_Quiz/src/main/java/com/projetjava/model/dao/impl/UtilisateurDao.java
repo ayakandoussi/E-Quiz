@@ -149,7 +149,7 @@ public class UtilisateurDao implements Dao<Utilisateur> {
     public void update(Utilisateur utilisateur) {
         try {
             BDConnexion bd = new BDConnexion();
-            String query = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, role = ?, , filomod= ? WHERE id = ?";
+            String query = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, role = ?, filomod= ? WHERE id = ?";
             PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query);
             preparedStatement.setString(1, utilisateur.getNom());
             preparedStatement.setString(2, utilisateur.getPrenom());

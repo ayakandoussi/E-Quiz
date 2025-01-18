@@ -40,7 +40,7 @@ public class ModifierMotDePasseController {
     private MenuItem Accueil, Profil, SeDeconnecter;
 
     @FXML
-    private Button addQuizButton;
+    private Button addQuizButton, bouttonenregistrer;
 
     private Utilisateur utilisateur;
     private UtilisateurDao utilisateurDAO;
@@ -57,6 +57,7 @@ public class ModifierMotDePasseController {
             Profil.setOnAction(event -> afficherProfil());
             Accueil.setOnAction(event -> afficherAccueil(utilisateur));
             SeDeconnecter.setOnAction(event -> seDeconnecter());
+
         } else {
             afficherErreur("Utilisateur non connecté. Veuillez vous reconnecter.");
         }
