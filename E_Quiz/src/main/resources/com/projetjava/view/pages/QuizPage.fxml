@@ -32,10 +32,13 @@
                 </ImageView>
                 <MenuButton layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
                     <items>
-                        <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
-                        <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
-                        <MenuItem mnemonicParsing="false" text="Se deconnecter" />
+                        <MenuItem fx:id="Accueil" disable="true" mnemonicParsing="false" text="Accueil" />
+                        <MenuItem fx:id="Profil" disable="true" mnemonicParsing="false" text="Profil" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Se deconnecter" />
                     </items>
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor>
                 </MenuButton>
             </children>
         </Pane>

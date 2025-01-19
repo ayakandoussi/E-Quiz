@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -19,14 +20,72 @@
    <children>
       <Pane fx:id="formulairequestion" layoutY="63.0" prefHeight="326.0" prefWidth="601.0" visible="false">
          <children>
-              <TextField fx:id="questionField" layoutX="30.0" layoutY="32.0" prefHeight="62.0" prefWidth="542.0" promptText="Entrez la question" />
-              <TextField fx:id="choix3Field" layoutX="30.0" layoutY="163.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 3" />
-            <Label layoutX="30.0" layoutY="6.0" text="Ajouter une question" />
-              <TextField fx:id="choix1Field" layoutX="30.0" layoutY="98.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 1" />
-              <TextField fx:id="choix2Field" layoutX="30.0" layoutY="131.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 2" />
-              <TextField fx:id="choix4Field" layoutX="30.0" layoutY="197.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 4" />
-            <TextField fx:id="reponse" layoutX="30.0" layoutY="237.0" prefHeight="25.0" prefWidth="542.0" promptText="Bonne réponse" />
-            <Button fx:id="questionsuivante" layoutX="429.0" layoutY="283.0" mnemonicParsing="false" onAction="#ajouterQuestion" prefHeight="29.0" prefWidth="143.0" style="-fx-background-color: BLUE; -fx-text-fill: white;" text="Suivant" />
+              <TextField fx:id="questionField" layoutX="30.0" layoutY="32.0" prefHeight="62.0" prefWidth="542.0" promptText="Entrez la question">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.21960784494876862" green="0.24705882370471954" blue="0.7647058963775635" />
+                     </color>
+                  </DropShadow>
+               </effect></TextField>
+              <TextField fx:id="choix3Field" layoutX="30.0" layoutY="175.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 3">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.21960784494876862" green="0.24705882370471954" blue="0.7647058963775635" />
+                     </color>
+                  </DropShadow>
+               </effect></TextField>
+            <Label layoutX="30.0" layoutY="2.0" text="Ajouter une question">
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font></Label>
+              <TextField fx:id="choix1Field" layoutX="30.0" layoutY="110.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 1">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.21960784494876862" green="0.24705882370471954" blue="0.7647058963775635" />
+                     </color>
+                  </DropShadow>
+               </effect></TextField>
+              <TextField fx:id="choix2Field" layoutX="30.0" layoutY="143.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 2">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.21960784494876862" green="0.24705882370471954" blue="0.7647058963775635" />
+                     </color>
+                  </DropShadow>
+               </effect></TextField>
+              <TextField fx:id="choix4Field" layoutX="30.0" layoutY="209.0" prefHeight="25.0" prefWidth="542.0" promptText="Choix 4">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.21960784494876862" green="0.24705882370471954" blue="0.7647058963775635" />
+                     </color>
+                  </DropShadow>
+               </effect></TextField>
+            <TextField fx:id="reponse" layoutX="30.0" layoutY="246.0" prefHeight="25.0" prefWidth="542.0" promptText="Bonne réponse">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.21960784494876862" green="0.24705882370471954" blue="0.7647058963775635" />
+                     </color>
+                  </DropShadow>
+               </effect></TextField>
+            <Button fx:id="questionsuivante" layoutX="449.0" layoutY="288.0" mnemonicParsing="false" onAction="#ajouterQuestion" prefHeight="29.0" prefWidth="123.0" style="-fx-background-color: BLUE; -fx-text-fill: white;" text="Suivant">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color blue="0.01568627543747425" />
+                     </color>
+                  </DropShadow>
+               </effect></Button>
          </children>
       </Pane>
        <Pane layoutY="-1.0" prefHeight="53.0" prefWidth="601.0" style="-fx-background-color: blue;" styleClass="theme" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -43,10 +102,13 @@
         </ImageView>
         <MenuButton fx:id="menu" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: blue;" text="menu" textFill="WHITE">
             <items>
-                <MenuItem fx:id="Accueil" mnemonicParsing="false" text="Accueil" />
-                <MenuItem fx:id="Profil" mnemonicParsing="false" text="Profil" />
-                <MenuItem fx:id="SeDeconnecter" mnemonicParsing="false" text="Se deconnecter" />
+                <MenuItem fx:id="Accueil" disable="true" mnemonicParsing="false" text="Accueil" />
+                <MenuItem fx:id="Profil" disable="true" mnemonicParsing="false" text="Profil" />
+                <MenuItem fx:id="SeDeconnecter" disable="true" mnemonicParsing="false" text="Se deconnecter" />
             </items>
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor>
         </MenuButton>
     </children>
 </Pane>
@@ -66,16 +128,30 @@
                      </color>
                   </DropShadow>
                </effect></Button>
-            <Label layoutX="61.0" layoutY="137.0" prefHeight="25.0" prefWidth="111.0" text="Description">
+            <Label layoutX="74.0" layoutY="168.0" prefHeight="25.0" prefWidth="111.0" text="Description">
                <font>
                   <Font name="Arial Rounded MT Bold" size="12.0" />
                </font></Label>
-            <Label layoutX="61.0" layoutY="91.0" prefHeight="17.0" prefWidth="111.0" text="Titre du quiz">
+            <Label layoutX="74.0" layoutY="87.0" prefHeight="17.0" prefWidth="111.0" text="Titre du quiz">
                <font>
                   <Font name="Arial Rounded MT Bold" size="12.0" />
                </font></Label>
-            <TextField fx:id="titre" layoutX="196.0" layoutY="88.0" prefHeight="25.0" prefWidth="378.0" />
-            <TextArea fx:id="description" layoutX="196.0" layoutY="137.0" prefHeight="88.0" prefWidth="378.0" />
+            <TextField fx:id="titre" layoutX="196.0" layoutY="78.0" prefHeight="35.0" prefWidth="378.0">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.6345164775848389" green="0.5524691343307495" blue="1.0" />
+                     </color>
+                  </InnerShadow>
+               </effect></TextField>
+            <TextArea fx:id="description" layoutX="196.0" layoutY="137.0" prefHeight="88.0" prefWidth="378.0" wrapText="true">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.6345164775848389" green="0.5524691343307495" blue="1.0" />
+                     </color>
+                  </InnerShadow>
+               </effect></TextArea>
          </children>
       </AnchorPane>
    </children>
