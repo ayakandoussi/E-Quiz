@@ -1,9 +1,7 @@
 package com.projetjava.controller;
 
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import com.projetjava.domain.Etudiant;
-import com.projetjava.domain.Professeur;
 import com.projetjava.domain.Session;
 import com.projetjava.domain.Utilisateur;
 import javafx.fxml.FXML;
@@ -136,15 +134,6 @@ public class QuestionController {
         }
     }
 
-    private String getReponseChoisie() {
-        Toggle selectedToggle = choix.getSelectedToggle();
-        if (selectedToggle != null) {
-            RadioButton selectedRadioButton = (RadioButton) selectedToggle;
-            return selectedRadioButton.getText();
-        }
-        return "";
-    }
-
     public boolean verifierReponse(String reponse) {
         Question questionActuelle = questions.get(currentQuestionIndex);
         return reponse.equals(questionActuelle.getBonneReponse());
@@ -153,15 +142,6 @@ public class QuestionController {
     public void genererQuestions(int nombreQuestions) throws SQLException {
         Collections.shuffle(questions);
         questions = questions.subList(0, Math.min(nombreQuestions, questions.size()));
-    }
-
-    private void reinitialiserQuiz() throws SQLException, BonChoixException {
-
-        score = 0;
-        currentQuestionIndex = 0;
-        questions.clear();
-        chargerQuestions(idQuiz);
-        afficherQuestion();
     }
 
     @FXML
