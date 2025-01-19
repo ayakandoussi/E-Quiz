@@ -103,7 +103,7 @@ public class LoginPageController implements Initializable {
 
             try {
                 utilisateur.setEmail(EmailSignUp.getText());
-                utilisateur.setMotDePasseS(PaswordSignUp.getText()); 
+                utilisateur.setMotDePasseS(PaswordSignUp.getText());
             } catch (EmailException ex) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Erreur Email");
@@ -164,102 +164,93 @@ public class LoginPageController implements Initializable {
 
             if (utilisateur != null) {
                 boolean motDePasseValide = BCrypt.checkpw(PasswordIn.getText(), utilisateur.getMotDePasse());
-                boolean emailValide = EmailIn.getText().equals(utilisateur.getEmail());
-                if (emailValide) {
+                if (motDePasseValide) {
+                    Session session = Session.getInstance();
+                    session.setUtilisateurConnecte(utilisateur);
+                    String role = utilisateur.getRole();
+                    FXMLLoader loader;
 
-                    if (motDePasseValide) {
-                        Session session = Session.getInstance();
-                        session.setUtilisateurConnecte(utilisateur);
-                        String role = utilisateur.getRole();
-                        FXMLLoader loader;
-
-                        try {
-                            if ("professeur".equals(role)) {
-                                loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
-                            } else if ("etudiant".equals(role)) {
-                                loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
-                            } else {
-                                throw new IllegalStateException("Rôle non valide.");
-                            }
-                            Parent root = loader.load();
-                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            Scene scene = new Scene(root);
-                            stage.setScene(scene);
-                            stage.show();
-
-                        } catch (IOException e) {
-                            alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Erreur");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Erreur lors du chargement de la page : " + e.getMessage());
-                            alert.showAndWait();
+                    try {
+                        if ("professeur".equals(role)) {
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
+                        } else if ("etudiant".equals(role)) {
+                            loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/EtudiantAccueil.fxml"));
+                        } else {
+                            throw new IllegalStateException("Rôle non valide.");
                         }
+                        Parent root = loader.load();
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
 
-                    } else {
-                        alert = new Alert(AlertType.ERROR);
+                    } catch (IOException e) {
+                        alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Erreur");
                         alert.setHeaderText(null);
-                        alert.setContentText("Email ou mot de passe incorrect !");
+                        alert.setContentText("Erreur lors du chargement de la page : " + e.getMessage());
                         alert.showAndWait();
                     }
-                } else {
-                    System.out.println("Échec de la connexion.");
 
+                } else {
                     alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Erreur");
                     alert.setHeaderText(null);
                     alert.setContentText("Email ou mot de passe incorrect !");
                     alert.showAndWait();
                 }
+            } else {
+                System.out.println("Échec de la connexion.");
+                alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Email ou mot de passe incorrect !");
+                alert.showAndWait();
             }
         }
     }
-    
-        @FXML
-        public void Switchform
-        (ActionEvent event
-        
-            ) {
+
+    @FXML
+    public void Switchform(ActionEvent event
+    ) {
         TranslateTransition slider = new TranslateTransition();
-            if (event.getSource() == CreateAccountBtn) {
-                slider.setNode(SignUp);
-                slider.setToX(400);  
-                slider.setDuration(Duration.seconds(0.5));
-                slider.setOnFinished(e -> {
-                    HaveAccountBtn1.setVisible(true);
-                    CreateAccountBtn.setVisible(false);
-                    SignIn.setVisible(false);
-                    LabelDont.setVisible(false);
-                    LabelAleady.setVisible(true);
+        if (event.getSource() == CreateAccountBtn) {
+            slider.setNode(SignUp);
+            slider.setToX(400);
+            slider.setDuration(Duration.seconds(0.5));
+            slider.setOnFinished(e -> {
+                HaveAccountBtn1.setVisible(true);
+                CreateAccountBtn.setVisible(false);
+                SignIn.setVisible(false);
+                LabelDont.setVisible(false);
+                LabelAleady.setVisible(true);
 
-                });
+            });
 
-                slider.play(); 
-            } else if (event.getSource() == HaveAccountBtn1) {
-                slider.setNode(SignUp);
+            slider.play();
+        } else if (event.getSource() == HaveAccountBtn1) {
+            slider.setNode(SignUp);
 
-                slider.setToX(0);
-                slider.setDuration(Duration.seconds(0.5));
-                slider.setOnFinished(e -> {
-                    HaveAccountBtn1.setVisible(false);
-                    CreateAccountBtn.setVisible(true);
-                    SignIn.setVisible(true);
-                    LabelDont.setVisible(true);
-                    LabelAleady.setVisible(false);
+            slider.setToX(0);
+            slider.setDuration(Duration.seconds(0.5));
+            slider.setOnFinished(e -> {
+                HaveAccountBtn1.setVisible(false);
+                CreateAccountBtn.setVisible(true);
+                SignIn.setVisible(true);
+                LabelDont.setVisible(true);
+                LabelAleady.setVisible(false);
 
-                });
+            });
 
-                slider.play();
-            }
+            slider.play();
         }
-
-        @Override
-        public void initialize
-        (URL url, ResourceBundle rb
-        
-            ) {
-        ObservableList<String> list = FXCollections.observableArrayList("Professeur", "Etudiant");
-            Role.setItems(list);
-        }
-
     }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb
+    ) {
+        ObservableList<String> list = FXCollections.observableArrayList("Professeur", "Etudiant");
+        Role.setItems(list);
+    }
+
+}
