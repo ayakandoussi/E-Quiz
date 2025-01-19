@@ -15,16 +15,10 @@ public class InsertQuiz {
         String sql = "INSERT INTO quiz (titre, description, idEnseignant) VALUES (?, ?, ?)";
 
         String[][] quizzes = {
-            {"Introduction à Java", "Quiz pour tester les bases du langage Java, y compris les variables, types de données, et syntaxe."},
-            {"Les boucles en Java", "Quiz pour évaluer la compréhension des structures de contrôle comme for, while et do-while."},
-            {"Les classes et objets", "Quiz pour vérifier les connaissances sur les concepts POO en Java, comme les classes, objets, et méthodes."},
-            {"Les collections en Java", "Quiz pour tester les connaissances sur les listes, ensembles, et maps en Java."},
-            {"Gestion des exceptions", "Quiz sur la gestion des erreurs avec try-catch-finally et les exceptions personnalisées."},
-            {"Introduction à JavaFX", "Quiz sur les bases de JavaFX, comme les scènes, les stages, et les layouts."},
-            {"Les contrôles JavaFX", "Quiz sur les éléments d'interface comme les boutons, labels, et text fields en JavaFX."},
-            {"CSS avec JavaFX", "Quiz sur la personnalisation des interfaces JavaFX avec des fichiers CSS."},
-            {"Les événements en JavaFX", "Quiz pour évaluer la compréhension des événements et des écouteurs en JavaFX."},
-            {"Les bases de données avec JavaFX", "Quiz sur l'intégration de bases de données MySQL dans une application JavaFX."}
+            {"Les commandes de base Unix", "Quiz teste la connaissance des commandes fondamentales de l'interface en ligne de commande Unix, comme `ls`, `cd`, `mkdir`, et `rm`. Les utilisateurs seront évalués sur leur capacité à naviguer dans le système de fichiers, manipuler des fichiers et des répertoires."},
+            {"Gestion des permissions et des utilisateurs sous Unix", "Quiz évalue la compréhension de la gestion des permissions dans Unix. Les questions portent sur les commandes comme `chmod`, `chown`, `chgrp`, et les concepts relatifs aux utilisateurs, groupes et leurs permissions d'accès."},
+            {"Gestion des processus Unix", "Quiz teste les connaissances sur la gestion des processus dans un environnement Unix. Il couvre des commandes comme `ps`, `top`, `kill`, `bg`, `fg`, et l'utilisation des signaux pour contrôler les processus en cours d'exécution."},
+            {"Scripting shell sous Unix", "Quiz évalue la maîtrise des scripts shell Unix, y compris les boucles, les conditions, les variables et les fonctions. Il teste également la capacité à automatiser des tâches avec des scripts shell."}
         };
 
         try (Connection connection = DriverManager.getConnection(url, username, password); PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -32,7 +26,7 @@ public class InsertQuiz {
             for (String[] quiz : quizzes) {
                 String titre = quiz[0];
                 String description = quiz[1];
-                int idEnseignant = 6;
+                int idEnseignant = 7;
                 statement.setString(1, titre);
                 statement.setString(2, description);
                 statement.setInt(3, idEnseignant);

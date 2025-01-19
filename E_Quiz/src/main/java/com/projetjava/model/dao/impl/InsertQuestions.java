@@ -15,29 +15,30 @@ public class InsertQuestions {
         String sql = "INSERT INTO question (enonce, choix1, choix2, choix3, choix4, bonneReponse, idQuiz) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Object[][] questions = {
-            {"Quelle est la méthode principale d'une application Java ?", "start()", "main()", "run()", "execute()", "choix2"},
-            {"Que signifie JVM ?", "Java Variable Machine", "Java Virtual Machine", "Java Verification Machine", "Java Version Manager", "choix2"},
-            {"Quel mot-clé est utilisé pour hériter d'une classe ?", "inherit", "extends", "implements", "super", "choix2"},
-            {"Comment déclarer une constante en Java ?", "final", "const", "constant", "immutable", "choix1"},
-            {"Que fait la méthode equals() ?", "Compare des objets", "Concatène des chaînes", "Copie un objet", "Efface un objet", "choix1"},
-            {"Que signifie JDK ?", "Java Development Kit", "Java Debugging Kit", "Java Data Kit", "Java Deployment Kit", "choix1"},
-            {"Quelle classe est utilisée pour manipuler des chaînes ?", "String", "StringBuilder", "CharSequence", "StringBuffer", "choix1"},
-            {"Quelle est la portée par défaut d'une variable dans une classe ?", "private", "public", "protected", "package-private", "choix4"},
-            {"Comment capturer une exception en Java ?", "try-catch", "throw-catch", "handle-exception", "catch-throw", "choix1"},
-            {"Quelle méthode est utilisée pour démarrer un thread ?", "run()", "start()", "begin()", "init()", "choix2"},
-            {"Quel est le type par défaut d'un nombre décimal ?", "float", "int", "double", "long", "choix3"},
-            {"Comment accéder à un membre statique ?", "new Instance", "super", "className.member", "this.member", "choix3"},
-            {"Quel layout est par défaut dans un JavaFX Stage ?", "FlowPane", "StackPane", "BorderPane", "AnchorPane", "choix2"},
-            {"Quelle méthode est utilisée pour charger une scène dans JavaFX ?", "loadScene()", "setScene()", "showScene()", "initializeScene()", "choix2"},
-            {"Quelle est l'extension des fichiers CSS utilisés avec JavaFX ?", ".javafx", ".fxcss", ".css", ".style", "choix3"},
-            {"Comment ajouter un événement à un bouton JavaFX ?", "addEventHandler()", "setOnAction()", "setEvent()", "handleEvent()", "choix2"},
-            {"Quelle classe est utilisée pour afficher des boîtes de dialogue en JavaFX ?", "AlertBox", "Dialog", "Popup", "Alert", "choix4"},
-            {"Quel package est utilisé pour les interfaces JavaFX ?", "javafx.scene", "javafx.stage", "javafx.graphics", "javafx.application", "choix1"},
-            {"Quelle méthode permet de définir un texte dans un Label JavaFX ?", "setText()", "updateText()", "assignText()", "text()", "choix1"},
-            {"Quelle classe est utilisée pour créer un formulaire en JavaFX ?", "FormPane", "VBox", "FormLayout", "GridPane", "choix4"}
+            {"Quelle commande affiche les processus en cours d'exécution ?", "ps", "top", "kill", "process", "ps"},
+            {"Quelle commande permet d'afficher une vue dynamique des processus ?", "top", "ps", "kill", "process", "top"},
+            {"Comment tuer un processus à partir de son PID ?", "kill", "stop", "terminate", "end", "kill"},
+            {"Comment envoyer un signal SIGKILL à un processus ?", "kill -9", "kill -15", "kill -s SIGKILL", "kill -kill", "kill -9"},
+            {"Quelle commande permet de suspendre un processus en arrière-plan ?", "bg", "fg", "pause", "stop", "bg"},
+            {"Quelle commande permet de reprendre un processus suspendu en avant-plan ?", "fg", "bg", "start", "resume", "fg"},
+            {"Quel signal permet de suspendre un processus ?", "SIGSTOP", "SIGKILL", "SIGTERM", "SIGPAUSE", "SIGSTOP"},
+            {"Quel signal permet d'arrêter un processus en cours d'exécution ?", "SIGTERM", "SIGSTOP", "SIGKILL", "SIGQUIT", "SIGTERM"},
+            {"Quelle commande permet de vérifier les processus d'un utilisateur ?", "ps -u", "top -u", "ps -a", "userprocess", "ps -u"},
+            {"Comment afficher les processus d'un utilisateur spécifique ?", "ps -u username", "top -u username", "ps username", "top username", "ps -u username"},
+            {"Quelle commande permet de mettre un processus en arrière-plan ?", "bg", "fg", "pause", "start", "bg"},
+            {"Quelle commande affiche l'ID du processus parent ?", "ps -f", "ps -p", "ps -e", "ps -a", "ps -f"},
+            {"Quelle commande permet d'exécuter un processus en arrière-plan ?", "command &", "command bg", "command fg", "bg command", "command &"},
+            {"Comment afficher un arbre des processus ?", "ps -ejH", "ps -ax", "top -tree", "ps -af", "ps -ejH"},
+            {"Comment lister les processus associés à un terminal ?", "ps -t", "ps -a", "top -t", "listprocess", "ps -t"},
+            {"Quel signal est utilisé pour redémarrer un processus ?", "SIGHUP", "SIGINT", "SIGTERM", "SIGSTOP", "SIGHUP"},
+            {"Comment obtenir la liste des processus avec leurs ressources ?", "top -u", "ps aux", "ps -ef", "top", "ps aux"},
+            {"Comment afficher les processus qui consomment le plus de ressources ?", "top", "ps -e", "ps -aux", "ps -r", "top"},
+            {"Quelle commande permet de vérifier l'état d'un processus ?", "ps -l", "ps -e", "ps -s", "top -s", "ps -l"},
+            {"Quelle commande permet de changer la priorité d'un processus ?", "renice", "nice", "priority", "top", "renice"},
+            {"Comment envoyer un signal SIGINT à un processus ?", "kill -2", "kill -9", "kill -s SIGINT", "kill -int", "kill -2"}
         };
 
-        int idQuiz = 3;
+        int idQuiz = 24;
 
         try (Connection connection = DriverManager.getConnection(url, username, password); PreparedStatement statement = connection.prepareStatement(sql)) {
 

@@ -41,39 +41,32 @@ public class ModifierMotDePasseController {
 
     @FXML
     private Button addQuizButton, bouttonenregistrer;
-    
-    
 
     private Utilisateur utilisateur;
     private UtilisateurDao utilisateurDAO;
-    
 
     public ModifierMotDePasseController() {
-        utilisateurDAO = new UtilisateurDao(); 
+        utilisateurDAO = new UtilisateurDao();
     }
 
     @FXML
     private void initialize() {
         utilisateur = Session.getInstance().getUtilisateurConnecte();
         if (utilisateur != null) {
-            roleLabel.setText(utilisateur.getRole() + ":" + utilisateur.getNom() + " " + utilisateur.getPrenom());
-            Profil.setOnAction(event -> afficherProfil());
+            afficherRole(utilisateur);            Profil.setOnAction(event -> afficherProfil());
             Accueil.setOnAction(event -> afficherAccueil(utilisateur));
             SeDeconnecter.setOnAction(event -> seDeconnecter());
             bouttonenregistrer.setOnAction(this::handleEnregistrerAction);
-
 
         } else {
             afficherErreur("Utilisateur non connecté. Veuillez vous reconnecter.");
         }
     }
 
-   
     public boolean verifierMotDePasse(String motDePasseSaisi, Utilisateur utilisateur) {
         return BCrypt.checkpw(motDePasseSaisi, utilisateur.getMotDePasse());
     }
 
-   
     @FXML
     private void handleEnregistrerAction(ActionEvent event) {
         String ancienMotDePasse = oldField.getText();
@@ -94,22 +87,39 @@ public class ModifierMotDePasseController {
             return;
         }
         try {
-            System.out.println(" avant: " +utilisateur.getMotDePasse());
+            System.out.println(" avant: " + utilisateur.getMotDePasse());
             utilisateur.setMotDePasse(newField.getText());
-            System.out.println(" apres: " +utilisateur.getMotDePasse());
-            utilisateurDAO.update(utilisateur); 
+            System.out.println(" apres: " + utilisateur.getMotDePasse());
+            utilisateurDAO.update(utilisateur);
             afficherMessage("Mot de passe modifié avec succès.");
         } catch (MotDePasseException ex) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur Mot de Passe");
             alert.setHeaderText(null);
-            alert.setContentText(ex.getMessage());  
+            alert.setContentText(ex.getMessage());
             alert.showAndWait();
         } catch (Exception e) {
             afficherErreur("Une erreur est survenue lors de la mise à jour du mot de passe.");
             e.printStackTrace();
         }
     }
+
+    private void afficherRole(Utilisateur utilisateur) {
+        String contenu = "";
+        String role = utilisateur.getRole();
+
+        if ("professeur".equals(role)) {
+            Professeur professeur = new Professeur(utilisateur);
+            contenu = professeur.afficher();
+        } else if ("etudiant".equals(role)) {
+            Etudiant etudiant = new Etudiant(utilisateur);
+            contenu = etudiant.afficher();
+        } else {
+            contenu = "Rôle non reconnu";
+        }
+        roleLabel.setText(contenu);
+    }
+    
 
     private void afficherMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

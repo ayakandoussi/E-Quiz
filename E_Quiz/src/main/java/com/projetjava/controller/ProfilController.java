@@ -19,27 +19,26 @@ import javafx.scene.Parent;
 public class ProfilController {
 
     @FXML
-    private TextField nomfield;       
+    private TextField nomfield;
     @FXML
-    private TextField prenomfiled;   
+    private TextField prenomfiled;
     @FXML
-    private TextField emailfield;     
+    private TextField emailfield;
     @FXML
-    private TextField rolefield;     
+    private TextField rolefield;
     @FXML
-    private Button bouttonmodifier;   
+    private Button bouttonmodifier;
     @FXML
-    private Label roleLabel;          
+    private Label roleLabel;
     @FXML
-    private MenuButton menu;          
+    private MenuButton menu;
     @FXML
-    private MenuItem Accueil;        
+    private MenuItem Accueil;
     @FXML
-    private MenuItem Profil;        
+    private MenuItem Profil;
     @FXML
-    private MenuItem SeDeconnecter;  
+    private MenuItem SeDeconnecter;
 
-    
     @FXML
     public void initialize() {
         Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
@@ -74,7 +73,7 @@ public class ProfilController {
             contenu = professeur.afficher();
         } else if ("etudiant".equals(role)) {
             Etudiant etudiant = new Etudiant(utilisateur);
-            contenu = etudiant.afficher();  
+            contenu = etudiant.afficher();
         } else {
             contenu = "Rôle non reconnu";
         }
@@ -87,11 +86,10 @@ public class ProfilController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/modifiermotdepasse.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            Stage stage = new Stage();
+            Stage stage = (Stage) bouttonmodifier.getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("Modifier Mot de Passe");
-            stage.show();
-            ((Stage) bouttonmodifier.getScene().getWindow()).close();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erreur lors du chargement de la page de modification de mot de passe.");
