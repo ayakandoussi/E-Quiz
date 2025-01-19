@@ -41,9 +41,12 @@ public class ModifierMotDePasseController {
 
     @FXML
     private Button addQuizButton, bouttonenregistrer;
+    
+    
 
     private Utilisateur utilisateur;
     private UtilisateurDao utilisateurDAO;
+    
 
     public ModifierMotDePasseController() {
         utilisateurDAO = new UtilisateurDao(); // Initialisation du DAO
@@ -57,6 +60,8 @@ public class ModifierMotDePasseController {
             Profil.setOnAction(event -> afficherProfil());
             Accueil.setOnAction(event -> afficherAccueil(utilisateur));
             SeDeconnecter.setOnAction(event -> seDeconnecter());
+            bouttonenregistrer.setOnAction(this::handleEnregistrerAction);
+
 
         } else {
             afficherErreur("Utilisateur non connecté. Veuillez vous reconnecter.");
@@ -95,7 +100,9 @@ public class ModifierMotDePasseController {
         }
         try {
             // Hacher le nouveau mot de passe et mettre à jour l'utilisateur
+            System.out.println(" avant: " +utilisateur.getMotDePasse());
             utilisateur.setMotDePasse(newField.getText());
+            System.out.println(" apres: " +utilisateur.getMotDePasse());
             utilisateurDAO.update(utilisateur); // Sauvegarder dans la base de données
             afficherMessage("Mot de passe modifié avec succès.");
         } catch (MotDePasseException ex) {
