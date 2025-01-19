@@ -74,7 +74,6 @@ public abstract class Utilisateur {
     }
 
     public void setMotDePasseS(String motDePasse) throws MotDePasseException {
-        //String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
         if (motDePasse.length() < 8 || !motDePasse.matches(".*[A-Z].*") || !motDePasse.matches(".*[0-9].*")) {
             throw new MotDePasseException("Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
         }

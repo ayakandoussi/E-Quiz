@@ -1,6 +1,7 @@
 package com.projetjava.controller;
 
 import com.projetjava.domain.Etudiant;
+import com.projetjava.domain.Resultat;
 import com.projetjava.domain.Utilisateur;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import com.projetjava.domain.Session;
+import com.projetjava.model.dao.impl.ResultatDao;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 
@@ -25,18 +27,16 @@ public class ResultatPageController {
     @FXML
     private Label remarqueLabel;
     @FXML
-    private MenuItem Profil;  // Bouton pour afficher le profil
+    private MenuItem Profil;
     @FXML
     private MenuItem SeDeconnecter;
     @FXML
     private MenuItem Accueil;
     private double score;
 
-    // Méthode d'initialisation
     @FXML
     private void initialize() {
 
-        // Récupérer l'utilisateur connecté via la session
         Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (utilisateurConnecte != null) {
@@ -50,31 +50,44 @@ public class ResultatPageController {
 
     }
 
-    // Méthode pour afficher le rôle de l'utilisateur
     private void afficherRole(Utilisateur utilisateur) {
         String contenu = "";
-
-        // Affichage spécifique pour l'étudiant
         if (utilisateur instanceof Etudiant) {
             Etudiant etudiant = (Etudiant) utilisateur;
-            contenu = etudiant.afficher(); // Appeler la méthode qui retourne le rôle de l'étudiant
+            contenu = etudiant.afficher();
         }
 
-        // Afficher le rôle dans le Label
         rolelabel.setText(contenu);
     }
 
-    public void afficherResultat(double score) {
+    public void afficherResultat(double score, int idQuiz) {
         this.score = score;
         System.out.println("Score reçu : " + score);
-        // Mettre à jour le label du score
-        scoreLabel.setText(String.format("%.0f", score));  // Afficher le score sans décimale
-
-        // Appeler la méthode pour afficher la remarque en fonction du score
+        scoreLabel.setText(String.format("%.0f", score));
         afficheResume();
+        enregistrerResultat(score, idQuiz);
     }
 
-    // Méthode pour afficher la remarque en fonction du score
+    public void enregistrerResultat(double score, int idQuiz) {
+
+        Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
+
+        if (utilisateurConnecte instanceof Etudiant) {
+            Etudiant etudiant = (Etudiant) utilisateurConnecte;
+            ResultatDao resultatDao = new ResultatDao();
+            Resultat resultat= new Resultat();
+            System.out.println("id"+ idQuiz);
+            resultat.setIdQuizzes(idQuiz);
+            resultat.setEtudiant(etudiant);
+            resultat.setScore(score);
+            resultatDao.add(resultat);
+            System.out.println("Résultat enregistré dans la base de données.");
+        } else {
+            System.out.println("L'utilisateur connecté n'est pas un étudiant.");
+        }
+
+    }
+
     public void afficheResume() {
         if (score >= 0 && score <= 5) {
             remarqueLabel.setText("Null!");
@@ -91,14 +104,9 @@ public class ResultatPageController {
 
     public void afficherProfil() {
         try {
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -119,12 +127,7 @@ public class ResultatPageController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
-            // Ici on utilise le MenuButton 'menu'
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -135,17 +138,10 @@ public class ResultatPageController {
 
     public void seDeconnecter() {
         try {
-
-            // Réinitialiser la session avant de rediriger
             Session.getInstance().setUtilisateurConnecte(null);
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -153,4 +149,5 @@ public class ResultatPageController {
         }
     }
 
+    
 }

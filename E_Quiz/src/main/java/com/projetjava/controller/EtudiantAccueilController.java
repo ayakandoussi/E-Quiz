@@ -142,12 +142,11 @@ public class EtudiantAccueilController {
 
         Label label = new Label(professeur.getFilomod());
 
-        // Configuration pour gérer le texte long
-        label.setWrapText(true); // Permet le retour à la ligne automatique
-        label.setTextAlignment(TextAlignment.CENTER); // Centre le texte
-        label.setMinHeight(Region.USE_PREF_SIZE); // Hauteur minimale basée sur le contenu
-        label.setMaxWidth(200); // Largeur maximale du label
-        label.setPrefWidth(Region.USE_COMPUTED_SIZE); // Largeur préférée basée sur le contenu
+        label.setWrapText(true); 
+        label.setTextAlignment(TextAlignment.CENTER); 
+        label.setMinHeight(Region.USE_PREF_SIZE);
+        label.setMaxWidth(200);
+        label.setPrefWidth(Region.USE_COMPUTED_SIZE);
 
         label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-family: 'Arial', sans-serif; -fx-opacity: 0.9; -fx-cursor: hand;");
 
@@ -177,8 +176,8 @@ public class EtudiantAccueilController {
         });
 
         professeurBox.getChildren().add(label);
-        professeurBox.setMinWidth(200); // Largeur minimale de la box
-        professeurBox.setPrefWidth(Region.USE_COMPUTED_SIZE); // Largeur préférée basée sur le contenu
+        professeurBox.setMinWidth(200); 
+        professeurBox.setPrefWidth(Region.USE_COMPUTED_SIZE); 
         profList.getChildren().add(professeurBox);
     }
 
@@ -233,43 +232,27 @@ public class EtudiantAccueilController {
     private void startQuiz(Quiz quiz) {
 
         System.out.println("Démarrer le quiz: " + quiz.getTitre());
-        // Créer une nouvelle scène pour le quiz
         try {
-
-            // Charger le FXML de la page QuizPage
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/QuizPage.fxml"));
-
             AnchorPane quizPage = loader.load();
-
-            QuestionController questionController = loader.getController(); // Correctement récupérer le contrôleur
-            questionController.selectionnerQuiz(quiz); // Passer le quiz sélectionné
-
-            // Créer une nouvelle scène avec le contenu de quizPage.fxml
+            QuestionController questionController = loader.getController(); 
+            questionController.selectionnerQuiz(quiz);
             Scene quizScene = new Scene(quizPage);
-
-            // Récupérer le Stage actuel (la fenêtre)
             Stage stage = (Stage) rootPane.getScene().getWindow();
-
-            // Passer à la scène du quiz
             stage.setScene(quizScene);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            // Gérer l'erreur si le fichier FXML n'a pas pu être chargé
         }
     }
 
     public void afficherProfil() {
         try {
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent Profil = loader.load();
-
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.setScene(new Scene(Profil));
             stage.show();
-
-            // Afficher la nouvelle fenêtre
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -293,19 +276,14 @@ public class EtudiantAccueilController {
 
     public void seDeconnecter() {
         try {
-            // Réinitialiser la session avant de rediriger
             Session.getInstance().setUtilisateurConnecte(null);
-
-            // Charger la page de connexion
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
             Parent LoginPage = loader.load();
-
-            // Rediriger vers la page de connexion
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.setScene(new Scene(LoginPage));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();  // Ajout du printStackTrace pour voir les erreurs potentielles
+            e.printStackTrace();  
         }
     }
 

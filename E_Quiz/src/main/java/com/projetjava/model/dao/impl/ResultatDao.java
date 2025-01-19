@@ -15,14 +15,12 @@ public class ResultatDao implements Dao<Resultat> {
     public void add(Resultat resultat) {
         try {
             BDConnexion bdConnexion = new BDConnexion();
-            String query = "INSERT INTO `resultatquiz` (`idResultatQuiz`, `idEtudiant`, `idQuiz`, `score`) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO `resultatquiz` (`idEtudiant`, `idQuiz`, `score`) VALUES ( ?, ?, ?)";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
-            preparedStatement.setInt(1, resultat.getIdResultatQuiz());
-            preparedStatement.setInt(2, resultat.getEtudiant().getId());
-            preparedStatement.setInt(3, resultat.getQuiz().getIdQuiz());
-            preparedStatement.setDouble(4, resultat.getScore());
-
+            preparedStatement.setInt(1, resultat.getEtudiant().getId());
+            preparedStatement.setInt(2, resultat.getIdQuizzes());
+            preparedStatement.setDouble(3, resultat.getScore());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             bdConnexion.close();
@@ -38,7 +36,7 @@ public class ResultatDao implements Dao<Resultat> {
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
             preparedStatement.setInt(1, resultat.getEtudiant().getId());
-            preparedStatement.setInt(2, resultat.getQuiz().getIdQuiz());
+            preparedStatement.setInt(2, resultat.getIdQuizzes());
             preparedStatement.setDouble(3, resultat.getScore());
             preparedStatement.setInt(4, resultat.getIdResultatQuiz());
 
@@ -67,10 +65,7 @@ public class ResultatDao implements Dao<Resultat> {
                 Etudiant etudiant = new Etudiant();
                 etudiant.setId(resultSet.getInt("etudiantId"));
                 resultat.setEtudiant(etudiant);
-
-                Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("quizId"));
-                resultat.setQuiz(quiz);
+                resultat.setIdQuizzes(resultSet.getInt("quizId"));
 
                 resultats.add(resultat);
             }
@@ -102,10 +97,7 @@ public class ResultatDao implements Dao<Resultat> {
                 Etudiant etudiant = new Etudiant();
                 etudiant.setId(resultSet.getInt("idEtudiant"));
                 resultat.setEtudiant(etudiant);
-
-                Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
-                resultat.setQuiz(quiz);
+                resultat.setIdQuizzes(resultSet.getInt("idQuiz"));
             }
 
             preparedStatement.close();
@@ -131,16 +123,12 @@ public class ResultatDao implements Dao<Resultat> {
 
         }
     }
-// Récupérer les résultats d'un quiz donné
 
     public ArrayList<Resultat> getResultatsByQuiz(int quizId) {
         ArrayList<Resultat> resultats = new ArrayList<>();
 
         try {
-            // Création de la connexion à la base de données
             BDConnexion bdConnexion = new BDConnexion();
-
-            // Requête SQL corrigée
             String query = "SELECT r.idResultatQuiz, r.score, r.idEtudiant, q.idQuiz, e.nom, e.prenom "
                     + "FROM resultatquiz r "
                     + "JOIN utilisateur e ON r.idEtudiant = e.id "
@@ -148,39 +136,28 @@ public class ResultatDao implements Dao<Resultat> {
                     + "WHERE r.idQuiz = ?";
             PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
 
-            // Remplacement du paramètre dans la requête
             preparedStatement.setInt(1, quizId);
 
-            // Exécution de la requête
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Traitement des résultats
             while (resultSet.next()) {
                 Resultat resultat = new Resultat();
                 resultat.setIdResultatQuiz(resultSet.getInt("idResultatQuiz"));
                 resultat.setScore(resultSet.getDouble("score"));
 
-                // Récupérer l'étudiant associé
                 Etudiant etudiant = new Etudiant();
                 etudiant.setId(resultSet.getInt("idEtudiant"));
                 etudiant.setNom(resultSet.getString("nom"));
                 etudiant.setPrenom(resultSet.getString("prenom"));
                 resultat.setEtudiant(etudiant);
+                resultat.setIdQuizzes(resultSet.getInt("idQuiz"));
 
-                // Récupérer le quiz associé
-                Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
-                resultat.setQuiz(quiz);
-
-                // Ajouter le résultat à la liste
                 resultats.add(resultat);
             }
 
-            // Fermeture des ressources
             preparedStatement.close();
             bdConnexion.close();
         } catch (SQLException ex) {
-            // Gestion et affichage des erreurs
             System.err.println("Erreur lors de la récupération des résultats : " + ex.getMessage());
             ex.printStackTrace();
         }

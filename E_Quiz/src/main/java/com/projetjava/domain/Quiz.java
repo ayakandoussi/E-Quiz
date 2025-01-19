@@ -6,7 +6,7 @@ public class Quiz {
     private String titre;
     private String description;
 
-    private int idEnseignant; // Identifiant du professeur qui a créé le quiz
+    private int idEnseignant; 
 
     public Quiz() {
 
@@ -20,7 +20,6 @@ public class Quiz {
 
     }
 
-    // Getters et Setters
     public int getIdQuiz() {
         return id;
     }

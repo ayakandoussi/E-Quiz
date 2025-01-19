@@ -1,4 +1,3 @@
-
 package com.projetjava.model.dao.impl;
 
 import java.sql.Connection;
@@ -14,9 +13,9 @@ public class InsertUtilisateurs {
     }
 
     public static void insertUsers() {
-        String url = "jdbc:mysql://localhost:3306/e-quiz";  // Assure-toi que le nom de ta base de données est correct
-        String username = "root";  // Ton nom d'utilisateur pour la base de données
-        String password = "";  // Le mot de passe de la base de données, ici vide pour XAMPP par défaut
+        String url = "jdbc:mysql://localhost:3306/e-quiz";  
+        String username = "root";  
+        String password = "";  
 
         String sql = "INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
 
@@ -33,8 +32,7 @@ public class InsertUtilisateurs {
             {"Hanani", "Fatima"}
         };
 
-        try (Connection connection = DriverManager.getConnection(url, username, password); 
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password); PreparedStatement statement = connection.prepareStatement(sql)) {
 
             for (String[] utilisateur : utilisateurs) {
                 String nom = utilisateur[0];
@@ -55,12 +53,11 @@ public class InsertUtilisateurs {
             System.out.println("Les utilisateurs ont été insérés avec succès.");
 
         } catch (SQLException e) {
-           
+
         }
     }
 
     public static void main(String[] args) {
-        insertUsers();  
+        insertUsers();
     }
 }
-

@@ -3,16 +3,16 @@ package com.projetjava.domain;
 public class Resultat implements Interpretation{
 
     private  int idResultatQuiz;
-    private Quiz quiz;
     private double score;
     private Etudiant etudiant;
+    private int idQuiz;
 
     public Resultat() {
     }
 
-    public Resultat(Etudiant etudiant, Quiz quiz, double score) {
+    public Resultat(Etudiant etudiant, int idQuiz, double score) {
 
-        this.quiz = quiz;
+        this.idQuiz = idQuiz;
         this.etudiant = etudiant;
         this.score = score;
     }
@@ -25,12 +25,14 @@ public class Resultat implements Interpretation{
         return etudiant;
     }
 
-    public Quiz getQuiz() {
-        return quiz;
-    }
+   
 
     public double getScore() {
         return score;
+    }
+
+    public int getIdQuizzes() {
+        return idQuiz;
     }
 
     public void setIdResultatQuiz(int idResultatQuiz) {
@@ -41,12 +43,14 @@ public class Resultat implements Interpretation{
         this.score = score;
     }
 
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
+   
 
     public void setEtudiant(Etudiant etudiant) {
         this.etudiant = etudiant;
+    }
+
+    public void setIdQuizzes(int idQuiz) {
+        this.idQuiz = idQuiz;
     }
 
     @Override

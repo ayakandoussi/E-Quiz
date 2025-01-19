@@ -49,12 +49,12 @@ public class ModifierMotDePasseController {
     
 
     public ModifierMotDePasseController() {
-        utilisateurDAO = new UtilisateurDao(); // Initialisation du DAO
+        utilisateurDAO = new UtilisateurDao(); 
     }
 
     @FXML
     private void initialize() {
-        utilisateur = Session.getInstance().getUtilisateurConnecte(); // Récupérer l'utilisateur connecté
+        utilisateur = Session.getInstance().getUtilisateurConnecte();
         if (utilisateur != null) {
             roleLabel.setText(utilisateur.getRole() + ":" + utilisateur.getNom() + " " + utilisateur.getPrenom());
             Profil.setOnAction(event -> afficherProfil());
@@ -68,17 +68,12 @@ public class ModifierMotDePasseController {
         }
     }
 
-    /**
-     * Vérifie si le mot de passe saisi correspond au mot de passe actuel de
-     * l'utilisateur.
-     */
+   
     public boolean verifierMotDePasse(String motDePasseSaisi, Utilisateur utilisateur) {
         return BCrypt.checkpw(motDePasseSaisi, utilisateur.getMotDePasse());
     }
 
-    /**
-     * Gestion de la modification du mot de passe.
-     */
+   
     @FXML
     private void handleEnregistrerAction(ActionEvent event) {
         String ancienMotDePasse = oldField.getText();
@@ -99,28 +94,22 @@ public class ModifierMotDePasseController {
             return;
         }
         try {
-            // Hacher le nouveau mot de passe et mettre à jour l'utilisateur
             System.out.println(" avant: " +utilisateur.getMotDePasse());
             utilisateur.setMotDePasse(newField.getText());
             System.out.println(" apres: " +utilisateur.getMotDePasse());
-            utilisateurDAO.update(utilisateur); // Sauvegarder dans la base de données
+            utilisateurDAO.update(utilisateur); 
             afficherMessage("Mot de passe modifié avec succès.");
         } catch (MotDePasseException ex) {
-            // Si une exception est levée, afficher une alerte personnalisée
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur Mot de Passe");
             alert.setHeaderText(null);
-            alert.setContentText(ex.getMessage());  // Le message de l'exception sera affiché ici
+            alert.setContentText(ex.getMessage());  
             alert.showAndWait();
         } catch (Exception e) {
             afficherErreur("Une erreur est survenue lors de la mise à jour du mot de passe.");
             e.printStackTrace();
         }
     }
-
-    /**
-     * Affiche un message d'information.
-     */
 
     private void afficherMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -130,9 +119,6 @@ public class ModifierMotDePasseController {
         alert.showAndWait();
     }
 
-    /**
-     * Affiche un message d'erreur.
-     */
     private void afficherErreur(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur");
@@ -143,14 +129,9 @@ public class ModifierMotDePasseController {
 
     public void afficherProfil() {
         try {
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -171,12 +152,7 @@ public class ModifierMotDePasseController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
-            // Ici on utilise le MenuButton 'menu'
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -187,17 +163,10 @@ public class ModifierMotDePasseController {
 
     public void seDeconnecter() {
         try {
-
-            // Réinitialiser la session avant de rediriger
             Session.getInstance().setUtilisateurConnecte(null);
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {

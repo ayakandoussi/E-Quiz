@@ -1,33 +1,29 @@
 
-/* Style global pour l'arrière-plan */
 .root {
-    -fx-background-color: #ffffff; /* Blanc */
+    -fx-background-color: #ffffff;
 }
 
-/* Style pour le champ de texte (questionField) */
 .text-field {
-    -fx-background-color: white; /* Bleu clair */
-    -fx-text-fill: blue;       /* Bleu foncé */
+    -fx-background-color: white;
+    -fx-text-fill: blue;
     -fx-font-size: 16px;
     -fx-padding: 10px;
-    -fx-border-color: blue;   /* Bleu foncé */
+    -fx-border-color: blue;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
 }
 
-/* Style pour les CheckBox (choix) */
 .check-box {
-    -fx-text-fill: blue;      /* Bleu foncé */
+    -fx-text-fill: blue;
     -fx-font-size: 14px;
     -fx-border-color: transparent;
     -fx-border-radius: 5px;
-    -fx-background-color: white; /* Bleu clair */
+    -fx-background-color: white;
 }
 
-/* Style pour les boutons */
 .button {
-    -fx-background-color: blue; /* Bleu foncé */
-    -fx-text-fill: #ffffff;        /* Blanc */
+    -fx-background-color: blue;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 14px;
     -fx-padding: 10px;
     -fx-border-radius: 5px;
@@ -36,9 +32,9 @@
 }
 
 .button:hover {
-    -fx-background-color: white; /* Bleu plus clair */
+    -fx-background-color: white;
 }
 
 .button:pressed {
-    -fx-background-color: blue; /* Bleu très foncé */
+    -fx-background-color: blue;
 }

@@ -13,35 +13,32 @@ import java.util.List;
 public class QuizDao implements Dao<Quiz> {
 
     @Override
-   public void add(Quiz quiz) {
-    try {
-        BDConnexion bd = new BDConnexion();
-        String query = "INSERT INTO quiz (titre, description, idEnseignant) VALUES (?, ?, ?)";
-        PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, quiz.getTitre());
-        preparedStatement.setString(2, quiz.getDescription());
-        preparedStatement.setInt(3, quiz.getIdEnseignant());
+    public void add(Quiz quiz) {
+        try {
+            BDConnexion bd = new BDConnexion();
+            String query = "INSERT INTO quiz (titre, description, idEnseignant) VALUES (?, ?, ?)";
+            PreparedStatement preparedStatement = bd.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, quiz.getTitre());
+            preparedStatement.setString(2, quiz.getDescription());
+            preparedStatement.setInt(3, quiz.getIdEnseignant());
+            int affectedRows = preparedStatement.executeUpdate();
 
-        // Exécutez la requête
-        int affectedRows = preparedStatement.executeUpdate();
-
-        // Si une ligne est affectée, récupérez l'ID généré
-        if (affectedRows > 0) {
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    quiz.setIdQuiz(generatedKeys.getInt(1)); // Assignez l'ID généré
-                } else {
-                    System.out.println("Aucune clé générée !");
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        quiz.setIdQuiz(generatedKeys.getInt(1));
+                    } else {
+                        System.out.println("Aucune clé générée !");
+                    }
                 }
+            } else {
+                System.out.println("Aucune ligne affectée !");
             }
-        } else {
-            System.out.println("Aucune ligne affectée !");
-        }
 
-    } catch (SQLException ex) {
-        ex.printStackTrace(); // Affichez les erreurs SQL pour déboguer
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
-}
 
     @Override
     public Quiz getById(int id) {
@@ -86,13 +83,11 @@ public class QuizDao implements Dao<Quiz> {
                 quiz.setTitre(resultSet.getString("titre"));
                 quiz.setDescription(resultSet.getString("description"));
                 quiz.setIdEnseignant(resultSet.getInt("idEnseignant"));
-
-                // Ajout du quiz à la liste
                 quizzes.add(quiz);
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace(); // Utilisez un logger dans un projet réel
+            ex.printStackTrace();
         }
 
         return quizzes;
@@ -134,42 +129,45 @@ public class QuizDao implements Dao<Quiz> {
     }
 
     public ArrayList<Quiz> getQuizzesByProfesseur(int professeurId) {
-    ArrayList<Quiz> quizzes = new ArrayList<>();
-    BDConnexion bdConnexion = null;
-    PreparedStatement preparedStatement = null;
-    ResultSet resultSet = null;
+        ArrayList<Quiz> quizzes = new ArrayList<>();
+        BDConnexion bdConnexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
 
-    try {
-        bdConnexion = new BDConnexion();
-        String query = "SELECT * FROM Quiz WHERE idEnseignant=?";
-        preparedStatement = bdConnexion.getConnection().prepareStatement(query);
-        preparedStatement.setInt(1, professeurId);
-        resultSet = preparedStatement.executeQuery();
-
-        while (resultSet.next()) {
-            Quiz quiz = new Quiz();
-            quiz.setIdQuiz(resultSet.getInt("idQuiz"));
-            quiz.setTitre(resultSet.getString("titre"));
-            quiz.setDescription(resultSet.getString("description"));
-
-            quizzes.add(quiz);
-        }
-    } catch (SQLException ex) {
-        // Log l'erreur pour faciliter le débogage
-        ex.printStackTrace();
-        // Vous pouvez aussi afficher un message d'erreur à l'utilisateur si nécessaire
-    } finally {
-        // Fermeture des ressources dans le bloc finally pour garantir leur fermeture
         try {
-            if (resultSet != null) resultSet.close();
-            if (preparedStatement != null) preparedStatement.close();
-            if (bdConnexion != null) bdConnexion.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+            bdConnexion = new BDConnexion();
+            String query = "SELECT * FROM Quiz WHERE idEnseignant=?";
+            preparedStatement = bdConnexion.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1, professeurId);
+            resultSet = preparedStatement.executeQuery();
 
-    return quizzes;
-}
+            while (resultSet.next()) {
+                Quiz quiz = new Quiz();
+                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
+                quiz.setTitre(resultSet.getString("titre"));
+                quiz.setDescription(resultSet.getString("description"));
+
+                quizzes.add(quiz);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (bdConnexion != null) {
+                    bdConnexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return quizzes;
+    }
 
 }

@@ -16,7 +16,6 @@ public class Question {
     public Question() {
     }
 
-    // Constructeur avec tous les paramètres nécessaires
     public Question(int idQuestion, String enonce, String choix1, String choix2, String choix3, String choix4, String bonneReponse, int idQuiz) throws BonChoixException {
         this.idQuestion = idQuestion;
         this.enonce = enonce;
@@ -28,7 +27,6 @@ public class Question {
         this.idQuiz = idQuiz;
     }
 
-    // Getters and Setters
     public int getIdQuestion() {
         return idQuestion;
     }

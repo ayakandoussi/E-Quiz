@@ -92,7 +92,6 @@ public class LoginPageController implements Initializable {
             alert.setContentText("Remplissez tous les champs !!");
             alert.showAndWait();
         } else {
-            // Créer l'utilisateur avec les données du formulaire
             Utilisateur utilisateur = new Utilisateur() {
                 @Override
                 public String afficher() {
@@ -103,8 +102,8 @@ public class LoginPageController implements Initializable {
             utilisateur.setPrenom(Prenom.getText());
 
             try {
-                utilisateur.setEmail(EmailSignUp.getText()); // Cela déclenchera une exception si l'email est invalide
-                utilisateur.setMotDePasseS(PaswordSignUp.getText()); // Cela déclenchera une exception si le mot de passe est invalide
+                utilisateur.setEmail(EmailSignUp.getText());
+                utilisateur.setMotDePasseS(PaswordSignUp.getText()); 
             } catch (EmailException ex) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Erreur Email");
@@ -123,8 +122,6 @@ public class LoginPageController implements Initializable {
 
             utilisateur.setRole((String) Role.getSelectionModel().getSelectedItem());
             utilisateur.setFilomod(Filomod.getText());
-
-            // Utilisation de UtilisateurDao pour ajouter l'utilisateur à la base de données
             UtilisateurDao utilisateurDao = new UtilisateurDao();
             utilisateurDao.add(utilisateur);
 
@@ -133,8 +130,6 @@ public class LoginPageController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Utilisateur enregistré avec succès !");
             alert.showAndWait();
-
-            // Transition vers l'écran suivant
             TranslateTransition slider = new TranslateTransition();
             slider.setNode(SignUp);
             slider.setToX(0);
@@ -153,7 +148,6 @@ public class LoginPageController implements Initializable {
     }
 
     public boolean verifierMotDePasse(String motDePasseSaisi, String motDePasseHache) {
-        // Vérifie si le mot de passe saisi correspond au mot de passe haché
         return BCrypt.checkpw(motDePasseSaisi, motDePasseHache);
     }
 
@@ -165,7 +159,6 @@ public class LoginPageController implements Initializable {
             alert.setContentText("Remplissez tous les champs !!!");
             alert.showAndWait();
         } else {
-            // Utilisation de UtilisateurDao pour récupérer l'utilisateur par email et mot de passe
             UtilisateurDao utilisateurDao = new UtilisateurDao();
             Utilisateur utilisateur = utilisateurDao.getByEmail(EmailIn.getText());
 
@@ -175,12 +168,8 @@ public class LoginPageController implements Initializable {
                 if (emailValide) {
 
                     if (motDePasseValide) {
-                        // Initialiser la session
-
                         Session session = Session.getInstance();
                         session.setUtilisateurConnecte(utilisateur);
-
-                        // Charger et afficher la nouvelle page selon le rôle
                         String role = utilisateur.getRole();
                         FXMLLoader loader;
 
@@ -192,11 +181,7 @@ public class LoginPageController implements Initializable {
                             } else {
                                 throw new IllegalStateException("Rôle non valide.");
                             }
-
-                            // Charger la page associée au rôle
                             Parent root = loader.load();
-
-                            // Obtenez la scène actuelle
                             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                             Scene scene = new Scene(root);
                             stage.setScene(scene);
@@ -211,7 +196,6 @@ public class LoginPageController implements Initializable {
                         }
 
                     } else {
-                        // Si aucun utilisateur ne correspond
                         alert = new Alert(AlertType.ERROR);
                         alert.setTitle("Erreur");
                         alert.setHeaderText(null);
@@ -239,10 +223,8 @@ public class LoginPageController implements Initializable {
         TranslateTransition slider = new TranslateTransition();
             if (event.getSource() == CreateAccountBtn) {
                 slider.setNode(SignUp);
-                slider.setToX(400);  // Déplace le panneau SignUp
+                slider.setToX(400);  
                 slider.setDuration(Duration.seconds(0.5));
-
-                // Action après la transition
                 slider.setOnFinished(e -> {
                     HaveAccountBtn1.setVisible(true);
                     CreateAccountBtn.setVisible(false);
@@ -252,14 +234,12 @@ public class LoginPageController implements Initializable {
 
                 });
 
-                slider.play(); // Démarre l'animation
+                slider.play(); 
             } else if (event.getSource() == HaveAccountBtn1) {
                 slider.setNode(SignUp);
 
                 slider.setToX(0);
                 slider.setDuration(Duration.seconds(0.5));
-
-                // Action après la transition
                 slider.setOnFinished(e -> {
                     HaveAccountBtn1.setVisible(false);
                     CreateAccountBtn.setVisible(true);

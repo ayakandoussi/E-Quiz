@@ -18,36 +18,30 @@ import javafx.scene.Parent;
 
 public class ProfilController {
 
-    // Champs pour les informations de profil
     @FXML
-    private TextField nomfield;       // Champ nom
+    private TextField nomfield;       
     @FXML
-    private TextField prenomfiled;    // Champ prénom
+    private TextField prenomfiled;   
     @FXML
-    private TextField emailfield;     // Champ email
+    private TextField emailfield;     
     @FXML
-    private TextField rolefield;      // Champ rôle
+    private TextField rolefield;     
     @FXML
-    private Button bouttonmodifier;   // Bouton modifier mot de passe
+    private Button bouttonmodifier;   
     @FXML
-    private Label roleLabel;          // Label pour afficher le rôle, nom et prénom
+    private Label roleLabel;          
+    @FXML
+    private MenuButton menu;          
+    @FXML
+    private MenuItem Accueil;        
+    @FXML
+    private MenuItem Profil;        
+    @FXML
+    private MenuItem SeDeconnecter;  
 
-    // MenuButton et MenuItems
-    @FXML
-    private MenuButton menu;          // MenuButton pour afficher le menu
-    @FXML
-    private MenuItem Accueil;         // Item "Accueil"
-    @FXML
-    private MenuItem Profil;          // Item "Profil"
-    @FXML
-    private MenuItem SeDeconnecter;   // Item "Se déconnecter"
-
-    /**
-     * Méthode d'initialisation appelée après le chargement du fichier FXML.
-     */
+    
     @FXML
     public void initialize() {
-        // Gestion des informations de profil
         Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (utilisateurConnecte != null) {
@@ -76,19 +70,14 @@ public class ProfilController {
         String role = utilisateur.getRole();
 
         if ("professeur".equals(role)) {
-            // Créez un objet Professeur et récupérez son affichage
             Professeur professeur = new Professeur(utilisateur);
             contenu = professeur.afficher();
         } else if ("etudiant".equals(role)) {
-            // Créez un objet Etudiant et récupérez son affichage
             Etudiant etudiant = new Etudiant(utilisateur);
-            contenu = etudiant.afficher();  // Affiche les informations de l'étudiant
+            contenu = etudiant.afficher();  
         } else {
-            // Cas par défaut si le rôle n'est ni professeur ni étudiant
             contenu = "Rôle non reconnu";
         }
-
-        // Met à jour le texte du roleLabel avec le contenu approprié
         roleLabel.setText(contenu);
     }
 
@@ -111,14 +100,9 @@ public class ProfilController {
 
     public void afficherProfil() {
         try {
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -139,12 +123,7 @@ public class ProfilController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
-            // Ici on utilise le MenuButton 'menu'
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -156,16 +135,10 @@ public class ProfilController {
     public void seDeconnecter() {
         try {
 
-            // Réinitialiser la session avant de rediriger
             Session.getInstance().setUtilisateurConnecte(null);
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {

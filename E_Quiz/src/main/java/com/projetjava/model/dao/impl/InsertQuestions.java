@@ -7,15 +7,13 @@ import java.sql.SQLException;
 
 public class InsertQuestions {
 
-    // Fonction pour insérer des questions dans la BDD
     public static void insertQuestions() {
-        String url = "jdbc:mysql://localhost:3306/e_quiz"; // Remplacez par l'URL de votre base de données
-        String username = "root"; // Remplacez par votre utilisateur MySQL
-        String password = "ABC@def123"; // Remplacez par votre mot de passe MySQL
+        String url = "jdbc:mysql://localhost:3306/e_quiz";
+        String username = "root";
+        String password = "ABC@def123";
 
         String sql = "INSERT INTO question (enonce, choix1, choix2, choix3, choix4, bonneReponse, idQuiz) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        // Liste des questions, choix, et bonnes réponses
         Object[][] questions = {
             {"Quelle est la méthode principale d'une application Java ?", "start()", "main()", "run()", "execute()", "choix2"},
             {"Que signifie JVM ?", "Java Variable Machine", "Java Virtual Machine", "Java Verification Machine", "Java Version Manager", "choix2"},
@@ -39,12 +37,10 @@ public class InsertQuestions {
             {"Quelle classe est utilisée pour créer un formulaire en JavaFX ?", "FormPane", "VBox", "FormLayout", "GridPane", "choix4"}
         };
 
-        int idQuiz = 3; // ID du quiz auquel les questions seront associées
+        int idQuiz = 3;
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password); PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            // Boucle pour insérer chaque question
             for (Object[] question : questions) {
                 String enonce = (String) question[0];
                 String choix1 = (String) question[1];
@@ -52,8 +48,6 @@ public class InsertQuestions {
                 String choix3 = (String) question[3];
                 String choix4 = (String) question[4];
                 String bonneReponse = (String) question[5];
-
-                // Remplir la requête préparée
                 statement.setString(1, enonce);
                 statement.setString(2, choix1);
                 statement.setString(3, choix2);
@@ -62,13 +56,12 @@ public class InsertQuestions {
                 statement.setString(6, bonneReponse);
                 statement.setInt(7, idQuiz);
 
-                // Exécuter la requête
                 statement.executeUpdate();
             }
 
             System.out.println("20 questions ont été insérées avec succès pour le quiz ID " + idQuiz + ".");
         } catch (SQLException e) {
-            e.printStackTrace(); // Afficher l'erreur SQL
+            e.printStackTrace();
         }
     }
 

@@ -53,9 +53,9 @@ public class UtilisateurDao implements Dao<Utilisateur> {
             if (resultSet.next()) {
                 String role = resultSet.getString("role");
                 if (role.equals("professeur")) {
-                    utilisateur = new Professeur(); // Type spécifique
+                    utilisateur = new Professeur(); 
                 } else if (role.equals("etudiant")) {
-                    utilisateur = new Etudiant(); // Type spécifique
+                    utilisateur = new Etudiant(); 
                 }
                 utilisateur.setNom(resultSet.getString("nom"));
                 utilisateur.setPrenom(resultSet.getString("prenom"));
@@ -192,9 +192,9 @@ public class UtilisateurDao implements Dao<Utilisateur> {
             if (resultSet.next()) {
                 String role = resultSet.getString("role");
                 if (role.equals("professeur")) {
-                    utilisateur = new Professeur(); // Type spécifique
+                    utilisateur = new Professeur();
                 } else if (role.equals("etudiant")) {
-                    utilisateur = new Etudiant(); // Type spécifique
+                    utilisateur = new Etudiant(); 
                 }
                 utilisateur.setId(resultSet.getInt("id"));
                 utilisateur.setNom(resultSet.getString("nom"));

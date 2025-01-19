@@ -52,11 +52,11 @@ public class AjoutQuizController {
     @FXML
     private Button questionsuivante;
 
-    private Quiz quizEnCours; // Stocker le quiz ajouté
+    private Quiz quizEnCours; 
     private QuizDao quizDao;
     private QuestionDAO questionDao;
-    private int nombreQuestionsAjoutees = 0; // Compteur pour les questions ajoutées
-    private static final int NOMBRE_MAX_QUESTIONS = 20; // Nombre maximum de questions
+    private int nombreQuestionsAjoutees = 0; 
+    private static final int NOMBRE_MAX_QUESTIONS = 20; 
 
     private void afficherRole(Utilisateur utilisateur) {
         String contenu;
@@ -74,7 +74,6 @@ public class AjoutQuizController {
     }
 
     public void initialize() {
-        // Récupérer l'utilisateur connecté depuis la session
         Utilisateur utilisateurConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (utilisateurConnecte != null) {
@@ -118,7 +117,7 @@ public class AjoutQuizController {
         quizEnCours.setDescription(descriptionQuiz);
         quizEnCours.setIdEnseignant(utilisateurConnecte.getId());
 
-        quizDao.add(quizEnCours); // ID automatiquement récupéré ici
+        quizDao.add(quizEnCours); 
 
         if (quizEnCours.getIdQuiz() <= 0) {
             afficherAlerte("Erreur", "Impossible de créer le quiz. Veuillez réessayer.", Alert.AlertType.ERROR);
@@ -134,7 +133,6 @@ public class AjoutQuizController {
 
     @FXML
     private void ajouterQuestion() throws BonChoixException {
-        // Vérifier si le nombre maximum de questions est atteint
         if (nombreQuestionsAjoutees >= NOMBRE_MAX_QUESTIONS) {
             afficherAlerte("Information", "Vous avez déjà ajouté les 20 questions requises.", Alert.AlertType.INFORMATION);
             return;
@@ -167,16 +165,14 @@ public class AjoutQuizController {
         question.setIdQuiz(quizEnCours.getIdQuiz());
 
         questionDao.add(question);
-        nombreQuestionsAjoutees++; // Incrémenter le compteur des questions ajoutées
+        nombreQuestionsAjoutees++; 
 
-        // Vérifier si les 20 questions sont atteintes après cet ajout
         if (nombreQuestionsAjoutees == NOMBRE_MAX_QUESTIONS) {
             afficherAlerte("Succès", "Vous avez ajouté les 20 questions requises. Quiz terminé.", Alert.AlertType.INFORMATION);
         } else {
             afficherAlerte("Succès", "La question a été ajoutée. (" + nombreQuestionsAjoutees + "/20)", Alert.AlertType.INFORMATION);
         }
 
-        // Réinitialiser les champs pour la question suivante
         questionField.clear();
         choix1Field.clear();
         choix2Field.clear();
@@ -191,17 +187,13 @@ public class AjoutQuizController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.setOnHidden(event -> {
-            // Vérifiez si la redirection vers l'accueil est nécessaire (par exemple, quiz terminé)
+
             if (message.contains("Quiz terminé")) {
                 try {
-                    // Charger le fichier FXML de la nouvelle page
+
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
                     Parent root = loader.load();
-
-                    // Obtenir la fenêtre principale
                     Stage stage = (Stage) menu.getScene().getWindow();
-
-                    // Remplacer la scène existante par la nouvelle
                     stage.setScene(new Scene(root));
                     stage.show();
                 } catch (Exception e) {
@@ -213,18 +205,11 @@ public class AjoutQuizController {
         alert.showAndWait();
     }
 
-    // Méthode pour afficher la page de profil
     public void afficherProfil() {
         try {
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Profil.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
-            // Ici on utilise le MenuButton 'menu'
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -238,12 +223,7 @@ public class AjoutQuizController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/ProfAccueil.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle à partir de n'importe quel élément de la scène
-            // Ici on utilise le MenuButton 'menu'
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -253,16 +233,10 @@ public class AjoutQuizController {
 
     public void seDeconnecter() {
         try {
-            // Réinitialiser la session avant de rediriger
             Session.getInstance().setUtilisateurConnecte(null);
-            // Charger le fichier FXML de la page de profil
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/LoginPage.fxml"));
             Parent root = loader.load();
-
-            // Récupérer la fenêtre actuelle
             Stage stage = (Stage) menu.getScene().getWindow();
-
-            // Remplacer la scène existante
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {

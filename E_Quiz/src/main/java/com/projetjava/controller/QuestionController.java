@@ -74,7 +74,6 @@ public class QuestionController {
         this.currentQuestionIndex = 0;
         this.score = 0;
 
-        // Récupérer l'utilisateur connecté via la session
         Utilisateur etudiantConnecte = Session.getInstance().getUtilisateurConnecte();
 
         if (etudiantConnecte != null) {
@@ -98,28 +97,12 @@ public class QuestionController {
 
     @FXML
     public void selectionnerQuiz(Quiz quizSelectionne) throws SQLException, BonChoixException {
-        int idQuiz = quizSelectionne.getIdQuiz(); // ID du quiz sélectionné
-        int idEtudiant = Session.getInstance().getUtilisateurConnecte().getId(); // Récupérer l'ID de l'étudiant
-
+        idQuiz = quizSelectionne.getIdQuiz();
+        int idEtudiant = Session.getInstance().getUtilisateurConnecte().getId();
         chargerQuestions(idQuiz);
-
-        // Afficher la première question
         afficherQuestion();
     }
 
-    // Méthode pour définir l'ID du quiz et de l'étudiant dynamiquement
-    public void setIdQuiz(int idQuiz, int idEtudiant) throws SQLException, BonChoixException {
-        this.idQuiz = idQuiz;
-        this.idEtudiant = idEtudiant;
-
-        // Charger les questions pour ce quiz
-        chargerQuestions(idQuiz);
-
-        // Afficher la première question
-        afficherQuestion();
-    }
-
-    // Méthode pour charger les questions du quiz à partir de la base de données
     private void chargerQuestions(int idQuiz) throws SQLException, BonChoixException {
         String query = "SELECT idQuestion, enonce, choix1, choix2, choix3, choix4, bonneReponse FROM Question WHERE idQuiz = ? ORDER BY idQuestion";
         PreparedStatement preparedStatement = bdConnexion.getConnection().prepareStatement(query);
@@ -140,7 +123,6 @@ public class QuestionController {
         }
     }
 
-    // Méthode pour afficher la question actuelle
     private void afficherQuestion() {
         if (currentQuestionIndex < questions.size()) {
             Question question = questions.get(currentQuestionIndex);
@@ -150,12 +132,10 @@ public class QuestionController {
             choix3.setText(question.getChoix3());
             choix4.setText(question.getChoix4());
         } else {
-            // Lorsque toutes les questions sont répondues, afficher la page des résultats
             afficherResultats();
         }
     }
 
-    // Méthode pour obtenir la réponse choisie par l'utilisateur
     private String getReponseChoisie() {
         Toggle selectedToggle = choix.getSelectedToggle();
         if (selectedToggle != null) {
@@ -165,72 +145,52 @@ public class QuestionController {
         return "";
     }
 
-    // Méthode pour vérifier la réponse donnée par l'utilisateur
     public boolean verifierReponse(String reponse) {
         Question questionActuelle = questions.get(currentQuestionIndex);
         return reponse.equals(questionActuelle.getBonneReponse());
     }
 
-    // Méthode pour générer un certain nombre de questions aléatoires
     public void genererQuestions(int nombreQuestions) throws SQLException {
-        Collections.shuffle(questions);  // Mélange les questions
-        questions = questions.subList(0, Math.min(nombreQuestions, questions.size()));  // Limite le nombre de questions
+        Collections.shuffle(questions);
+        questions = questions.subList(0, Math.min(nombreQuestions, questions.size()));
     }
 
     private void reinitialiserQuiz() throws SQLException, BonChoixException {
-        // Réinitialiser le score
+
         score = 0;
-        currentQuestionIndex = 0;  // Revenir à la première question
-
-        // Recharger les questions pour le quiz (si elles ont été chargées précédemment)
-        questions.clear();  // Vider la liste actuelle des questions
-        chargerQuestions(idQuiz);  // Recharger les questions pour ce quiz
-
-        // Afficher la première question
+        currentQuestionIndex = 0;
+        questions.clear();
+        chargerQuestions(idQuiz);
         afficherQuestion();
     }
 
-    // Méthode pour passer à la question suivante
     @FXML
     private void questionSuivante() {
-        // Vérifier si une réponse a été sélectionnée
         RadioButton selectedRadioButton = (RadioButton) choix.getSelectedToggle();
         if (selectedRadioButton != null) {
             String reponseChoisie = selectedRadioButton.getText();
-            // Vérifier si la réponse est correcte
             if (verifierReponse(reponseChoisie)) {
-                score++; // Incrémenter le score si la réponse est correcte
+                score++;
             }
         }
-
-        // Passer à la question suivante
         currentQuestionIndex++;
-
-        // Vérifier si c'est la dernière question
         if (currentQuestionIndex < questions.size()) {
             afficherQuestion();
         } else {
-            // Lorsque toutes les questions sont répondues, afficher la page des résultats
             afficherResultats();
         }
 
-        // Réinitialiser la sélection des réponses
         choix.selectToggle(null);
     }
 
     private void afficherResultats() {
         try {
-            // Charger la scène des résultats
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projetjava/view/pages/Resultat.fxml"));
             Parent root = loader.load();
-
-            // Passer le score à la scène des résultats
             ResultatPageController resultatController = loader.getController();
-            resultatController.afficherResultat(score);  // Passer le score à la méthode afficherResultat()
-
-            // Charger la scène dans la fenêtre actuelle
+            resultatController.afficherResultat(score, idQuiz);
             Scene scene = new Scene(root);
-            Stage stage = (Stage) questionLabel.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) questionLabel.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
