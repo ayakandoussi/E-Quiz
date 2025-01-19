@@ -216,7 +216,7 @@ public class LoginPageController implements Initializable {
         TranslateTransition slider = new TranslateTransition();
         if (event.getSource() == CreateAccountBtn) {
             slider.setNode(SignUp);
-            slider.setToX(400);
+            slider.setToX(300);
             slider.setDuration(Duration.seconds(0.5));
             slider.setOnFinished(e -> {
                 HaveAccountBtn1.setVisible(true);

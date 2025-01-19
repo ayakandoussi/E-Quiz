@@ -15,7 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/com/projetjava/view/pages/LoginPage"), 800, 500);
+        scene = new Scene(loadFXML("/com/projetjava/view/pages/LoginPage"), 600, 400);
         //scene = new Scene(loadFXML("/com/projetjava/view/pages/AjoutQuiz"), 600, 400);
         //scene = new Scene(loadFXML("QuizPage"), 640, 480);//
         //scene = new Scene(loadFXML("EtudiantAccueil"), 640, 480);
